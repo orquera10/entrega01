@@ -30,11 +30,7 @@ class ProductManager {
             console.log(`Todos los campos son obligatorios.`);
             return
         }
-        // if(title==null || description==null || price==null || thumbnail==null || code==null || stock==null) {
-        //     console.log(`Todos los campos son obligatorios.`);
-        //     return
-        // }
-        
+
         if (this.products.length === 0) {
             product.id = 1;
         } else {
@@ -55,4 +51,4 @@ class ProductManager {
     }
 }
 
-export default ProductManager;
+module.exports = ProductManager;
