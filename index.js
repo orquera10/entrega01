@@ -1,54 +1,20 @@
-class ProductManager {
-    constructor() {
-        this.products = [];
-    }
+const ProductManager = require("./manager/ProductManager.js");
 
-    getProducts = () => {
-        return this.products;
-    }
+//Se creará una instancia de la clase “ProductManager”
+const productos = new ProductManager();
 
+//Se llamará “getProducts” recién creada la instancia, debe devolver un arreglo vacío [] 
+console.log(productos.getProducts());
 
-    addProduct = (title, description, price, thumbnail,code,stock) => {
+//Se llamará al método “addProduct”
+productos.addProduct("producto prueba","Este es un producto de prueba",200,"sin imagen","abc123",25);
 
-        const product = {
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock
-        };
+//El objeto debe agregarse satisfactoriamente con un id generado automáticamente SIN REPETIRSE
+console.log(productos.getProducts());
 
-        const validarCode = this.products.find(item=>item.code===code);
+//Se llamará al método “addProduct” con los mismos campos de arriba, debe arrojar un error porque el código estará repetido.
+productos.addProduct("producto prueba","Este es un producto de prueba",200,"sin imagen","abc123",25);
+console.log(productos.getProducts());
 
-        if (validarCode) {
-            console.log(`El code ${code} ya esta en uso`);
-            return
-        }
-
-        if(!title || !description || !price || !thumbnail || !code || stock==null) {
-            console.log(`Todos los campos son obligatorios.`);
-            return
-        }
-
-        if (this.products.length === 0) {
-            product.id = 1;
-        } else {
-            product.id = this.products[this.products.length - 1].id + 1;
-        }
-        
-        this.products.push(product);
-        
-    }
-
-    getProductById = (id) =>{
-        const productoEncontrado = this.products.find(item=>item.id===id)
-        if (productoEncontrado) {
-            return productoEncontrado;
-        } else {
-            return `Not found`;
-        }
-    }
-}
-
-module.exports = ProductManager;
+//Se evaluará que getProductById devuelva error si no encuentra el producto o el producto en caso de encontrarlo
+console.log(productos.getProductById(0));
