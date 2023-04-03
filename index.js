@@ -16,7 +16,7 @@ const env = async () => {
         description: 'Este es un producto de prueba',
         price: 200,
         thumbnail: 'sin imagen',
-        code: 'abc123',
+        code: 'abc130',
         stock: 25
     };
     await manager.addProduct(producto);
@@ -36,7 +36,7 @@ const env = async () => {
         // description: 'Este es un producto de prueba',
         price: 205,
         // thumbnail: 'sin imagen',
-        code: 'abc124',
+        code: 'abc125',
         //stock: 29
     };
     await manager.updateProducts(1,productoMod);
@@ -45,8 +45,7 @@ const env = async () => {
 
     //Se llamará al método “deleteProduct”, se evaluará que realmente se elimine el producto o que arroje un error en caso de no existir.
     await manager.deleteProduct(3);
-    productoPorID = await manager.getProductById(2)
-    console.log(productoPorID);
-
+    productos = await manager.getProducts();
+    console.log(productos);
 }
 env();
