@@ -93,7 +93,7 @@ export default class ProductManager {
 
             const nuevoProducts = products.map( element => {
                 if (element.id === id) {
-                    return {...element,...product,id:id}   
+                    return {...element,...product}   
                 } else {
                     return element;
                 }
