@@ -1,4 +1,3 @@
-
 import fs from "fs";
 
 export default class ProductManager {
@@ -20,10 +19,37 @@ export default class ProductManager {
         }
     }
 
+    validarCode = ({code}, products) =>{
+        const validarCode = products.find(item=>item.code===code);
+        if (validarCode) {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    validarCampos = ({title,description,price,thumbnail,code,stock}) => {
+            if(!title || !description || !price || !thumbnail || !code || stock==null) {
+                return true;
+        } else{
+            return false;
+        }
+    }
 
     addProduct = async (product) => {
         try {
+
             const products = await this.getProducts();
+            
+            if (this.validarCampos(product)) {
+                console.log(`Todos los campos son obligatorios.`);
+                return;
+            }
+
+            if (this.validarCode(product, products)) {
+                console.log(`El code ${product.code} ya esta en uso`);
+                return;
+            }
 
             if (products.length === 0) {
                 product.id = 1;
@@ -59,7 +85,13 @@ export default class ProductManager {
     updateProducts = async (id, product) =>{
         try {
             const products = await this.getProducts();
-            const nuevoProducts = products.map(function (element) {
+
+            if (this.validarCode(product, products)) {
+                console.log(`El code ${product.code} ya esta en uso`);
+                return;
+            }
+
+            const nuevoProducts = products.map( element => {
                 if (element.id === id) {
                     return {...element,...product,id:id}   
                 } else {
@@ -73,30 +105,20 @@ export default class ProductManager {
         }
     }
 
-    // updateProducts = async (id, product) =>{
-    //     try {
-    //         const products = await this.getProducts();
-    //         let indice = products.findIndex( objeto => {
-    //             return objeto.id === id;
-    //         });
-    //         if (indice !== -1) {
-    //             products[indice] = { ...products[indice], ...product };
-    //         }
-
-    //         await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
-
     deleteProduct = async (id) =>{
         try {
             const products = await this.getProducts();
-            const nuevoProducts = products.filter( product => {
-                return product.id !== id;
-            });
-            await fs.promises.writeFile(this.path, JSON.stringify(nuevoProducts, null, '\t'));
+            const idEncontrado = products.find(item=>item.id===id)
+            if (idEncontrado) {
+                const nuevoProducts = products.filter( product => {
+                    return product.id !== id;
+                });
+                await fs.promises.writeFile(this.path, JSON.stringify(nuevoProducts, null, '\t'));
+            } else{
+                console.log(`Error id ${id} no encontrado`);
+                return;
+            }
+            
         } catch (error) {
             console.log(error);
         }
