@@ -1,7 +1,6 @@
 {
   "name": "entrega01",
   "version": "1.0.0",
-  "description": "",
   "main": "Index.js",
   "type": "module",
   "scripts": {
@@ -17,5 +16,6 @@
   "bugs": {
     "url": "https://github.com/orquera10/entrega01/issues"
   },
-  "homepage": "https://github.com/orquera10/entrega01#readme"
+  "homepage": "https://github.com/orquera10/entrega01#readme",
+  "description": ""
 }
