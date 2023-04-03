@@ -61,7 +61,7 @@ export default class ProductManager {
             const products = await this.getProducts();
             const nuevoProducts = products.map(function (element) {
                 if (element.id === id) {
-                    return {...element,...product,id:id}   
+                    return {...element,...product}//,id:id}   
                 } else {
                     return element;
                 }
