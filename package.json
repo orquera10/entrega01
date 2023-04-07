@@ -17,5 +17,9 @@
     "url": "https://github.com/orquera10/entrega01/issues"
   },
   "homepage": "https://github.com/orquera10/entrega01#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  }
 }
