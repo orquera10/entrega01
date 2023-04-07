@@ -1,4 +1,4 @@
-import ProductManager  from "./manager/ProductManager.js";
+import ProductManager  from "./src/ProductManager.js";
 
 
 //Se creará una instancia de la clase “ProductManager”
