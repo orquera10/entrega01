@@ -8,7 +8,7 @@ const productManager = new ProductManager('./data/Products.json');
 
 app.get('/products', async (req, res) => {
     const productos = await productManager.getProducts();
-    const limite = Number(req.query.limite) || productos.length;
+    const limite = Number(req.query.limit) || productos.length;
     const productView = productos.slice(0,limite);
     res.send(productView);
 });
