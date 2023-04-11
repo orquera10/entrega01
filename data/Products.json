@@ -2,9 +2,9 @@
 	{
 		"title": "producto prueba",
 		"description": "Este es un producto de prueba",
-		"price": 205,
+		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc125",
+		"code": "abc130",
 		"stock": 25,
 		"id": 1
 	},
@@ -13,7 +13,7 @@
 		"description": "Este es un producto de prueba",
 		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc123",
+		"code": "abc131",
 		"stock": 25,
 		"id": 2
 	},
@@ -22,7 +22,7 @@
 		"description": "Este es un producto de prueba",
 		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc126",
+		"code": "abc132",
 		"stock": 25,
 		"id": 3
 	},
@@ -31,7 +31,7 @@
 		"description": "Este es un producto de prueba",
 		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc128",
+		"code": "abc133",
 		"stock": 25,
 		"id": 4
 	},
@@ -40,7 +40,7 @@
 		"description": "Este es un producto de prueba",
 		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc130",
+		"code": "abc134",
 		"stock": 25,
 		"id": 5
 	},
@@ -49,7 +49,7 @@
 		"description": "Este es un producto de prueba",
 		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc138",
+		"code": "abc135",
 		"stock": 25,
 		"id": 6
 	},
@@ -58,7 +58,7 @@
 		"description": "Este es un producto de prueba",
 		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc140",
+		"code": "abc136",
 		"stock": 25,
 		"id": 7
 	},
@@ -67,7 +67,7 @@
 		"description": "Este es un producto de prueba",
 		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc141",
+		"code": "abc137",
 		"stock": 25,
 		"id": 8
 	},
@@ -76,7 +76,7 @@
 		"description": "Este es un producto de prueba",
 		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc142",
+		"code": "abc138",
 		"stock": 25,
 		"id": 9
 	},
@@ -85,8 +85,17 @@
 		"description": "Este es un producto de prueba",
 		"price": 200,
 		"thumbnail": "sin imagen",
-		"code": "abc143",
+		"code": "abc139",
 		"stock": 25,
 		"id": 10
+	},
+	{
+		"title": "producto prueba",
+		"description": "Este es un producto de prueba",
+		"price": 200,
+		"thumbnail": "sin imagen",
+		"code": "abc140",
+		"stock": 25,
+		"id": 11
 	}
 ]

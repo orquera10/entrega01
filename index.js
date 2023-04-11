@@ -16,7 +16,7 @@ const env = async () => {
         description: 'Este es un producto de prueba',
         price: 200,
         thumbnail: 'sin imagen',
-        code: 'abc130',
+        code: 'abc140',
         stock: 25
     };
     await manager.addProduct(producto);
