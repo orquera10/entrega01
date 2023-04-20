@@ -19,48 +19,17 @@ export default class ProductManager {
         }
     }
 
-    validarCode = ({code}, products) =>{
-        const validarCode = products.find(item=>item.code===code);
-        if (validarCode) {
-            return true;
-        } else{
-            return false;
-        }
-    }
-
-    validarCampos = ({title,description,price,thumbnail,code,stock}) => {
-            if(!title || !description || !price || !thumbnail || !code || stock==null) {
-                return true;
-        } else{
-            return false;
-        }
-    }
 
     addProduct = async (product) => {
         try {
-
             const products = await this.getProducts();
-            
-            if (this.validarCampos(product)) {
-                console.log(`Todos los campos son obligatorios.`);
-                return;
-            }
-
-            if (this.validarCode(product, products)) {
-                console.log(`El code ${product.code} ya esta en uso`);
-                return;
-            }
-
             if (products.length === 0) {
                 product.id = 1;
             } else {
                 product.id = products[products.length - 1].id + 1;
             }
-
             products.push(product);
-
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
-
             return product;
         } catch (error) {
             console.log(error);
@@ -70,13 +39,7 @@ export default class ProductManager {
     getProductById = async (id) =>{
         try {
             const products = await this.getProducts();
-            const productoEncontrado = products.find(item=>item.id===id)
-            if (productoEncontrado) {
-                return productoEncontrado;
-            } else {
-                return `Not found`;
-            }
-            
+            return products.find(item=>item.id===id);
         } catch (error) {
             console.log(error);
         }
@@ -86,20 +49,15 @@ export default class ProductManager {
         try {
             const products = await this.getProducts();
 
-            if (this.validarCode(product, products)) {
-                console.log(`El code ${product.code} ya esta en uso`);
-                return;
-            }
-
             const nuevoProducts = products.map( element => {
                 if (element.id === id) {
                     return {...element,...product}   
                 } else {
                     return element;
                 }
-            
             });
             await fs.promises.writeFile(this.path, JSON.stringify(nuevoProducts, null, '\t'));
+            return this.getProductById(id);
         } catch (error) {
             console.log(error);
         }
@@ -108,16 +66,10 @@ export default class ProductManager {
     deleteProduct = async (id) =>{
         try {
             const products = await this.getProducts();
-            const idEncontrado = products.find(item=>item.id===id)
-            if (idEncontrado) {
-                const nuevoProducts = products.filter( product => {
-                    return product.id !== id;
-                });
-                await fs.promises.writeFile(this.path, JSON.stringify(nuevoProducts, null, '\t'));
-            } else{
-                console.log(`Error id ${id} no encontrado`);
-                return;
-            }
+            const nuevoProducts = products.filter( product => {
+                return product.id !== id;
+            });
+            await fs.promises.writeFile(this.path, JSON.stringify(nuevoProducts, null, '\t'));
             
         } catch (error) {
             console.log(error);
