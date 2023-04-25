@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import CartManager from '../managers/CartManager.js';
-import ProductManager from '../managers/ProductManager.js';
+import CartManager from '../../managers/CartManager.js';
+import ProductManager from '../../managers/ProductManager.js';
 
-const cartManager = new CartManager("./src/data/Carts.json");
-const productManager = new ProductManager("./src/data/Products.json");
+const cartManager = new CartManager("./src/files/Carts.json");
+const productManager = new ProductManager("./src/files/Products.json");
 const router = Router();
 
 router.get('/:cid', async (req, res) => {

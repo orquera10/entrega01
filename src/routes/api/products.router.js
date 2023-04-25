@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import ProductManager from '../managers/ProductManager.js';
+import ProductManager from '../../managers/ProductManager.js';
 
-const productManager = new ProductManager("./src/data/Products.json")
+const productManager = new ProductManager("./src/files/Products.json")
 const router = Router();
 
 
@@ -42,6 +42,11 @@ router.post('/', async (req, res) => {
         return res.status(400).send({ error: 'Valores incompletos'});
     }
     const result = await productManager.addProduct(product);
+    
+
+    const io = req.app.get('socketio');
+    io.emit("showProducts", await productManager.getProducts());
+
     res.send({ status: 'success', result });
 });
 
