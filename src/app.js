@@ -24,7 +24,11 @@ app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
 
-const server = app.listen(8080, () => console.log('Server running on port 8080'));
+const server = app.listen(8081, () => console.log('Server running on port 8081'));
 
 const io = new Server(server);
 app.set('socketio', io);
+
+io.on('connection', socket =>{
+    console.log('cliente conectado');
+})

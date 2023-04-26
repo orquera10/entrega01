@@ -5,7 +5,7 @@ const router = Router();
 const productManager = new ProductManager(`./src/files/Products.json`);
 const productos = await productManager.getProducts();
 
-router.get(`/home`, async (req,res) => {
+router.get(`/`, async (req,res) => {
     res.render(`home`, {products:productos});
 });
 
