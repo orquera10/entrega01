@@ -1,142 +1,179 @@
 [
 	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
+	  "title": "Laptop Dell XPS 13",
+	  "description": "Laptop ultradelgada con procesador Intel Core i7 de 11ª generación, pantalla InfinityEdge de 13.4 pulgadas, 16GB de RAM y 512GB de almacenamiento en estado sólido.",
+	  "price": 1399,
+	  "status": true,
+	  "code": "dell-xps-13",
+	  "category": "Informática",
+	  "stock": 10,
+	  "id": 1,
+	  "thumbnail": "https://www.dell.com/en-us/shop/dell-laptops/new-xps-13-laptop/spd/xps-13-9310-laptop/xn9310cto210s?configurationid=4c7ca1de-36c4-4b0e-a59f-6a82a9f54b96"
+	},
+	{
+	  "title": "Monitor LG UltraGear",
+	  "description": "Monitor para juegos de 27 pulgadas con resolución QHD, tasa de refresco de 144Hz, tiempo de respuesta de 1ms y tecnología de sincronización AMD FreeSync.",
+	  "price": 399,
+	  "status": true,
+	  "code": "lg-ultragear",
+	  "category": "Informática",
+	  "stock": 15,
+	  "id": 2,
+	  "thumbnail": "https://www.lg.com/us/images/monitors/md07518550/gallery/desktop-01.jpg"
+	},
+	{
+	  "title": "Teclado mecánico Corsair K70 RGB",
+	  "description": "Teclado mecánico para juegos con retroiluminación RGB por tecla, interruptores Cherry MX Speed, reposamuñecas extraíble y controles multimedia dedicados.",
+	  "price": 159,
+	  "status": true,
+	  "code": "corsair-k70-rgb",
+	  "category": "Informática",
+	  "stock": 20,
+	  "id": 3,
+	  "thumbnail": "https://www.corsair.com/corsairmedia/sys_master/productcontent/CH-9109014-NA-K70-MK-2-SE-SIG-Gallery-K70-SIG.png"
+	},
+	{
+	  "title": "Tableta gráfica Wacom Intuos",
+	  "description": "Tableta gráfica con área activa de 7 pulgadas, 4096 niveles de presión, conexión USB y lápiz digital sin pilas.",
+	  "price": 79,
+	  "status": true,
+	  "code": "wacom-intuos",
+	  "category": "Informática",
+	  "stock": 25,
+	  "id": 4,
+	  "thumbnail": "https://www.wacom.com/-/media/wacomdotcom/images/products/pen-tablets/intuos/paper-edition/desktop/tablet-paper.png"
+	},
+	{
+		"title": "Impresora láser HP LaserJet Pro M404n",
+		"description": "Impresora láser monocromática con velocidad de impresión de hasta 40 páginas por minuto, capacidad de papel de hasta 350 hojas y conectividad Ethernet.",
+		"price": 229,
 		"status": true,
-		"code": "abc132",
-		"category": "food",
-		"stock": 25,
-		"id": 1
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
+		"code": "hp-laserjet-pro-m404n",
+		"category": "Informática",
+		"stock": 8,
+		"id": 5,
+		"thumbnail": "https://store.hp.com/app/assets/images/product/4TJ91A%23BGJ/center_facing.png"
+	  },
+	  {
+		"title": "Disco duro externo Samsung T7",
+		"description": "Disco duro externo con capacidad de 1TB, velocidad de transferencia de hasta 1,050MB/s y resistente a golpes y caídas.",
+		"price": 149,
 		"status": true,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
-		"id": 2
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
+		"code": "samsung-t7",
+		"category": "Informática",
+		"stock": 12,
+		"id": 6,
+		"thumbnail": "https://images.samsung.com/is/image/samsung/assets/ca-fr/portable-ssd-t7-touch/silver/gallery/ca-fr-t7-touch-g2.jpg?$CA-GALLERY-JPG$"
+	  },
+	  {
+		"title": "Mouse inalámbrico Logitech MX Anywhere 3",
+		"description": "Mouse inalámbrico con tecnología de seguimiento Darkfield, rueda de desplazamiento MagSpeed y conectividad Bluetooth o USB.",
+		"price": 79,
 		"status": true,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
-		"id": 3
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"status": false,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
-		"id": 4
-	},
-	{
-		"title": "producto prueba4",
-		"description": "Este es un producto de prueba",
-		"price": 200,
+		"code": "logitech-mx-anywhere-3",
+		"category": "Informática",
+		"stock": 18,
+		"id": 7,
+		"thumbnail": "https://assets.logitech.com/assets/65548/mx-anywhere-3.png"
+	  },
+	  {
+		"title": "Auriculares inalámbricos Sony WH-1000XM4",
+		"description": "Auriculares inalámbricos con cancelación de ruido activa, hasta 30 horas de duración de batería y compatibilidad con asistentes de voz como Alexa y Google Assistant.",
+		"price": 349,
 		"status": true,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
-		"id": 6
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
+		"code": "sony-wh-1000xm4",
+		"category": "Informática",
+		"stock": 5,
+		"id": 8,
+		"thumbnail": "https://www.sony.com/image/5ed5bba771f90c02b5a5b8c5d5f5a5d3?fmt=pjpeg&wid=660&bgcolor=F1F5F9&bgc=F1F5F9"
+	  },
+	  {
+		"title": "MacBook Air 2020",
+		"description": "Laptop ultraligera con procesador Intel Core i3, pantalla Retina de 13.3 pulgadas, 8GB de RAM y 256GB de almacenamiento SSD.",
+		"price": 999,
 		"status": true,
-		"id": 7
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
+		"code": "macbook-air-2020",
+		"category": "Informática",
+		"stock": 6,
+		"id": 9,
+		"thumbnail": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp-spacegray-select-202011?wid=1808&hei=1686&fmt=jpeg&qlt=80&.v=1613676034000"
+	  },
+	  {
+		"title": "Monitor gaming ASUS ROG Swift PG279QZ",
+		"description": "Monitor de 27 pulgadas con resolución 2K, tasa de refresco de 165Hz, tiempo de respuesta de 4ms y compatibilidad con tecnología G-Sync de NVIDIA.",
+		"price": 599,
 		"status": true,
-		"id": 8
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
-		"status": "false",
-		"id": 9
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
+		"code": "asus-rog-swift-pg279qz",
+		"category": "Informática",
+		"stock": 10,
+		"id": 10,
+		"thumbnail": "https://www.asus.com/media/global/products/UtEzY9f8SD0SjKvR/P_setting_fff_1_90_end_600.png"
+	  },
+	  {
+		"title": "Teclado mecánico Corsair K100 RGB",
+		"description": "Teclado mecánico con switches Cherry MX Speed, retroiluminación RGB por tecla, controles multimedia y conexión USB 3.0 con paso por tecla.",
+		"price": 199,
 		"status": true,
-		"id": 10
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
-		"status": false,
-		"id": 11
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
+		"code": "corsair-k100-rgb",
+		"category": "Informática",
+		"stock": 7,
+		"id": 11,
+		"thumbnail": "https://www.corsair.com/medias/sys_master/images/images/h13/hd7/13875872055390/CH-912A01A-NA-Gallery-K100-RGB-US-01.png"
+	  },
+	  {
+		"title": "Tableta gráfica Wacom Intuos M",
+		"description": "Tableta gráfica con área activa de 216 x 135 mm, 4096 niveles de presión, 4 teclas express y compatibilidad con lápices Wacom Pro Pen 2.",
+		"price": 199,
 		"status": true,
-		"id": 12
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
+		"code": "wacom-intuos-m",
+		"category": "Informática",
+		"stock": 4,
+		"id": 12,
+		"thumbnail": "https://www.wacom.com/-/media/wacomdotcom/images/products/pen-tablets/intuos/m/wacom-intuos-m-product-image.png"
+	  },
+	  {
+		"title": "Portátil HP Spectre x360",
+		"description": "Portátil 2 en 1 con procesador Intel Core i7, pantalla táctil Full HD de 13.3 pulgadas, 16GB de RAM y 512GB de almacenamiento SSD.",
+		"price": 1499,
 		"status": true,
-		"id": 13
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
+		"code": "hp-spectre-x360",
+		"category": "Informática",
+		"stock": 5,
+		"id": 13,
+		"thumbnail": "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c06280921.png"
+	  },
+	  {
+		"title": "Auriculares inalámbricos Sony WH-1000XM4",
+		"description": "Auriculares inalámbricos con cancelación de ruido, tecnología de audio de alta resolución y autonomía de hasta 30 horas.",
+		"price": 349,
 		"status": true,
-		"id": 14
-	},
-	{
-		"title": "producto prueba",
-		"description": "Este es un producto de prueba",
-		"price": 200,
-		"code": "abc133",
-		"category": "food",
-		"stock": 25,
+		"code": "sony-wh-1000xm4",
+		"category": "Informática",
+		"stock": 12,
+		"id": 14,
+		"thumbnail": "https://www.sony.com/image/3d3aa614bb78e03b331d8f16e26c7269?fmt=pjpeg&wid=660&hei=660&bgcolor=F1F5F9&bgc=F1F5F9"
+	  },
+	  {
+		"title": "Cámara web Logitech C922 Pro Stream",
+		"description": "Cámara web con resolución Full HD 1080p, 60 fps, corrección automática de iluminación y compatibilidad con fondos virtuales.",
+		"price": 99,
 		"status": true,
-		"id": 15
-	}
+		"code": "logitech-c922-pro-stream",
+		"category": "Informática",
+		"stock": 8,
+		"id": 15,
+		"thumbnail": "https://www.logitech.com/content/dam/logitech/en/products/c922-pro-stream-webcam/c922-hero.png"
+	  },
+	  {
+		"title": "Impresora láser HP Color LaserJet Pro MFP M281fdw",
+		"description": "Impresora multifunción con tecnología láser, impresión a doble cara automática, pantalla táctil de 2.7 pulgadas y conectividad Wi-Fi y Ethernet.",
+		"price": 399,
+		"status": true,
+		"code": "hp-color-laserjet-pro-mfp-m281fdw",
+		"category": "Informática",
+		"stock": 6,
+		"id": 16,
+		"thumbnail": "https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c05579437.png"
+	  }
 ]
+  

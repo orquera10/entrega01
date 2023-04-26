@@ -76,6 +76,9 @@ router.delete('/:pid', async (req, res) => {
         return res.status(400).send({ error: 'Id no encontrado'});
     }
     const result = await productManager.deleteProduct(productID);
+
+    const io = req.app.get('socketio');
+    io.emit("showProducts", await productManager.getProducts());
     res.send({ status: 'success', result });
     
 });
