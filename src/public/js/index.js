@@ -20,4 +20,5 @@ socket.on(`showProducts`, data =>{
             </div>
         `
     })
-})
+});
+

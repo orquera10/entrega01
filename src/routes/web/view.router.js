@@ -10,7 +10,13 @@ router.get(`/`, async (req,res) => {
 });
 
 router.get(`/realTimeProducts`, async (req,res) => {
-    res.render(`realTimeProducts`, {products:productos});
+    res.render(`realTimeProducts`);
+    
+    const io = req.app.get('socketio');
+    io.on('connection', socket =>{
+        socket.emit("showProducts", productos);
+        console.log('cliente conectado');
+    })
 });
 
 export default router;

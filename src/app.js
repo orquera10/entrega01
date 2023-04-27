@@ -6,6 +6,9 @@ import __dirname from './utils.js';
 import {Server} from 'socket.io';
 // import viewsRealTimeRouter from './routes/web/viewRealTime.router.js';
 import viewsRouter from './routes/web/view.router.js';
+import ProductManager from './managers/ProductManager.js';
+
+const productM = new ProductManager("./src/files/Products.json")
 
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -29,6 +32,9 @@ const server = app.listen(8081, () => console.log('Server running on port 8081')
 const io = new Server(server);
 app.set('socketio', io);
 
-io.on('connection', socket =>{
-    console.log('cliente conectado');
-})
+const productos = await productM.getProducts()
+
+// io.on('connection', socket =>{
+//     socket.emit("showProducts", productos);
+//     console.log('cliente conectado');
+// })
