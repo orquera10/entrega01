@@ -27,7 +27,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
 try {
-    await mongoose.connect('mongodb+srv://orquera10:aPDmJq6NtcNyzMpx@clustercoderbackend.bqnpenw.mongodb.net/ecommerce?retryWrites=true&w=majority');
+    await mongoose.connect('mongodb+srv://orquera10:xxZGmwIcMyu8IiD6@clustercoderbackend.bqnpenw.mongodb.net/ecommerce?retryWrites=true&w=majority');
     console.log('DB CONNECTED')
 } catch (error) {
     console.log(error);
