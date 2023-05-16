@@ -1,23 +1,33 @@
 import { Router } from 'express';
-import ProductManager from '../../dao/fileSystemManagers/ProductManager.js';
+import Products from '../../dao/dbManager/products.js';
 
-const productManager = new ProductManager("./src/files/Products.json")
+const productManager = new Products()
 const router = Router();
 
 router.get('/', async (req, res) => {
-    const productos = await productManager.getProducts();
-    const limite = Number(req.query.limit) || productos.length;
-    const productView = productos.slice(0,limite);
-    res.send({ status: 'success', productView });
+    try {
+        const productos = await productManager.getProducts();
+        const limite = Number(req.query.limit) || productos.length;
+        const productView = productos.slice(0, limite);
+        res.send({ status: 'success', payload: productView });
+    } catch (error) {
+        res.status(500).send({ status: 'error', error });
+    }
+    
 });
 
 router.get('/:pid', async (req, res) => {
-    const productID = Number(req.params.pid);
-    const product = await productManager.getProductById(productID);
-    if (!product) {
-        return res.status(400).send({ error: 'Producto no encontrado'});
+    try {
+        const productID = Number(req.params.pid);
+        const product = await productManager.getProductById(productID);
+        if (!product) {
+            return res.status(400).send({ error: 'Producto no encontrado' });
+        }
+        res.send({ status: 'success', payload: product });
+    } catch (error) {
+        res.status(500).send({ status: 'error', error });
     }
-    res.send({status: 'success', product});
+    
 });
 
 router.post('/', async (req, res) => {
@@ -32,20 +42,25 @@ router.post('/', async (req, res) => {
         //     "stock": 25,
         //     "id": 3
         // }
-    const product = req.body;
-    if (product.status===null || product.status===undefined) {
-        product.status = true;
+    try {
+        const product = req.body;
+        if (product.status === null || product.status === undefined) {
+            product.status = true;
+        }
+        if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
+            return res.status(400).send({ error: 'Valores incompletos' });
+        }
+        const result = await productManager.addProduct(product);
+
+
+        const io = req.app.get('socketio');
+        io.emit("showProducts", await productManager.getProducts());
+
+        res.send({ status: 'success', payload: result });
+    } catch (error) {
+        res.status(500).send({ status: 'error', error });
     }
-    if(!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
-        return res.status(400).send({ error: 'Valores incompletos'});
-    }
-    const result = await productManager.addProduct(product);
     
-
-    const io = req.app.get('socketio');
-    io.emit("showProducts", await productManager.getProducts());
-
-    res.send({ status: 'success', result });
 });
 
 router.put('/:pid', async (req, res) => {
@@ -59,28 +74,36 @@ router.put('/:pid', async (req, res) => {
         //     "category": "food",
         //     "stock": 25
         // }
-    const productID = Number(req.params.pid);
-    const product = req.body;
-    const encontrado = await productManager.getProductById(productID)
-    if (!encontrado) {
-        return res.status(400).send({ error: 'Id no encontrado'});
+    try {
+        const productID = Number(req.params.pid);
+        const product = req.body;
+        const encontrado = await productManager.getProductById(productID)
+        if (!encontrado) {
+            return res.status(400).send({ error: 'Id no encontrado' });
+        }
+        const result = await productManager.updateProducts(productID, product);
+        res.send({ status: 'success', result });
+    } catch (error) {
+        res.status(500).send({ status: 'error', error });
     }
-    const result = await productManager.updateProducts(productID,product);
-    res.send({ status: 'success', result });
+    
 });
 
 router.delete('/:pid', async (req, res) => {
-    const productID = Number(req.params.pid);
-    const encontrado = await productManager.getProductById(productID)
-    if (!encontrado) {
-        return res.status(400).send({ error: 'Id no encontrado'});
-    }
-    const result = await productManager.deleteProduct(productID);
+    try {
+        const productID = Number(req.params.pid);
+        const encontrado = await productManager.getProductById(productID)
+        if (!encontrado) {
+            return res.status(400).send({ error: 'Id no encontrado' });
+        }
+        const result = await productManager.deleteProduct(productID);
 
-    const io = req.app.get('socketio');
-    io.emit("showProducts", await productManager.getProducts());
-    res.send({ status: 'success', result });
-    
+        const io = req.app.get('socketio');
+        io.emit("showProducts", await productManager.getProducts());
+        res.send({ status: 'success', result });
+    } catch (error) {
+        res.status(500).send({ status: 'error', error });
+    }
 });
 
 

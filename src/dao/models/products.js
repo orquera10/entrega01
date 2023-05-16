@@ -35,4 +35,4 @@ const productsSchema = new mongoose.Schema({
     thumbnail: String
 });
 
-export const userModel = mongoose.model(productCollections, productsSchema);
+export const productModel = mongoose.model(productCollections, productsSchema);

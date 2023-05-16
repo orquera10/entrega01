@@ -20,33 +20,17 @@ export default class Carts {
     }
 
     addProductToCart = async (cartId, productId) =>{
-        
+        const cart = await cartModel.findById(cartId);
+        const existingProductIndex = cart.products.findIndex((item) => item.product.toString() === productId);
 
-
-
-        const result = await productModel.updateOne({_id:id},product);
-        return result;
-    }
-}
-
-
-addProductToCart = async (cartId, productId) => {
-    try {
-        const carts = await this.getCarts();
-
-        const indexCart = carts.findIndex(elemen=>elemen.id===cartId);
-        const products = carts[indexCart].products;
-        const indexProduct = products.findIndex(elemen=> elemen.product===productId);
-
-        if (indexProduct===-1) {
-            products.push({product:productId, quantity:1});
-        } else{
-            products[indexProduct].quantity+=1;
+        if (existingProductIndex !== -1) {
+            cart.productList[existingProductIndex].quantity += 1;
+        } else {
+            cart.productList.push({ product: productId, quantity: 1 });
         }
-    
-        await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'));
-        return this.getCartById(cartId);
-    } catch (error) {
-        console.log(error);
+
+        await cart.save();
+
+        return cart;
     }
 }

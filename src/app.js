@@ -5,9 +5,10 @@ import cartsRouter from './routes/api/carts.router.js';
 import __dirname from './utils.js';
 import {Server} from 'socket.io';
 import viewsRouter from './routes/web/view.router.js';
-import ProductManager from "./dao/fileSystemManagers/ProductManager.js";
+import Product from "./dao/dbManager/products.js";
+import mongoose from 'mongoose';
 
-const productManager = new ProductManager("./src/files/Products.json")
+const productManager = new Product();
 
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -25,6 +26,12 @@ app.use(`/`,viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
+try {
+    await mongoose.connect('mongodb+srv://orquera10:aPDmJq6NtcNyzMpx@clustercoderbackend.bqnpenw.mongodb.net/ecommerce?retryWrites=true&w=majority');
+    console.log('DB CONNECTED')
+} catch (error) {
+    console.log(error);
+}
 
 const server = app.listen(8081, () => console.log('Server running on port 8081'));
 
