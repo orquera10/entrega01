@@ -4,9 +4,8 @@ import productsRouter from './routes/api/products.router.js';
 import cartsRouter from './routes/api/carts.router.js';
 import __dirname from './utils.js';
 import {Server} from 'socket.io';
-// import viewsRealTimeRouter from './routes/web/viewRealTime.router.js';
 import viewsRouter from './routes/web/view.router.js';
-import ProductManager from "./managers/ProductManager.js";
+import ProductManager from "./dao/fileSystemManagers/ProductManager.js";
 
 const productManager = new ProductManager("./src/files/Products.json")
 
