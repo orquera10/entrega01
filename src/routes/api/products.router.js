@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:pid', async (req, res) => {
     try {
-        const productID = Number(req.params.pid);
+        const productID = req.params.pid;
         const product = await productManager.getProductById(productID);
         if (!product) {
             return res.status(400).send({ error: 'Producto no encontrado' });
@@ -75,7 +75,7 @@ router.put('/:pid', async (req, res) => {
         //     "stock": 25
         // }
     try {
-        const productID = Number(req.params.pid);
+        const productID = req.params.pid;
         const product = req.body;
         const encontrado = await productManager.getProductById(productID)
         if (!encontrado) {
@@ -91,7 +91,7 @@ router.put('/:pid', async (req, res) => {
 
 router.delete('/:pid', async (req, res) => {
     try {
-        const productID = Number(req.params.pid);
+        const productID = req.params.pid;
         const encontrado = await productManager.getProductById(productID)
         if (!encontrado) {
             return res.status(400).send({ error: 'Id no encontrado' });

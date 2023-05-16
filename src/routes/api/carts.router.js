@@ -9,7 +9,7 @@ const router = Router();
 
 router.get('/:cid', async (req, res) => {
     try {
-        const cartID = Number(req.params.cid);
+        const cartID = req.params.cid;
         const cart = await cartManager.getCartById(cartID);
         if (!cart) {
             return res.status(400).send({ error: 'Carrito no encontrado' });
@@ -34,9 +34,10 @@ router.post('/', async (req, res) => {
 
 router.post('/:cid/product/:pid', async (req, res) => {
     try {
-        const cartID = Number(req.params.cid);
-        const productID = Number(req.params.pid);
+        const cartID = req.params.cid;
+        const productID = req.params.pid;
         const product = await productManager.getProductById(productID);
+        console.log(product);
         if (!product) {
             return res.status(400).send({ error: 'Producto no encontrado' });
         }
