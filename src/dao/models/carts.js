@@ -5,7 +5,7 @@ const cartCollection = 'carts';
 const cartsSchema = new mongoose.Schema({
     products: [
         {
-            product: Number,
+            product: String,
             quantity: Number
         }
     ]

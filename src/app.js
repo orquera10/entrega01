@@ -1,14 +1,16 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import handlebars from 'express-handlebars';
+import {Server} from 'socket.io';
+import __dirname from './utils.js';
 import productsRouter from './routes/api/products.router.js';
 import cartsRouter from './routes/api/carts.router.js';
 import viewsRouter from './routes/web/view.router.js';
-import __dirname from './utils.js';
-import {Server} from 'socket.io';
 import Product from "./dao/dbManager/products.js";
-import mongoose from 'mongoose';
+import Message from "./dao/dbManager/messages.js";
 
 const productManager = new Product();
+const messageManager = new Message();
 
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -44,3 +46,24 @@ io.on('connection', socket =>{
     console.log('cliente conectado');
     socket.emit("showProducts", productos);
 })
+
+const messages = await messageManager.getMessages();
+
+
+io.on('connection', socket => {
+    console.log('Nuevo cliente de chat conectado');
+
+    socket.on('message', async data => {
+        messages.push(data);
+        io.emit('messageLogs', messages);
+        await messageManager.addMessages(data);
+        
+    });
+
+    socket.on('authenticated', data => {
+        socket.emit('messageLogs', messages);
+        socket.broadcast.emit('newUserConnected', data);
+    });
+    
+})
+
