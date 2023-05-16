@@ -24,9 +24,9 @@ export default class Carts {
         const existingProductIndex = cart.products.findIndex((item) => item.product.toString() === productId);
 
         if (existingProductIndex !== -1) {
-            cart.productList[existingProductIndex].quantity += 1;
+            cart.products[existingProductIndex].quantity += 1;
         } else {
-            cart.productList.push({ product: productId, quantity: 1 });
+            cart.products.push({ product: productId, quantity: 1 });
         }
 
         await cart.save();

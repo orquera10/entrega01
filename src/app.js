@@ -2,9 +2,9 @@ import express from 'express';
 import handlebars from 'express-handlebars';
 import productsRouter from './routes/api/products.router.js';
 import cartsRouter from './routes/api/carts.router.js';
+import viewsRouter from './routes/web/view.router.js';
 import __dirname from './utils.js';
 import {Server} from 'socket.io';
-import viewsRouter from './routes/web/view.router.js';
 import Product from "./dao/dbManager/products.js";
 import mongoose from 'mongoose';
 
