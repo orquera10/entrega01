@@ -1,9 +1,9 @@
 import { Router } from "express";
-import Products from "../../dao/dbManager/products.js";
+// import Products from "../../dao/dbManager/products.js";
 import { productModel } from "../../dao/models/products.js"; 
+import { cartModel } from "../../dao/models/carts.js";
 
 const router = Router();
-const productManager = new Products();
 
 router.get('/products', async (req, res) => {
     const { page = 1, limit = 10, category = "", status = "",  sort = "" } = req.query;
@@ -36,10 +36,20 @@ router.get('/products', async (req, res) => {
     res.render('home', result);
 });
 
-router.get('/carts/:cid', async (req,res) =>{
-    
-    res.render('cart', result)
-})
+router.get('/carts/:cid', async (req, res) => {
+    try {
+        const cartID = req.params.cid;
+
+        const carrito = await cartModel.find({ _id: cartID }).populate('products.product');
+        const result = JSON.stringify(carrito)
+        console.log(JSON.stringify(carrito, null, '\t'));
+
+        res.render('cart', result)
+    } catch (error) {
+        res.status(500).send({ status: 'error', error });
+    }
+
+});
 
 router.get(`/realTimeProducts`, async (req,res) => {
     try {
