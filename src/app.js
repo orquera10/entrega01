@@ -47,6 +47,9 @@ io.on('connection', socket =>{
     socket.emit("showProducts", productos);
 })
 
+
+
+
 const messages = await messageManager.getMessages();
 
 

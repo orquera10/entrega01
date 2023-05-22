@@ -26,7 +26,50 @@ export default class Carts {
         if (existingProductIndex !== -1) {
             cart.products[existingProductIndex].quantity += 1;
         } else {
-            cart.products.push({ product: productId, quantity: 1 });
+            cart.products.push({ product: productId});
+        }
+
+        await cart.save();
+
+        return cart;
+    }
+
+    deleteProductToCart = async (cid, pid) => {
+        const cart = await cartModel.findById(cid);
+        const existingProductIndex = cart.products.findIndex((item) => item.product.toString() === pid);
+        if (existingProductIndex !== -1) {
+            cart.products.splice(existingProductIndex, 1);
+            // cart.products[existingProductIndex].quantity = 0;
+        } else {
+            console.log('No existe');
+        }
+
+        await cart.save();
+
+        return cart;
+    }
+
+    deleteCart = async (cid) => {
+        const cart = await cartModel.findById(cid);
+        cart.products = [];
+
+        await cart.save();
+
+        return cart;
+    }
+
+    updateCart = async (id, product) =>{
+        const result = await cartModel.updateOne({_id:id}, product);
+        return result;
+    }
+
+    updateQuantityCart = async (cid,pid,cantidad) =>{
+        const cart = await cartModel.findById(cid);
+        const existingProductIndex = cart.products.findIndex((item) => item.product.toString() === pid);
+        if (existingProductIndex !== -1) {
+            cart.products[existingProductIndex].quantity = cantidad.quantity;
+        } else {
+            console.log('No existe');
         }
 
         await cart.save();

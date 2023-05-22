@@ -5,10 +5,16 @@ const cartCollection = 'carts';
 const cartsSchema = new mongoose.Schema({
     products: [
         {
-            product: String,
-            quantity: Number
+            product: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref:'products'
+            },
+            quantity: {
+                type: Number,
+                default: 1
+            }
         }
     ]
 });
 
-export const cartModel = mongoose.model(cartCollection, cartsSchema)
+export const cartModel = mongoose.model(cartCollection, cartsSchema);
