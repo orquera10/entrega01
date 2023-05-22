@@ -51,7 +51,7 @@ const messages = await messageManager.getMessages();
 
 
 io.on('connection', socket => {
-    console.log('Nuevo cliente de chat conectado');
+    
 
     socket.on('message', async data => {
         messages.push(data);
