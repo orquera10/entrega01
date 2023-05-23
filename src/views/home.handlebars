@@ -19,13 +19,16 @@
         
         {{/each}}
     </div>
-    {{#if this.hasPrevPage}}
-    <a href={{this.prevLink}}><button>Anterior</button></a>
-    {{/if}}
-
-    {{#if this.hasNextPage}}
-    <a href={{this.nextLink}}><button>Siguiente</button></a>
-    {{/if}}
+    <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0">
+        {{#if this.hasPrevPage}}
+        <a href={{this.prevLink}}><button class="btn btn-secondary m-3">Anterior</button></a>
+        {{/if}}
+    
+        {{#if this.hasNextPage}}
+        <a href={{this.nextLink}} ><button class="btn btn-secondary m-3">Siguiente</button></a>
+        {{/if}}
+    </div>
+    
 </div>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/socket.io/socket.io.js"></script>
