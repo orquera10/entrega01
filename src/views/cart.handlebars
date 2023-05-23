@@ -1,20 +1,21 @@
-
 <div class="row container-fluid m-0 p-0">
-    <h1 class="col-12 text-center"></h1>
-    {{!-- <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0" id="container"></div>
-        {{#each this.payload}}
+    <h1 class="col-12 text-center">Carrito: {{this._id}}</h1>
+    <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0" id="container">
+        {{#each this.products}}
         <div class="card col-4 m-4" style="width: 18rem;">
             <div class="card-body text-center">
-                <h4 class="card-subtitle mb-2 text-body-secondary">ID: {{this._id}}</h4>
-                <h5 class="card-title">{{this.title}}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">Category: {{this.category}}</h6>
-                <p class="card-text m-1">Description: {{this.description}}</p>
-                <p class="card-text m-1">Code: {{this.code}}</p>
-                <p class="card-text font-weight-bold m-1">Price: {{this.price}}</p>
-                <p class="card-text m-1">Stock: {{this.stock}}</p>
-                <p class="card-text m-1">Satus: {{this.status}}</p>
+                <h4 class="card-subtitle mb-2 text-body-secondary">ID: {{this.product._id}}</h4>
+                <h4 class="card-subtitle mb-2 text-body-secondary">ID: {{this.product.title}}</h4>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Category: {{this.product.category}}</h6>
+                <p class="card-text m-1">Description: {{this.product.description}}</p>
+                <p class="card-text m-1">Code: {{this.product.code}}</p>
+                <p class="card-text font-weight-bold m-1">Price: {{this.product.price}}</p>
+                <p class="card-text m-1">Stock: {{this.product.stock}}</p>
+                <p class="card-text m-1">Satus: {{this.product.status}}</p>
+
+                <h2 class="card-title">Quantity: {{this.quantity}}</h2>
             </div>
         </div>
         {{/each}}
-    </div> --}}
+    </div>
 </div>

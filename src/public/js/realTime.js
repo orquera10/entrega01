@@ -2,7 +2,6 @@ const socket = io();
 const form = document.getElementById(`form`);
 const container = document.getElementById(`container`);
 
-
 socket.on(`showProducts`, data =>{
     container.innerHTML = ``;
         data.forEach(prod=>{

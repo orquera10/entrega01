@@ -3,6 +3,7 @@ import { Router } from "express";
 import { productModel } from "../../dao/models/products.js"; 
 import { cartModel } from "../../dao/models/carts.js";
 
+
 const router = Router();
 
 router.get('/products', async (req, res) => {
@@ -36,19 +37,52 @@ router.get('/products', async (req, res) => {
     res.render('home', result);
 });
 
+// router.get('/carts/:cid', async (req,res) =>{
+//     try {
+//         const cid = req.params.cid;
+//         console.log(cid);
+//         const cart = await cartModel.find({_id:cid}).populate('products.product');
+//         const result = JSON.stringify(cart)
+//         console.log(JSON.stringify(cart, null, '\t'));
+//         res.render('cart', result)
+//     } catch (error) {
+//         console.log(error);
+//     }
+    
+// })
+
 router.get('/carts/:cid', async (req, res) => {
     try {
         const cartID = req.params.cid;
 
         const carrito = await cartModel.find({ _id: cartID }).populate('products.product');
-        const result = JSON.stringify(carrito)
-        console.log(JSON.stringify(carrito, null, '\t'));
+
+        const result = {
+            _id : carrito[0]._id,
+            products : []
+        }
+
+        carrito[0].products.forEach(item=>{
+            result.products.push({
+                product: {
+                    _id : item.product._id,
+                    title: item.product.title,
+                    description: item.product.description,
+                    code: item.product.code,
+                    price: item.product.price,
+                    status: item.product.status,
+                    stock: item.product.stock,
+                    category: item.product.category,
+                    thumbnail: item.product.thumbnail
+                },
+                quantity: item.quantity
+            })
+        })
 
         res.render('cart', result)
     } catch (error) {
         res.status(500).send({ status: 'error', error });
     }
-
 });
 
 router.get(`/realTimeProducts`, async (req,res) => {
