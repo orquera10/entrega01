@@ -24,14 +24,14 @@
                     icon: 'success',
                     title: "¡Éxito!",
                     text: "El producto se agrego correctamente al carrito.",
-                  })
+                })
             } else {
                 console.error('Error al realizar la solicitud POST');
                 Swal.fire({
                     icon: 'error',
                     title: "¡Error!",
                     text: "Se produjo un error en la operación.",
-                  })
+                })
             }
             })
             .catch(error => {
