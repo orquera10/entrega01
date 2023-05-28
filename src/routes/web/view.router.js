@@ -1,14 +1,31 @@
 import { Router } from "express";
-// import Products from "../../dao/dbManager/products.js";
-import { productModel } from "../../dao/models/products.js"; 
-import { cartModel } from "../../dao/models/carts.js";
+import { productModel } from "../../dao/models/products.model.js"; 
+import { cartModel } from "../../dao/models/carts.model.js";
 
 
 const router = Router();
 
-router.get('/products', async (req, res) => {
+//Acceso público y privado
+const publicAccess = (req, res, next) => {
+    if(req.session.user) return res.redirect('/products');
+    next();
+}
+
+const privateAccess = (req, res, next) => {
+    if(!req.session.user) return res.redirect('/login');
+    next();
+}
+
+//redireccionar raiz al login
+router.get('/', publicAccess, (req, res) => {
+    res.redirect('/login');
+});
+
+//Vista para mostrar los productos con paginacion
+router.get('/products', privateAccess, async (req, res) => {
     const { page = 1, limit = 10, category = "", status = "",  sort = "" } = req.query;
     const filter = {};
+
     if (category) {
         filter.category = category; // Agregar filtro por categoría si se especifica
     }
@@ -34,23 +51,11 @@ router.get('/products', async (req, res) => {
         prevLink: products.hasPrevPage ? `/products?page=${products.prevPage}&limit=${limit}&category=${category}&status=${status}&sort=${sort}` : null,
         nextLink: products.hasNextPage ? `/products?page=${products.nextPage}&limit=${limit}&category=${category}&status=${status}&sort=${sort}` : null
     }
-    res.render('home', result);
+
+    res.render('home', {products:result, user:req.session.user});
 });
 
-// router.get('/carts/:cid', async (req,res) =>{
-//     try {
-//         const cid = req.params.cid;
-//         console.log(cid);
-//         const cart = await cartModel.find({_id:cid}).populate('products.product');
-//         const result = JSON.stringify(cart)
-//         console.log(JSON.stringify(cart, null, '\t'));
-//         res.render('cart', result)
-//     } catch (error) {
-//         console.log(error);
-//     }
-    
-// })
-
+//Vista para mostrar los productos de un carrito especificado
 router.get('/carts/:cid', async (req, res) => {
     try {
         const cartID = req.params.cid;
@@ -85,6 +90,7 @@ router.get('/carts/:cid', async (req, res) => {
     }
 });
 
+//Vista para ver productos en tiempo real
 router.get(`/realTimeProducts`, async (req,res) => {
     try {
         res.render(`realTimeProducts`);
@@ -93,8 +99,18 @@ router.get(`/realTimeProducts`, async (req,res) => {
     }
 });
 
+//Vista del chat
 router.get('/chat', (req, res) => {    
     res.render('chat');
+});
+
+//Vistas para login
+router.get('/register', publicAccess, (req, res) => {
+    res.render('register');
+});
+
+router.get('/login', publicAccess, (req, res) => {
+    res.render('login');
 });
 
 export default router;

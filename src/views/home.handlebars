@@ -1,7 +1,18 @@
 <div class="row container-fluid m-0 p-0">
+    <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0 text-center">
+        <div class="card col-4 m-4" style="width: 18rem;">
+            <h4 class="card-title">Bienvenido</h4>
+            <p class="card-subtitle mb-2 text-body-secondary">Nombre: {{user.name}}</p>
+            <p class="card-subtitle mb-2 text-body-secondary">Email: {{user.email}}</p>
+            <p class="card-subtitle mb-2 text-body-secondary">Edad: {{user.age}}</p>
+            <p class="card-subtitle mb-2 text-body-secondary">Rol: {{user.role}}</p>
+            <a href="/api/sessions/logout" ><button class="btn btn-secondary m-3">Salir</button></a>
+        </div>
+        
+    </div>
     <h1 class="col-12 text-center">Productos</h1>
     <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0" id="container">
-        {{#each this.payload}}
+        {{#each products.payload}}
         <div class="card col-4 m-4" style="width: 18rem;">
             <div class="card-body text-center">
                 <h4 class="card-subtitle mb-2 text-body-secondary">ID: {{this._id}}</h4>
@@ -20,12 +31,12 @@
         {{/each}}
     </div>
     <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0">
-        {{#if this.hasPrevPage}}
-        <a href={{this.prevLink}}><button class="btn btn-secondary m-3">Anterior</button></a>
+        {{#if products.hasPrevPage}}
+        <a href={{products.prevLink}}><button class="btn btn-secondary m-3">Anterior</button></a>
         {{/if}}
     
-        {{#if this.hasNextPage}}
-        <a href={{this.nextLink}} ><button class="btn btn-secondary m-3">Siguiente</button></a>
+        {{#if products.hasNextPage}}
+        <a href={{products.nextLink}} ><button class="btn btn-secondary m-3">Siguiente</button></a>
         {{/if}}
     </div>
     
