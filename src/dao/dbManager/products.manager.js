@@ -15,7 +15,7 @@ export default class Products {
     }
 
     getProductById = async (id) =>{
-        const result = await productModel.find({_id:id}).lean();
+        const result = await productModel.findOne({_id:id}).lean();
         return result;
     }
 

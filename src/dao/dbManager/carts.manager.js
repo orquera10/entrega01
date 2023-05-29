@@ -15,13 +15,13 @@ export default class Carts {
     }
 
     getCartById = async (id) =>{
-        const result = await cartModel.find({_id:id}).lean();
+        const result = await cartModel.findOne({_id:id}).lean();
         return result;
     }
 
     addProductToCart = async (cartId, productId) =>{
         const cart = await cartModel.findById(cartId);
-        const existingProductIndex = cart.products.findIndex((item) => item.product.toString() === productId);
+        const existingProductIndex = cart.products.findIndex((item) => item.product._id.toString() === productId);
 
         if (existingProductIndex !== -1) {
             cart.products[existingProductIndex].quantity += 1;
@@ -36,10 +36,10 @@ export default class Carts {
 
     deleteProductToCart = async (cid, pid) => {
         const cart = await cartModel.findById(cid);
-        const existingProductIndex = cart.products.findIndex((item) => item.product.toString() === pid);
+        
+        const existingProductIndex = cart.products.findIndex((item) => item.product._id.toString() === pid);
         if (existingProductIndex !== -1) {
             cart.products.splice(existingProductIndex, 1);
-            // cart.products[existingProductIndex].quantity = 0;
         } else {
             console.log('No existe');
         }

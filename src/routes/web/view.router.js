@@ -1,9 +1,12 @@
 import { Router } from "express";
 import { productModel } from "../../dao/models/products.model.js"; 
-import { cartModel } from "../../dao/models/carts.model.js";
+// import { cartModel } from "../../dao/models/carts.model.js";
+import Carts from "../../dao/dbManager/carts.manager.js"
 
 
 const router = Router();
+
+const cartManager = new Carts()
 
 //Acceso público y privado
 const publicAccess = (req, res, next) => {
@@ -59,30 +62,7 @@ router.get('/products', privateAccess, async (req, res) => {
 router.get('/carts/:cid', async (req, res) => {
     try {
         const cartID = req.params.cid;
-
-        const carrito = await cartModel.find({ _id: cartID }).populate('products.product');
-
-        const result = {
-            _id : carrito[0]._id,
-            products : []
-        }
-
-        carrito[0].products.forEach(item=>{
-            result.products.push({
-                product: {
-                    _id : item.product._id,
-                    title: item.product.title,
-                    description: item.product.description,
-                    code: item.product.code,
-                    price: item.product.price,
-                    status: item.product.status,
-                    stock: item.product.stock,
-                    category: item.product.category,
-                    thumbnail: item.product.thumbnail
-                },
-                quantity: item.quantity
-            })
-        })
+        const result = await cartManager.getCartById(cartID)
 
         res.render('cart', result)
     } catch (error) {
