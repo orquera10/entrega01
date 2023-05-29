@@ -14,6 +14,12 @@ form.addEventListener('submit', e => {
     }).then(result => {
         if (result.status === 200) {
             window.location.replace('/login');
+        } else{
+            Swal.fire({
+                icon: 'error',
+                title: "¡Error!",
+                text: "Email ya registrado",
+            })
         }
     });
 })
