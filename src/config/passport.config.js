@@ -12,16 +12,6 @@ const initializePassport = () => {
     }, async (req, username, password, done) => {
         const { first_name, last_name, email, age } = req.body;
         try {
-
-            // if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-            //     const userToSave = {
-            //         first_name: "Administrador",
-            //         email: email,
-            //         role: 'admin'
-            //     }
-            //     return done(null, userToSave)
-            // }
-
             const user = await userModel.findOne({ email: username });
 
             if (user) {
@@ -48,13 +38,25 @@ const initializePassport = () => {
         usernameField: 'email'
     }, async (username, password, done) => {
         try {
+            // if (username === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+            //     const user = {
+            //         id_: 1,
+            //         first_name: "Administrador",
+            //         email: username,
+            //         role: 'admin'
+            //     }
+            //     return done(null, user)
+            // }
+
             const user = await userModel.findOne({ email: username});
 
             if (!user) {
                 return done(null, false)
             }
 
-            if (!isValidPassword(user, password)) return done(null, false)
+            if (!isValidPassword(user, password)) {
+                return done(null, false)
+            }
 
             return done(null, user)
             //req.user

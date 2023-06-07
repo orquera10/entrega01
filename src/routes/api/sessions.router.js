@@ -1,3 +1,4 @@
+import { error } from 'console';
 import { Router } from 'express';
 // import userModel from '../../dao/models/user.model.js';
 import passport from 'passport';
@@ -31,7 +32,7 @@ router.post('/register', passport.authenticate('register', { failureRedirect: 'f
 });
 
 router.get('/fail-register', async (req, res) => {
-    res.send({ status: 'error', message: 'Register failed' });
+    res.status(400).send({ status: 'error', message: 'Register failed' });
 });
 
 // router.post('/login', async (req, res) => {
@@ -64,22 +65,34 @@ router.get('/fail-register', async (req, res) => {
 //     }
 // });
 
-router.post('/login',  passport.authenticate('login'), async (req, res) => {
+router.post('/login',  passport.authenticate('login', { failureRedirect: 'fail-login' }), async (req, res) => {
+    // const { email, password } = req.body;
+    // console.log(req.body);
+    // if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+    //     req.session.user = {
+    //             first_name: "Administrador",
+    //             email: email,
+    //             role: 'admin'
+    //     }
+    //     return res.send({ status: 'success', message: 'Login success' })
+    // }
+    
     if (!req.user) return res.status(400).send({ status: 'error', error: 'Invalid credentials' });
-
+    
     req.session.user = {
         first_name: req.user.first_name,
         last_name: req.user.last_name,
         age: req.user.age,
-        email: req.user.email
+        email: req.user.email,
+        role: req.user.role || "usuario"
     };
 
     res.send({ status: 'success', message: 'Login success' })
 });
 
-// router.get('/fail-login', async (req, res) => {
-//     res.send({ status: 'error', message: 'Login failed' });
-// });
+router.get('/fail-login', async (req, res) => {
+    res.status(400).send({ status: 'error', message: 'Login failed' })
+});
 
 router.get('/logout', (req, res) => {
     req.session.destroy(err => {

@@ -19,7 +19,8 @@ form.addEventListener('submit', e => {
                 icon: 'error',
                 title: "¡Error!",
                 text: "Email o Password incorrectos",
-            })
+            });
+            setTimeout(()=>{window.location.replace('/login');},2000)
         }
     })
 })

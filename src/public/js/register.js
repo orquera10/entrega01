@@ -20,7 +20,8 @@ form.addEventListener('submit', e => {
                 timer: 3000,
                 title: "¡Error!",
                 text: "Email ya registrado",
-            })
+            });
+            setTimeout(()=>{window.location.replace('/register');},2000)
         }
     });
 })

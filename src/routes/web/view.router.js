@@ -54,7 +54,7 @@ router.get('/products', privateAccess, async (req, res) => {
         prevLink: products.hasPrevPage ? `/products?page=${products.prevPage}&limit=${limit}&category=${category}&status=${status}&sort=${sort}` : null,
         nextLink: products.hasNextPage ? `/products?page=${products.nextPage}&limit=${limit}&category=${category}&status=${status}&sort=${sort}` : null
     }
-    console.log(req.session.user);
+    
     res.render('home', {products:result, user:req.session.user});
 });
 
