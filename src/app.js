@@ -11,6 +11,10 @@ import Product from "./dao/dbManager/products.manager.js";
 import Message from "./dao/dbManager/messages.manager.js";
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
+import initializePassport from './config/passport.config.js';
+import passport from 'passport';
+
+
 
 const productManager = new Product();
 const messageManager = new Message();
@@ -24,11 +28,12 @@ try {
     console.log(error);
 }
 
-app.use(express.static(`${__dirname}/public`));
+
 
 //Parametros de config
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(`${__dirname}/public`));
 
 //Configuracion handlebars
 app.engine('handlebars', handlebars.engine());
@@ -45,6 +50,12 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+
+//PASSPORT
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use(`/`,viewsRouter);
 app.use('/api/products', productsRouter);

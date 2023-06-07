@@ -17,6 +17,7 @@ form.addEventListener('submit', e => {
         } else{
             Swal.fire({
                 icon: 'error',
+                timer: 3000,
                 title: "¡Error!",
                 text: "Email ya registrado",
             })
