@@ -2,11 +2,16 @@
     <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0 text-center">
         <div class="card col-4 m-4" style="width: 18rem;">
             <h4 class="card-title">Bienvenido</h4>
-            <p class="card-subtitle mb-2 text-body-secondary">Nombre: {{user.first_name}} {{user.last_name}}</p>
-            <p class="card-subtitle mb-2 text-body-secondary">Email: {{user.email}}</p>
-            <p class="card-subtitle mb-2 text-body-secondary">Edad: {{user.age}}</p>
-            <p class="card-subtitle mb-2 text-body-secondary">Rol: {{user.role}}</p>
-            <a href="/api/sessions/logout" ><button class="btn btn-secondary m-3">Salir</button></a>
+            {{#if user.itsAdmin}}
+                <p class="card-subtitle mb-2 text-body-secondary">Email: {{user.email}}</p>
+                <p class="card-subtitle mb-2 text-body-secondary">Rol: {{user.role}}</p>
+            {{else}}
+                <p class="card-subtitle mb-2 text-body-secondary">Nombre: {{user.first_name}} {{user.last_name}}</p>
+                <p class="card-subtitle mb-2 text-body-secondary">Email: {{user.email}}</p>
+                <p class="card-subtitle mb-2 text-body-secondary">Edad: {{user.age}}</p>
+                <p class="card-subtitle mb-2 text-body-secondary">Rol: {{user.role}}</p>
+            {{/if}}
+            <a href="/api/sessions/logout"><button class="btn btn-secondary m-3">Salir</button></a>
         </div>
         
     </div>

@@ -3,6 +3,18 @@ import passport from 'passport';
 
 const router = Router();
 
+const setearUsuario = (req) => {
+    if (req.user.email === 'adminCoder@coder.com') req.user.role = "admin";
+    req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        age: req.user.age,
+        email: req.user.email,
+        role: req.user.role || "usuario",
+        itsAdmin: req.user.role === "admin"
+    };
+};
+
 router.post('/register', passport.authenticate('register', { failureRedirect: 'fail-register' }), async (req, res) => {
     res.send({ status: 'success', message: 'User registered' })
 });
@@ -15,15 +27,7 @@ router.post('/login',  passport.authenticate('login', { failureRedirect: 'fail-l
     
     if (!req.user) return res.status(400).send({ status: 'error', error: 'Invalid credentials' });
 
-    if (req.user.email === 'adminCoder@coder.com') req.user.role = "admin";
-    
-    req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age: req.user.age,
-        email: req.user.email,
-        role: req.user.role || "usuario"
-    };
+    setearUsuario(req);
 
     res.send({ status: 'success', message: 'Login success' })
 });
@@ -48,7 +52,7 @@ router.get('/github', passport.authenticate(
 router.get('/github-callback', passport.authenticate(
     'github', { failureRedirect: '/login' }
 ), async (req, res) => {
-    req.session.user = req.user;
+    setearUsuario(req);
     res.redirect('/')
 });
 
@@ -61,7 +65,7 @@ router.get('/google', passport.authenticate(
 router.get('/google-callback', passport.authenticate(
     'google', { failureRedirect: '/login' }
 ), async (req, res) => {
-    req.session.user = req.user;
+    setearUsuario(req);
     res.redirect('/')
 });
 

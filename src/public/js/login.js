@@ -17,10 +17,11 @@ form.addEventListener('submit', e => {
         } else{
             Swal.fire({
                 icon: 'error',
+                timer: 3000,
                 title: "¡Error!",
                 text: "Email o Password incorrectos",
             });
             setTimeout(()=>{window.location.replace('/login');},2000)
         }
-    })
+    });
 })
