@@ -2,10 +2,71 @@ import passport from 'passport';
 import local from 'passport-local';
 import userModel from '../dao/models/user.model.js';
 import { createHash, isValidPassword } from '../utils.js';
+import GitHubStrategy from 'passport-github2';
+import GoogleStrategy from 'passport-google-oauth2'
 
 const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
+    passport.use('github', new GitHubStrategy({
+        clientID: "Iv1.d43bcb2397327d68",
+        clientSecret: "19dcaa0228ee07bd94c9c35f6cf5726f98b86df5",
+        callbackURL: "http://localhost:8081/api/sessions/github-callback",
+        scope: ['user:email']
+    }, async (accessToken, refreshToken, profile, done) => {
+        try {
+            const email = profile.emails[0].value;
+            const user = await userModel.findOne({ email })
+            if (!user) {
+                const newUser = {
+                    first_name: profile._json.name,
+                    last_name: '',
+                    age: 18,
+                    email,
+                    password: '' 
+                }
+
+                const result = await userModel.create(newUser);
+                done(null, result);
+            } else {
+                done(null, user);
+            }
+        } catch (error) {
+            return done(error);
+        }
+    }));
+
+    passport.use('google', new GoogleStrategy({
+        clientID: '497464075287-fc71tg0hfcf9ek0p2nm8cvlpq6hqdsr2.apps.googleusercontent.com',
+        clientSecret: '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',
+        callbackURL: "http://localhost:8081/api/sessions/google-callback",
+        passReqToCallback   : true,
+        scope: [ 'email', 'profile' ]
+      },
+      async (request, accessToken, refreshToken, profile, done) => {
+        try {
+            const email = profile.emails[0].value;
+            const user = await userModel.findOne({ email })
+            if (!user) {
+                const newUser = {
+                    first_name: profile._json.name,
+                    last_name: '',
+                    age: 18,
+                    email,
+                    password: '' 
+                }
+
+                const result = await userModel.create(newUser);
+                done(null, result);
+            } else {
+                done(null, user);
+            }
+        } catch (error) {
+            return done(error)
+        }
+      }
+    ));
+
     passport.use('register', new LocalStrategy({
         passReqToCallback: true, //permite acceder al objeto request como cualquier otro middleware,
         usernameField: 'email'
@@ -38,16 +99,6 @@ const initializePassport = () => {
         usernameField: 'email'
     }, async (username, password, done) => {
         try {
-            // if (username === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-            //     const user = {
-            //         id_: 1,
-            //         first_name: "Administrador",
-            //         email: username,
-            //         role: 'admin'
-            //     }
-            //     return done(null, user)
-            // }
-
             const user = await userModel.findOne({ email: username});
 
             if (!user) {
@@ -77,33 +128,3 @@ const initializePassport = () => {
 };
 
 export default initializePassport;
-
-// router.post('/login', async (req, res) => {
-//     try {
-//         const { email, password } = req.body;
-
-//         if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-//             req.session.user = {
-//                 name: "Administrador",
-//                 email: email,
-//                 role: 'admin'
-//             }
-//             return res.send({ status: 'success', message: 'Login success' })
-//         }
-
-//         const user = await userModel.findOne({ email, password });
-
-//         if (!user) return res.status(400).send({ status: 'error', error: 'Incorrect credentials' });
-
-//         req.session.user = {
-//             name: `${user.first_name} ${user.last_name}`,
-//             email: user.email,
-//             age: user.age,
-//             role: "usuario"
-//         }
-
-//         res.send({ status: 'success', message: 'Login success' })
-//     } catch (error) {
-//         res.status(500).send({ status: 'error', error });
-//     }
-// });
