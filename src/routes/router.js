@@ -77,6 +77,12 @@ export default class Router {
     handlePolicies = (policies) => (req, res, next) => {
         if (policies[0] === 'PUBLIC') return next();
 
+        // if (!req.user) {
+        //     res.redirect('/login')
+        // } else {
+        //     res.redirect('/products')
+        // }
+
         const user = req.user;
 
         if (!policies.includes(user.role.toUpperCase()))

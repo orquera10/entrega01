@@ -11,11 +11,11 @@ import ViewsRouter from './routes/web/view.router.js';
 // import sessionsRouter from './routes/api/sessions.router.js';
 import Product from "./dao/dbManager/products.manager.js";
 import Message from "./dao/dbManager/messages.manager.js";
-import MongoStore from 'connect-mongo';
+// import MongoStore from 'connect-mongo';
 // import session from 'express-session';
 import initializePassport from './config/passport.config.js';
 import passport from 'passport';
-
+import cookieParser from 'cookie-parser';
 
 
 const productManager = new Product();
@@ -41,6 +41,7 @@ try {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
+app.use(cookieParser());
 
 //Configuracion handlebars
 app.engine('handlebars', handlebars.engine());

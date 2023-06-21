@@ -14,12 +14,20 @@ const productManager = new Products()
 export default class ViewsRouter extends Router {
     init() {
         this.get('/login', ['PUBLIC'], passportStrategiesEnum.NOTHING, (req, res) => {
+            
+            if (req.cookies["coderCookieToken"]) res.redirect('/products');
+            
             res.render('login');
+        
+            
+            
         });
         this.get('/register', ['PUBLIC'], passportStrategiesEnum.NOTHING, (req, res) => {
+            if (req.cookies["coderCookieToken"]) res.redirect('/products');
             res.render('register');
         });
-        this.get('/products', ['ADMIN'], passportStrategiesEnum.JWT, async (req, res) => {
+        this.get('/products', ['USER','ADMIN'], passportStrategiesEnum.JWT, async (req, res) => {
+            
             const { page = 1, limit = 10, category = "", status = "",  sort = "" } = req.query;
             const filter = {};
         
@@ -35,7 +43,7 @@ export default class ViewsRouter extends Router {
                 sortBy.price = sort
             } 
                 
-            const result = await productManager.getProductsPaginate(filter, limit, page, sortBy) 
+            const result = await productManager.getProductsPaginate(filter, limit, page, sortBy, category, status, sort) 
             
             res.render('home', {products:result, user:req.user});
         });

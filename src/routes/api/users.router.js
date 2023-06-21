@@ -27,12 +27,10 @@ export default class UsersRouter extends Router {
             // res.sendSuccess({ accessToken });
         });
 
-        // this.get('/logout', (req, res) => {
-        //     req.session.destroy(err => {
-        //         if(err) return res.status(500).send({ status: 'error', error: 'Logout fail' });
-        //         res.redirect('/products')
-        //     })
-        // });
+
+        this.get('/logout',['PUBLIC'], passportStrategiesEnum.NOTHING, (req, res) => {
+            res.clearCookie("coderCookieToken").redirect('/login')
+        });
         
 
         this.post('/register', ['PUBLIC'], passportStrategiesEnum.NOTHING, async (req, res) => {
