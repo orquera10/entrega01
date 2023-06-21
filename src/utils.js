@@ -1,21 +1,31 @@
-import path from 'path'
+// import path from 'path'
 import { fileURLToPath } from 'url'
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { dirname } from "path";
+import { PRIVATE_KEY } from "./config/constants.js"
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 //cifrado vs hasheo
 //Hasheo es mucho más seguro, porque?, con este mecanismo garantizamos que no vamos a poder revertir los datos a texto plano
 //Cifrado, si nosotros sabemos la clave privada con la que estamos cifrando los datos, podemos hacer el proceso inverso.
-export const createHash = password =>
+const createHash = password =>
     bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
-export const isValidPassword = (user, password) =>
+const isValidPassword = (user, password) =>
     bcrypt.compareSync(password, user.password);
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const generateToken = (user) => {
+    const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: '24h' });
+    return token;
+};
 
-
-export default __dirname
-
+export {
+    __dirname,
+    createHash,
+    isValidPassword,
+    generateToken
+}
 

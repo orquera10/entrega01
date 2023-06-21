@@ -1,112 +1,108 @@
-import { Router } from 'express';
+// import { Router } from 'express';
+import Router from '../router.js';
 import Products from '../../dao/dbManager/products.manager.js';
+import { passportStrategiesEnum } from '../../config/enums.js';
 
 const productManager = new Products()
-const router = Router();
+// const router = Router();
 
-router.get('/', async (req, res) => {
-    try {
-        const productos = await productManager.getProducts();
-        const limite = Number(req.query.limit) || productos.length;
-        const productView = productos.slice(0, limite);
-        res.send({ status: 'success', payload: productView });
-    } catch (error) {
-        res.status(500).send({ status: 'error', error });
+export default class ProductsRouter extends Router {
+    init() {
+        this.get('/', ['ADMIN'], passportStrategiesEnum.JWT, this.getAll);
+        this.get('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.getAllById);
+        // this.get('/paginated', ['ADMIN'], passportStrategiesEnum.JWT, this.getAllPaginated);
+        this.post('/', ['ADMIN'], passportStrategiesEnum.JWT, this.save);
+        this.put('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.update);
+        this.put('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.delete);
+    }
+    async getAll(req, res) {
+        try {
+            const products = await productManager.getProducts();
+            const limite = Number(req.query.limit) || productos.length;
+            const productView = products.slice(0, limite);
+            res.sendSuccess(productView);
+        } catch (error) {
+            res.sendServerError(error.message);
+        }
+    }
+
+    async getById(req, res) {
+        try {
+            const productID = req.params.pid;
+            const product = await productManager.getProductById(productID);
+            if (!product) {
+                return res.status(400).send({ error: 'Producto no encontrado' });
+            }
+            res.sendSuccess(product);
+        } catch (error) {
+            res.sendServerError(error.message);
+        }
+    }
+
+    // async getAllPaginated(req, res) {
+    //     try {
+    //         const { limit = 10, page = 1 } = req.query;
+    //         const students = await studentsManager.getAllPaginated(limit, page);
+    //         res.sendSuccess(students);
+    //     } catch (error) {
+    //         res.sendServerError(error.message);
+    //     }
+    // }
+
+    async save(req, res) {
+        try {
+            // const { first_name, last_name, dni, email, birth_date, gender } = req.body;
+            const product = req.body;
+
+            if (product.status === null || product.status === undefined) {
+                product.status = true;
+            }
+            if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
+                return res.sendClientError('incomplete values');
+            }
+            const result = await productManager.addProduct(product);
+    
+    
+            const io = req.app.get('socketio');
+            io.emit("showProducts", await productManager.getProducts());
+    
+            res.sendSuccess(result);
+
+        } catch (error) {
+            res.sendServerError(error.message);
+        }
+    }
+
+    async update(req, res) {
+        try {
+            const productID = req.params.pid;
+            const product = req.body;
+            const encontrado = await productManager.getProductById(productID)
+            if (!encontrado) {
+                return res.status(400).send({ error: 'Id no encontrado' });
+            }
+            const result = await productManager.updateProducts(productID, product);
+            res.sendSuccess(result);
+        } catch (error) {
+            res.sendServerError(error.message);
+        }
     }
     
-});
+    async delete(req, res) {
+        try {
+            const productID = req.params.pid;
+            const encontrado = await productManager.getProductById(productID)
+            if (!encontrado) {
+                return res.status(400).send({ error: 'Id no encontrado' });
+            }
+            const result = await productManager.deleteProduct(productID);
 
-router.get('/:pid', async (req, res) => {
-    try {
-        const productID = req.params.pid;
-        const product = await productManager.getProductById(productID);
-        if (!product) {
-            return res.status(400).send({ error: 'Producto no encontrado' });
+            const io = req.app.get('socketio');
+            io.emit("showProducts", await productManager.getProducts());
+
+            res.sendSuccess(result);
+        } catch (error) {
+            res.sendServerError(error.message);
         }
-        res.send({ status: 'success', payload: product });
-    } catch (error) {
-        res.status(500).send({ status: 'error', error });
     }
-    
-});
-
-router.post('/', async (req, res) => {
-        // {
-        //     "title": "producto prueba",
-        //     "description": "Este es un producto de prueba",
-        //     "price": 200,
-        //     "status": true,
-        //     "thumbnail": ["http://pagina/imagen1.jpg","http://pagina/imagen2.jpg"],
-        //     "code": "abc132",
-        //     "category": "food",
-        //     "stock": 25,
-        //     "id": 3
-        // }
-    try {
-        const product = req.body;
-        if (product.status === null || product.status === undefined) {
-            product.status = true;
-        }
-        if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
-            return res.status(400).send({ error: 'Valores incompletos' });
-        }
-        const result = await productManager.addProduct(product);
-
-
-        const io = req.app.get('socketio');
-        io.emit("showProducts", await productManager.getProducts());
-
-        res.send({ status: 'success', payload: result });
-    } catch (error) {
-        res.status(500).send({ status: 'error', error });
-    }
-    
-});
-
-router.put('/:pid', async (req, res) => {
-        // {
-        //     "title": "producto prueba",
-        //     "description": "Este es un producto de prueba",
-        //     "price": 200,
-        //     "status": true,
-        //     "thumbnail": ["http://pagina/imagen1.jpg","http://pagina/imagen2.jpg"],
-        //     "code": "abc132",
-        //     "category": "food",
-        //     "stock": 25
-        // }
-    try {
-        const productID = req.params.pid;
-        const product = req.body;
-        const encontrado = await productManager.getProductById(productID)
-        if (!encontrado) {
-            return res.status(400).send({ error: 'Id no encontrado' });
-        }
-        const result = await productManager.updateProducts(productID, product);
-        res.send({ status: 'success', result });
-    } catch (error) {
-        res.status(500).send({ status: 'error', error });
-    }
-    
-});
-
-router.delete('/:pid', async (req, res) => {
-    try {
-        const productID = req.params.pid;
-        const encontrado = await productManager.getProductById(productID)
-        if (!encontrado) {
-            return res.status(400).send({ error: 'Id no encontrado' });
-        }
-        const result = await productManager.deleteProduct(productID);
-
-        const io = req.app.get('socketio');
-        io.emit("showProducts", await productManager.getProducts());
-        res.send({ status: 'success', result });
-    } catch (error) {
-        res.status(500).send({ status: 'error', error });
-    }
-});
-
-
-
-
-export default router;
+}
