@@ -29,16 +29,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'user'
+    },
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'carts'
     }
-    // ,
-    // cart: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref:'carts'
-    // }
 });
 
-// userSchema.pre("findOne", function(){
-//     this.populate('carts')
-// })
+userSchema.pre("findOne", function(){
+    this.populate('cart')
+})
 
 export const userModel = mongoose.model(userCollection, userSchema);

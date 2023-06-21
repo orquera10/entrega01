@@ -12,6 +12,7 @@ export default class UsersRouter extends Router {
         this.post('/login', ['PUBLIC'], passportStrategiesEnum.NOTHING, async (req, res) => {
             const { email, password } = req.body;
             const user = await usersManager.getByEmail(email);
+            
             if (!user) return res.sendClientError('incorrect credentials');
 
             const comparePassword = isValidPassword(user, password);
@@ -45,10 +46,12 @@ export default class UsersRouter extends Router {
                 if (exists)
                     return res.sendClientError('user already exists')
                 
+                const cart = await cartManager.addCarts({ products: [] });
+
                 const hashedPassword = createHash(password);
 
                 const newUser = {
-                    ...req.body
+                    ...req.body, cart: cart._id
                 };
 
                 newUser.password = hashedPassword;
@@ -61,8 +64,13 @@ export default class UsersRouter extends Router {
             }
         })
 
-        // this.get('/current', ['PUBLIC'], passportStrategiesEnum.NOTHING, async (req, res) => {
-            
+        // this.get('/github', ['PUBLIC'], passportStrategiesEnum.github, async (req, res) => {
+        //     res.sendSuccess("User registered")
+        // })
+
+        // this.get('/github-callback', ['PUBLIC'], passportStrategiesEnum.github, async (req, res) => {
+
+        //     res.redirect('/')
         // })
     }
     
