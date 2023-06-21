@@ -64,6 +64,7 @@ app.use(passport.initialize());
 // app.use(passport.session());
 
 
+
 app.use(`/`,viewsRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
