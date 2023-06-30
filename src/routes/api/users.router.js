@@ -36,9 +36,9 @@ export default class UsersRouter extends Router {
 
         this.post('/register', ['PUBLIC'], passportStrategiesEnum.NOTHING, async (req, res) => {
             try {
-                const { first_name, last_name, role, email, password, age } = req.body;
+                const { first_name, last_name, email, password, age } = req.body;
 
-                if (!first_name || !last_name || !role || !email || !password || !age)
+                if (!first_name || !last_name || !email || !password || !age)
                     return res.sendClientError('incomplete values')
 
                 const exists = await usersManager.getByEmail(email);
@@ -51,7 +51,7 @@ export default class UsersRouter extends Router {
                 const hashedPassword = createHash(password);
 
                 const newUser = {
-                    ...req.body, cart: cart._id
+                    ...req.body, role: "USER", cart: cart._id
                 };
 
                 newUser.password = hashedPassword;
@@ -64,14 +64,33 @@ export default class UsersRouter extends Router {
             }
         })
 
-        // this.get('/github', ['PUBLIC'], passportStrategiesEnum.github, async (req, res) => {
-        //     res.sendSuccess("User registered")
-        // })
+        this.get('/github', ['PUBLIC'], passportStrategiesEnum.github, async (req, res) => {
+            res.sendSuccess("User registered")
+        })
 
-        // this.get('/github-callback', ['PUBLIC'], passportStrategiesEnum.github, async (req, res) => {
+        this.get('/github-callback', ['PUBLIC'], passportStrategiesEnum.github, async (req, res) => {
+            
+            const accessToken = generateToken(req.user);
+            
+            res.cookie(
+                'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
+            )
+            res.redirect('/')
+        })
 
-        //     res.redirect('/')
-        // })
+        this.get('/google', ['PUBLIC'], passportStrategiesEnum.google, async (req, res) => {
+            res.sendSuccess("User registered")
+        })
+
+        this.get('/google-callback', ['PUBLIC'], passportStrategiesEnum.google, async (req, res) => {
+            
+            const accessToken = generateToken(req.user);
+            
+            res.cookie(
+                'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
+            )
+            res.redirect('/')
+        })
     }
     
 }

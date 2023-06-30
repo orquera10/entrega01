@@ -89,13 +89,13 @@ const initializePassport = () => {
             const user = await userModel.findOne({ email })
             if (!user) {
                 const newUser = {
-                    first_name: profile._json.name,
-                    last_name: '',
+                    first_name: profile._json.login,
+                    last_name: 'user',
                     age: 18,
                     email,
-                    password: '' 
+                    role:'USER',
+                    password: createHash('1234')
                 }
-
                 const result = await userModel.create(newUser);
                 done(null, result);
             } else {
@@ -119,13 +119,14 @@ const initializePassport = () => {
             const user = await userModel.findOne({ email })
             if (!user) {
                 const newUser = {
-                    first_name: profile._json.name,
-                    last_name: '',
+                    first_name: profile._json.given_name,
+                    last_name: profile._json.family_name,
                     age: 18,
                     email,
-                    password: '' 
+                    role:'USER',
+                    password: createHash('1234') 
                 }
-
+                
                 const result = await userModel.create(newUser);
                 done(null, result);
             } else {
