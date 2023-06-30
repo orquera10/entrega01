@@ -3,7 +3,8 @@ import passport from 'passport';
 import {userModel} from '../dao/models/user.model.js';
 import { createHash, isValidPassword } from '../utils.js';
 import GitHubStrategy from 'passport-github2';
-import GoogleStrategy from 'passport-google-oauth2'
+import GoogleStrategy from 'passport-google-oauth2';
+import FacebookStrategy from 'passport-facebook';
 import jwt from "passport-jwt";
 import { PRIVATE_KEY } from "./constants.js";
 
@@ -135,6 +136,37 @@ const initializePassport = () => {
         } catch (error) {
             return done(error)
         }
+      }
+    ));
+
+    passport.use('facebook', new FacebookStrategy({
+        clientID: '821769652805626',
+        clientSecret: '18eaa5842a5e251bb966ab9b4213cd6e',
+        callbackURL: "http://localhost:8081/api/users/facebook-callback"
+      },
+      async function(accessToken, refreshToken, profile, done) {
+        
+        try {
+            const user = await userModel.findOne({ email:`${profile._json.id}@mail.com` })
+            if (!user) {
+                const newUser = {
+                    first_name: profile._json.name,
+                    last_name: 'user',
+                    age: 18,
+                    email: `${profile._json.id}@mail.com`,
+                    role:'USER',
+                    password: createHash('1234') 
+                }
+                
+                const result = await userModel.create(newUser);
+                done(null, result);
+            } else {
+                done(null, user);
+            }
+        } catch (error) {
+            return done(error)
+        }
+        
       }
     ));
 

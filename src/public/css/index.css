@@ -114,9 +114,6 @@
     border: 1px solid grey;
 }
 
-.bi-github{
-    font-size: 30px;
-}
-.bi-google{
+.bi-github, .bi-facebook, .bi-google{
     font-size: 30px;
 }

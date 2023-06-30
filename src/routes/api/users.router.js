@@ -91,6 +91,20 @@ export default class UsersRouter extends Router {
             )
             res.redirect('/')
         })
+
+        this.get('/facebook', ['PUBLIC'], passportStrategiesEnum.facebook, async (req, res) => {
+            res.sendSuccess("User registered")
+        })
+
+        this.get('/facebook-callback', ['PUBLIC'], passportStrategiesEnum.facebook, async (req, res) => {
+            
+            const accessToken = generateToken(req.user);
+            
+            res.cookie(
+                'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
+            )
+            res.redirect('/')
+        })
     }
     
 }
