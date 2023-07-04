@@ -25,7 +25,6 @@ export default class UsersRouter extends Router {
             res.cookie(
                 'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
             ).sendSuccess({ accessToken });
-            // res.sendSuccess({ accessToken });
         });
 
 

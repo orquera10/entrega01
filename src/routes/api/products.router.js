@@ -1,16 +1,13 @@
-// import { Router } from 'express';
 import Router from '../router.js';
 import Products from '../../dao/dbManager/products.manager.js';
 import { passportStrategiesEnum } from '../../config/enums.js';
 
 const productManager = new Products()
-// const router = Router();
 
 export default class ProductsRouter extends Router {
     init() {
         this.get('/', ['ADMIN'], passportStrategiesEnum.JWT, this.getAll);
         this.get('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.getAllById);
-        // this.get('/paginated', ['ADMIN'], passportStrategiesEnum.JWT, this.getAllPaginated);
         this.post('/', ['ADMIN'], passportStrategiesEnum.JWT, this.save);
         this.put('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.update);
         this.put('/:pid', ['ADMIN'], passportStrategiesEnum.JWT, this.delete);
@@ -18,7 +15,7 @@ export default class ProductsRouter extends Router {
     async getAll(req, res) {
         try {
             const products = await productManager.getProducts();
-            const limite = Number(req.query.limit) || productos.length;
+            const limite = Number(req.query.limit) || products.length;
             const productView = products.slice(0, limite);
             res.sendSuccess(productView);
         } catch (error) {
@@ -39,19 +36,8 @@ export default class ProductsRouter extends Router {
         }
     }
 
-    // async getAllPaginated(req, res) {
-    //     try {
-    //         const { limit = 10, page = 1 } = req.query;
-    //         const students = await studentsManager.getAllPaginated(limit, page);
-    //         res.sendSuccess(students);
-    //     } catch (error) {
-    //         res.sendServerError(error.message);
-    //     }
-    // }
-
     async save(req, res) {
         try {
-            // const { first_name, last_name, dni, email, birth_date, gender } = req.body;
             const product = req.body;
 
             if (product.status === null || product.status === undefined) {

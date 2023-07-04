@@ -1,4 +1,3 @@
-// import { Router } from 'express';
 import Router from '../router.js';
 import Carts from '../../dao/dbManager/carts.manager.js';
 import Products from '../../dao/dbManager/products.manager.js';
@@ -7,7 +6,6 @@ import { passportStrategiesEnum } from '../../config/enums.js';
 
 const cartManager = new Carts();
 const productManager = new Products();
-// const router = Router();
 
 export default class CartsRouter extends Router {
     init() {
