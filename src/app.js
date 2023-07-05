@@ -10,6 +10,7 @@ import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import config from './config/config.js';
 import "./dao/dbManager/dbConfig.js";
+import cors from 'cors';
 
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
@@ -17,6 +18,7 @@ const productsRouter = new ProductsRouter();
 const viewsRouter = new ViewsRouter();
 
 const app = express();
+app.use(cors());
 
 //Parametros de config
 app.use(express.json());
