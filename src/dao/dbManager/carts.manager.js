@@ -1,4 +1,4 @@
-import { cartModel } from "../models/carts.model.js";
+import { cartModel } from "../dbManager/models/carts.model.js";
 
 export default class Carts {
     constructor() {

@@ -1,4 +1,6 @@
-const PRIVATE_KEY = 'coder39760'
+import config from "./config.js"
+
+const PRIVATE_KEY = config.privateKey;
 
 export {
     PRIVATE_KEY

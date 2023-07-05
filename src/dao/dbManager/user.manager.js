@@ -1,4 +1,4 @@
-import { userModel } from '../models/user.model.js';
+import { userModel } from '../dbManager/models/user.model.js';
 
 export default class Users {
     constructor() {

@@ -1,9 +1,6 @@
-import Products from "../../dao/dbManager/products.manager.js"
 import Router from '../router.js';
 import { passportStrategiesEnum } from '../../config/enums.js';
-
-
-const productManager = new Products()
+import { getProductsPaginateService } from "../../service/products.service.js";
 
 
 export default class ViewsRouter extends Router {
@@ -33,7 +30,7 @@ export default class ViewsRouter extends Router {
                 sortBy.price = sort
             } 
                 
-            const result = await productManager.getProductsPaginate(filter, limit, page, sortBy, category, status, sort) 
+            const result = await getProductsPaginateService(filter, limit, page, sortBy, category, status, sort) 
             
             res.render('home', {products:result, user:req.user});
         });
