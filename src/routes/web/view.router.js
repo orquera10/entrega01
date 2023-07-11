@@ -1,6 +1,7 @@
 import Router from '../router.js';
 import { passportStrategiesEnum } from '../../config/enums.js';
 import { getProductsPaginateService } from "../../service/products.service.js";
+import { MESSAGEDAO } from '../../dao/index.js';
 
 
 export default class ViewsRouter extends Router {
@@ -37,7 +38,39 @@ export default class ViewsRouter extends Router {
         this.get('/', ['PUBLIC'], passportStrategiesEnum.NOTHING, (req, res) => {
             res.redirect('/login');
         });
-        
+
+        //Vista chat
+        this.get('/chat', ['USER'], passportStrategiesEnum.JWT, async (req, res) => {
+            const io = req.app.get('socketio');
+            //Implementacion para guardar mensages del chat en base de datos
+            const messages = await MESSAGEDAO.getMessages();
+            // console.log(messages);
+            // console.log(messages[8].user);
+            // const messagesName = messages.map(item=>{
+            //     return {user:item.user.first_name, message: item.message};
+            // })
+            // console.log(messages);
+            
+            io.on('connection', socket => {
+                console.log('conectado a chat');
+                socket.emit('messageLogs', messages);
+                socket.on('message', async data => {
+                    const result = {userId:req.user._id,...data};
+                    // console.log(result.userId.first_name);
+                    messages.push(result);
+                    io.emit('messageLogs', messages);
+                    await MESSAGEDAO.addMessages(result);
+
+                });
+
+                socket.on('authenticated', data => {
+                    
+                    socket.broadcast.emit('newUserConnected', data);
+                });
+            })
+
+            res.render('chat');
+        });
     }
 
 }

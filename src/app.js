@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser';
 import config from './config/config.js';
 import "./dao/dbManager/dbConfig.js";
 import cors from 'cors';
+import {Server} from 'socket.io';
 
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
@@ -41,5 +42,7 @@ app.use('/api/carts', cartsRouter.getRouter());
 app.use('/api/users', usersRouter.getRouter());
 
 const port = Number(config.port);
-app.listen(port, () => console.log('Server running on port 8081'));
+const server = app.listen(port, () => console.log('Server running on port 8081'));
 
+const io = new Server(server);
+app.set('socketio', io);
