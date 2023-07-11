@@ -3,6 +3,7 @@ import { passportStrategiesEnum } from '../../config/enums.js';
 import { getProductsPaginateService } from "../../service/products.service.js";
 import { MESSAGEDAO } from '../../dao/index.js';
 
+let userChat = "User Default";
 
 export default class ViewsRouter extends Router {
     init() {
@@ -41,39 +42,39 @@ export default class ViewsRouter extends Router {
 
         //Vista chat
         this.get('/chat', ['USER'], passportStrategiesEnum.JWT, async (req, res) => {
+
+            userChat = `${req.user.first_name} ${req.user.last_name}`
             const io = req.app.get('socketio');
             //Implementacion para guardar mensages del chat en base de datos
             const messages = await MESSAGEDAO.getMessages();
-            // console.log(messages);
-            // console.log(messages[8].user);
-            // const messagesName = messages.map(item=>{
-            //     return {user:item.user.first_name, message: item.message};
-            // })
-            // console.log(messages);
-            
-            io.on('connection', socket => {
+            io.emit('messageLogs', messages);
+
+            io.on('connection', async socket => {
                 console.log('conectado a chat');
-                socket.emit('messageLogs', messages);
+
+                // socket.broadcast.emit('newUserConnected', userChat);
+
                 socket.on('message', async data => {
-                    const result = {userId:req.user._id,...data};
+
+                    const result = { user: userChat, ...data };
                     // console.log(result.userId.first_name);
+                    await MESSAGEDAO.addMessages(result);
                     messages.push(result);
                     io.emit('messageLogs', messages);
-                    await MESSAGEDAO.addMessages(result);
 
                 });
 
-                socket.on('authenticated', data => {
-                    
-                    socket.broadcast.emit('newUserConnected', data);
-                });
+                // socket.on('authenticated', data => {
+
+                //     socket.broadcast.emit('newUserConnected', data);
+                // });
             })
-
             res.render('chat');
         });
     }
 
 }
+
 
 
 
