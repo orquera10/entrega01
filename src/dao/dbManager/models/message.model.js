@@ -3,10 +3,11 @@ import mongoose from 'mongoose';
 const messageCollection = 'message';
 
 const messagesSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'user'
-    },
+    // userId: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref:'user'
+    // },
+    user: String,
     message: String
 })
 

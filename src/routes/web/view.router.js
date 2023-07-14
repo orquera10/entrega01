@@ -40,6 +40,8 @@ export default class ViewsRouter extends Router {
 
         //Vista chat
         this.get('/chat', ['USER'], passportStrategiesEnum.JWT, async (req, res) => {
+
+            userChat = `${req.user.first_name} ${req.user.last_name}`
             const io = req.app.get('socketio');
             //Implementacion para guardar mensages del chat en base de datos
             const messages = await MessagesRepository.getMessages();
@@ -52,27 +54,31 @@ export default class ViewsRouter extends Router {
             
             io.on('connection', socket => {
                 console.log('conectado a chat');
-                socket.emit('messageLogs', messages);
+
+                // socket.broadcast.emit('newUserConnected', userChat);
+
                 socket.on('message', async data => {
-                    const result = {userId:req.user._id,...data};
+
+                    const result = { user: userChat, ...data };
                     // console.log(result.userId.first_name);
+                    await MESSAGEDAO.addMessages(result);
                     messages.push(result);
                     io.emit('messageLogs', messages);
                     await MessagesRepository.addMessages(result);
 
                 });
 
-                socket.on('authenticated', data => {
-                    
-                    socket.broadcast.emit('newUserConnected', data);
-                });
-            })
+                // socket.on('authenticated', data => {
 
+                //     socket.broadcast.emit('newUserConnected', data);
+                // });
+            })
             res.render('chat');
         });
     }
 
 }
+
 
 
 
