@@ -121,12 +121,16 @@ const updateQuantityCart = async (req, res) => {
 }
 const purchaseCart = async (req,res) => {
     try {
+        
         const cartID = req.params.cid;
         const cart = await getCartByIdService(cartID)
         if (!cart) {
             return res.status(400).send({ error: 'Carrito no encontrado' });
         }
-        const result = await purchaseCartService(res.user,cart);
+        if (cart.product === []) {
+            return res.status(400).send({ error: 'Carrito vacio' });
+        }
+        const result = await purchaseCartService(req.user, cart);
         res.sendSuccess(result);   
 
     } catch (error) {

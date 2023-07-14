@@ -49,7 +49,7 @@ const purchaseCartService = async (user, cart) => {
     for (let productCart of productsCart) {
         const product = await productsRepository.getProductsById(productCart.product);
 
-        if (productCart.quantity >= product.stock) {
+        if (productCart.quantity <= product.stock) {
             productsConStock.push(productCart);
             await productsRepository.updateProducts(product._id, { stock: product.stock - productCart.quantity });
         } else {
@@ -57,10 +57,11 @@ const purchaseCartService = async (user, cart) => {
         }
     }
 
-    const sum = productsConStock.reduce((acc, prev) => {
-        acc += prev.price;
+    const sum = productsConStock.reduce((acc, producto) => {
+        acc += producto.product.price;
         return acc;
     }, 0);
+
 
     const orderNumber = Date.now() + Math.floor(Math.random() * 100000 + 1);
 
@@ -71,7 +72,10 @@ const purchaseCartService = async (user, cart) => {
     };
 
     //actualizo el cart
-    await cartsRepository.updateCart(cart._id,productsSinStock);
+    const produ = {products: productsSinStock};
+    console.log(produ);
+    console.log(cart._id);
+    await cartsRepository.updateCart(cart._id, produ);
 
     const result = await ticketsRepository.createTicket(ticket);
     return ({ticket: result , productOut: productsSinStock});

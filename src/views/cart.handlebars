@@ -1,5 +1,8 @@
 <div class="row container-fluid m-0 p-0">
-    <h1 class="col-12 text-center">Carrito: {{this._id}}</h1>
+    <h1 class="col-12 text-center" data-cid="{{this._id}}" id="cartId">Carrito: {{this._id}}</h1>
+    <div class="text-center">
+        <button class="btn btn-primary" id="btnFin">Finalizar Compra</button>
+    </div>
     <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0" id="container">
         {{#each this.products}}
         <div class="card col-4 m-4" style="width: 18rem;">
@@ -19,3 +22,5 @@
         {{/each}}
     </div>
 </div>
+
+<script src="/js/btnFinalizar.js"></script>
