@@ -1,4 +1,4 @@
-import { getCartByIdService, addCartService, addProductToCartService, deleteProductToCartService, deleteCartService, updateCartService, updateQuantityCartService } from '../service/carts.service.js';
+import { getCartByIdService, addCartService, addProductToCartService, deleteProductToCartService, deleteCartService, updateCartService, updateQuantityCartService, purchaseCartService } from '../service/carts.service.js';
 import { getProductsByIdService } from '../service/products.service.js'
 
 const getCart = async (req, res) => {
@@ -119,8 +119,23 @@ const updateQuantityCart = async (req, res) => {
         res.sendServerError(error.message);
     }
 }
+const purchaseCart = async (req,res) => {
+    try {
+        const cartID = req.params.cid;
+        const cart = await getCartByIdService(cartID)
+        if (!cart) {
+            return res.status(400).send({ error: 'Carrito no encontrado' });
+        }
+        const result = await purchaseCartService(res.user,cart);
+        res.sendSuccess(result);   
+
+    } catch (error) {
+        res.sendServerError(error.message);
+    }
+}
 
 export{
+    purchaseCart,
     getCart,
     saveCart,
     addProductCart,

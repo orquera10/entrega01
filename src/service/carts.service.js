@@ -1,6 +1,10 @@
 import CartsRepository from '../repositories/carts.repository.js';
+import ProductsRepository from '../repositories/products.repository.js';
+import TicketsRepository from '../repositories/tickets.repository.js';
 
 const cartsRepository = new CartsRepository();
+const productsRepository = new ProductsRepository();
+const ticketsRepository = new TicketsRepository();
 
 const getCartByIdService = async (cid) => {
     const result = await cartsRepository.getCartById(cid);
@@ -37,6 +41,42 @@ const updateQuantityCartService = async (cid,pid,quantity) => {
     return result;
 }
 
+const purchaseCartService = async (user, cart) => {
+    const productsCart = cart.products;
+    const productsConStock = [];
+    const productsSinStock = [];
+
+    for (let productCart of productsCart) {
+        const product = await productsRepository.getProductsById(productCart.product);
+
+        if (productCart.quantity >= product.stock) {
+            productsConStock.push(productCart);
+            await productsRepository.updateProducts(product._id, { stock: product.stock - productCart.quantity });
+        } else {
+            productsSinStock.push(productCart);
+        }
+    }
+
+    const sum = productsConStock.reduce((acc, prev) => {
+        acc += prev.price;
+        return acc;
+    }, 0);
+
+    const orderNumber = Date.now() + Math.floor(Math.random() * 100000 + 1);
+
+    const ticket = {
+        code: orderNumber,
+        amount: sum,
+        purchaser: user.email,
+    };
+
+    //actualizo el cart
+    await cartsRepository.updateCart(cart._id,productsSinStock);
+
+    const result = await ticketsRepository.createTicket(ticket);
+    return ({ticket: result , productOut: productsSinStock});
+}
+
 
 export{
     addCartService,
@@ -45,5 +85,9 @@ export{
     deleteProductToCartService,
     deleteCartService,
     updateCartService,
-    updateQuantityCartService
+    updateQuantityCartService,
+    purchaseCartService
 }
+
+
+        
