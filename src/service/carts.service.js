@@ -62,6 +62,10 @@ const purchaseCartService = async (user, cart) => {
         return acc;
     }, 0);
 
+    console.log(productsConStock.length);
+    if (productsConStock.length === 0) {
+        throw { message: "No hay stock" };
+    }
 
     const orderNumber = Date.now() + Math.floor(Math.random() * 100000 + 1);
 
@@ -73,8 +77,6 @@ const purchaseCartService = async (user, cart) => {
 
     //actualizo el cart
     const produ = {products: productsSinStock};
-    console.log(produ);
-    console.log(cart._id);
     await cartsRepository.updateCart(cart._id, produ);
 
     const result = await ticketsRepository.createTicket(ticket);

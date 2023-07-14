@@ -1,10 +1,15 @@
 
     const postButtons = document.getElementsByClassName(`postButton`);
-    const cartUser = document.getElementById('tarjetaUser')
+    const cartUser = document.getElementById('tarjetaUser');
+    const btnCarrito = document.getElementById('btnCarrito');
     //Obtener id carrito
     const cid = cartUser.dataset.cid;
     console.log(cid);
     
+    btnCarrito.addEventListener(`click`, function() {
+        window.location.replace('/cart');
+    })
+
     
     for (let i = 0; i < postButtons.length; i++) {
         const postButton = postButtons[i];
