@@ -9,7 +9,7 @@ export default class CartsRouter extends Router {
     init() {
         this.get('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, getCart);
         this.post('/', ['ADMIN'], passportStrategiesEnum.JWT, saveCart);
-        this.post('/:cid/product/:pid', ['ADMIN','USER'], passportStrategiesEnum.JWT, addProductCart);
+        this.post('/:cid/product/:pid', ['USER'], passportStrategiesEnum.JWT, addProductCart);
         this.delete('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, deleteProductCart);
         this.delete('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, deleteCart);
         this.put('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, updateCart);

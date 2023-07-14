@@ -15,7 +15,6 @@
             
             // Realizar la solicitud POST aquí
             const url = `http://localhost:8081/api/carts/${cid}/product/${pid}`;
-            console.log(url);
             fetch(url, {
             method: 'POST',
             headers: {

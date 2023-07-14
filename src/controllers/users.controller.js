@@ -1,6 +1,7 @@
 import { isValidPassword, generateToken, createHash } from '../utils.js';
 import { getByEmail as getByEmailService, saveUser as saveUserService } from '../service/users.service.js';
 import { addCartService } from '../service/carts.service.js';
+import UserDto from '../dao/DTOs/user.dto.js';
 
 
 const userLogin = async (req, res) => {
@@ -37,6 +38,15 @@ const userRegister = async (req, res) => {
         newUser.password = hashedPassword;
         const result = await saveUserService(newUser);
         res.sendSuccess(result)
+    } catch (error) {
+        res.sendServerError(error.message);
+    }
+}
+
+const userCurrent = async (req,res) => {
+    try {
+        const result = new UserDto(req.user)
+        res.sendSuccess(result);
     } catch (error) {
         res.sendServerError(error.message);
     }
@@ -82,6 +92,7 @@ export {
     userLogin,
     userLogout,
     userRegister,
+    userCurrent,
     logGithub,
     callbackGithub,
     logGoogle,

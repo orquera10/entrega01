@@ -1,8 +1,7 @@
 import Router from '../router.js';
 import { passportStrategiesEnum } from '../../config/enums.js';
 import { getProductsPaginateService } from "../../service/products.service.js";
-import { MESSAGEDAO } from '../../dao/index.js';
-
+import MessagesRepository from '../../repositories/messages.repository.js';
 
 export default class ViewsRouter extends Router {
     init() {
@@ -43,7 +42,7 @@ export default class ViewsRouter extends Router {
         this.get('/chat', ['USER'], passportStrategiesEnum.JWT, async (req, res) => {
             const io = req.app.get('socketio');
             //Implementacion para guardar mensages del chat en base de datos
-            const messages = await MESSAGEDAO.getMessages();
+            const messages = await MessagesRepository.getMessages();
             // console.log(messages);
             // console.log(messages[8].user);
             // const messagesName = messages.map(item=>{
@@ -59,7 +58,7 @@ export default class ViewsRouter extends Router {
                     // console.log(result.userId.first_name);
                     messages.push(result);
                     io.emit('messageLogs', messages);
-                    await MESSAGEDAO.addMessages(result);
+                    await MessagesRepository.addMessages(result);
 
                 });
 
