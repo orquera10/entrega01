@@ -62,7 +62,6 @@ const purchaseCartService = async (user, cart) => {
         return acc;
     }, 0);
 
-    console.log(productsConStock.length);
     if (productsConStock.length === 0) {
         throw { message: "No hay stock" };
     }

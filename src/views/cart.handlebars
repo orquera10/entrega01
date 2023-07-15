@@ -1,7 +1,9 @@
 <div class="row container-fluid m-0 p-0">
     <h1 class="col-12 text-center" data-cid="{{this._id}}" id="cartId">Carrito: {{this._id}}</h1>
     <div class="text-center">
+        <a href="/products" class="btn btn-secondary">Regresar</a>
         <button class="btn btn-primary" id="btnFin">Finalizar Compra</button>
+        <button class="btn btn-danger" id="btnBorrar">Borrar Carrito</button>
     </div>
     <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0" id="container">
         {{#each this.products}}
