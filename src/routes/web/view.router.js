@@ -3,6 +3,7 @@ import { passportStrategiesEnum } from '../../config/enums.js';
 import { getProductsPaginateService } from "../../service/products.service.js";
 import MessagesRepository from '../../repositories/messages.repository.js';
 import CartsRepository from '../../repositories/carts.repository.js';
+import { generateProduct } from '../../utils.js';
 
 export default class ViewsRouter extends Router {
     init() {
@@ -41,11 +42,11 @@ export default class ViewsRouter extends Router {
 
         //Vista chat
         this.get('/chat', ['USER'], passportStrategiesEnum.JWT, async (req, res) => {
-
-            userChat = `${req.user.first_name} ${req.user.last_name}`
+            const messagesRepository = new MessagesRepository();
+            let userChat = `${req.user.first_name} ${req.user.last_name}`
             const io = req.app.get('socketio');
             //Implementacion para guardar mensages del chat en base de datos
-            const messages = await MessagesRepository.getMessages();
+            const messages = await messagesRepository.getMessages();
             
             io.on('connection', socket => {
                 console.log('conectado a chat');
@@ -54,10 +55,10 @@ export default class ViewsRouter extends Router {
 
                     const result = { user: userChat, ...data };
                     // console.log(result.userId.first_name);
-                    await MESSAGEDAO.addMessages(result);
+                    await messagesRepository.addMessages(result);
                     messages.push(result);
                     io.emit('messageLogs', messages);
-                    await MessagesRepository.addMessages(result);
+                    await messagesRepository.addMessages(result);
 
                 });
             })
@@ -79,7 +80,18 @@ export default class ViewsRouter extends Router {
             }
         });
 
-
+        this.get('/mocking-products', ['PUBLIC'], passportStrategiesEnum.NOTHING, async (req, res) => {
+            try {
+                const products = [];
+                for (let i = 0; i < 100; i++) {
+                    products.push(generateProduct());
+                }
+                res.sendSuccess(products);
+        
+            } catch (error) {
+                res.sendServerError(error.message);
+            }
+        });
 
     }
 

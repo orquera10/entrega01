@@ -4,6 +4,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { dirname } from "path";
 import { PRIVATE_KEY } from "./config/constants.js"
+import { faker } from '@faker-js/faker';
+
+faker.locale = "es";
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -22,10 +25,25 @@ const generateToken = (user) => {
     return token;
 };
 
+const generateProduct = () => {
+    return {
+        id: faker.database.mongodbObjectId(),
+        title: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        code: faker.random.alphaNumeric(10),
+        price: faker.commerce.price(),
+        status: true,
+        category: faker.commerce.department(),
+        stock: faker.random.numeric(1),
+        thumbnail: faker.image.image()
+    }
+}
+
 export {
     __dirname,
     createHash,
     isValidPassword,
-    generateToken
+    generateToken,
+    generateProduct
 }
 

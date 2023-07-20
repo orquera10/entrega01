@@ -9,7 +9,6 @@ import initializePassport from './config/passport.config.js';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import config from './config/config.js';
-// import "./dao/dbManager/dbConfig.js";
 import cors from 'cors';
 import {Server} from 'socket.io';
 

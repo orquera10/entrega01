@@ -1,5 +1,7 @@
+import CustomError from '../middleware/errors/CustomError.js';
+import EErrors from '../middleware/errors/enums.js';
+import { generateProductErrorInfo } from '../middleware/errors/info.js';
 import { getProductsService, getProductsByIdService, addProductService, updateProductsService, deleteProductService } from '../service/products.service.js';
-
 
 const getAllProduct = async (req, res) =>{
     try {
@@ -26,22 +28,26 @@ const getByIdProduct = async (req, res) =>{
 }
 
 const saveProduct = async (req, res) =>{
-    try {
+    
         const product = req.body;
-
+        
         if (product.status === null || product.status === undefined) {
             product.status = true;
         }
         if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
-            return res.sendClientError('incomplete values');
+            // return res.sendClientError('incomplete values');
+            throw CustomError.createError({
+                name: 'ProductError',
+                cause: generateProductErrorInfo(product),
+                message: 'Error trying to create product',
+                code: EErrors.INVALID_TYPE_ERROR
+            })
         }
         const result = await addProductService(product);
 
         res.sendSuccess(result);
 
-    } catch (error) {
-        res.sendServerError(error.message);
-    }
+    
 }
 
 const updateProduct = async (req, res) =>{
@@ -73,7 +79,6 @@ const deleteProduct = async (req, res) =>{
         res.sendServerError(error.message);
     }
 }
-
 
 export {
     getAllProduct,
