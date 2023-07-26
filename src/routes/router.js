@@ -18,7 +18,7 @@ export default class Router {
     init() { }
 
     async get(path, policies, passportStrategy, ...callbacks) {
-        await this.router.get(
+        this.router.get(
             path,
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
@@ -28,7 +28,7 @@ export default class Router {
     }
 
     async post(path, policies, passportStrategy, ...callbacks) {
-        await this.router.post(
+        this.router.post(
             path,
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
@@ -38,7 +38,7 @@ export default class Router {
     }
 
     async put(path, policies, passportStrategy, ...callbacks) {
-        await this.router.put(
+        this.router.put(
             path,
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
@@ -48,7 +48,7 @@ export default class Router {
     }
 
     async delete(path, policies, passportStrategy, ...callbacks) {
-        await this.router.delete(
+        this.router.delete(
             path,
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
@@ -97,7 +97,7 @@ export default class Router {
         next();
     }
 
-    async applyCallbacks (callbacks) {
+    applyCallbacks (callbacks) {
         return callbacks.map((callback) => async (...params) => {
             try {
                 await callback.apply(this, params);//req, res, next
