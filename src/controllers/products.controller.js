@@ -35,13 +35,13 @@ const saveProduct = async (req, res) =>{
             product.status = true;
         }
         if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
-            // return res.sendClientError('incomplete values');
+            
             throw CustomError.createError({
                 name: 'ProductError',
                 cause: generateProductErrorInfo(product),
                 message: 'Error trying to create product',
                 code: EErrors.INVALID_TYPE_ERROR
-            })
+            });
         }
         const result = await addProductService(product);
 

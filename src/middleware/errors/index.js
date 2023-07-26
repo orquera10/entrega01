@@ -1,6 +1,6 @@
 import EErrors from "./enums.js";
 
-export default (error, req, res, next) => {
+const errorHandler = (error, req, res, next) => {
     switch(error.code) {
         case EErrors.INVALID_TYPE_ERROR:
             res.status(400).send({
@@ -19,3 +19,5 @@ export default (error, req, res, next) => {
     }
     next();
 } 
+
+export default errorHandler;

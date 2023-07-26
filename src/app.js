@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser';
 import config from './config/config.js';
 import cors from 'cors';
 import {Server} from 'socket.io';
+import errorHandler from './middleware/errors/index.js'
 
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
@@ -39,6 +40,7 @@ app.use(`/`,viewsRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
 app.use('/api/users', usersRouter.getRouter());
+app.use(errorHandler);
 
 const port = Number(config.port);
 const server = app.listen(port, () => console.log('Server running on port 8081'));

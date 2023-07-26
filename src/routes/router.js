@@ -1,13 +1,13 @@
 import { Router as expressRouter } from 'express';
-// import jwt from 'jsonwebtoken';
 import { passportStrategiesEnum } from '../config/enums.js';
 import passport from 'passport';
+import toAsyncRouter from 'async-express-decorator';
 
 //POST, GET, DELETE, PUT
 //router.get('/asdasd', middle1, middle2, (req, res, next))
 export default class Router {
     constructor() {
-        this.router = expressRouter();
+        this.router = toAsyncRouter(expressRouter());
         this.init();
     }
 
@@ -17,43 +17,43 @@ export default class Router {
 
     init() { }
 
-    get(path, policies, passportStrategy, ...callbacks) {
-        this.router.get(
+    async get(path, policies, passportStrategy, ...callbacks) {
+        await this.router.get(
             path,
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            this.applyCallbacks(callbacks)
+            ...await this.applyCallbacks(callbacks)
         );
     }
 
-    post(path, policies, passportStrategy, ...callbacks) {
-        this.router.post(
+    async post(path, policies, passportStrategy, ...callbacks) {
+        await this.router.post(
             path,
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            this.applyCallbacks(callbacks)
+            ...await this.applyCallbacks(callbacks)
         );
     }
 
-    put(path, policies, passportStrategy, ...callbacks) {
-        this.router.put(
+    async put(path, policies, passportStrategy, ...callbacks) {
+        await this.router.put(
             path,
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            this.applyCallbacks(callbacks)
+            ...await this.applyCallbacks(callbacks)
         );
     }
 
-    delete(path, policies, passportStrategy, ...callbacks) {
-        this.router.delete(
+    async delete(path, policies, passportStrategy, ...callbacks) {
+        await this.router.delete(
             path,
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            this.applyCallbacks(callbacks)
+            ...await this.applyCallbacks(callbacks)
         );
     }
 
@@ -97,12 +97,12 @@ export default class Router {
         next();
     }
 
-    applyCallbacks(callbacks) {
+    async applyCallbacks (callbacks) {
         return callbacks.map((callback) => async (...params) => {
             try {
                 await callback.apply(this, params);//req, res, next
             } catch (error) {
-                params[1].status(500).json({ error: error.message });
+                throw error
             }
         })
     }
