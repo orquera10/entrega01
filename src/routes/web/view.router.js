@@ -80,6 +80,7 @@ export default class ViewsRouter extends Router {
             }
         });
 
+        //ruta para mockear productos
         this.get('/mocking-products', ['PUBLIC'], passportStrategiesEnum.NOTHING, async (req, res) => {
             try {
                 const products = [];
@@ -93,7 +94,29 @@ export default class ViewsRouter extends Router {
             }
         });
 
+        //ruta para probar logger
+        this.get('/test-logger', ['PUBLIC'], passportStrategiesEnum.NOTHING, async (req, res) => {
+            try {
+                
+                    //custom levels
+                    console.log('--------------------');
+                    req.logger.fatal('Prueba fatal');
+                    req.logger.error('Prueba error');
+                    req.logger.warning('Prueba warning');
+                    req.logger.info('Prueba info');
+                    req.logger.http('Prueba http');
+                    req.logger.debug('Prueba debug');
+                    
+                    res.sendSuccess({status:"sucess"});
+            
+            } catch (error) {
+                res.sendServerError(error.message);
+            }
+            
+        });
+
     }
+
 
 }
 

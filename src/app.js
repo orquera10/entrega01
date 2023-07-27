@@ -12,6 +12,7 @@ import config from './config/config.js';
 import cors from 'cors';
 import {Server} from 'socket.io';
 import errorHandler from './middleware/errors/index.js'
+import { addLogger } from './middleware/logger/logger.js';
 
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
@@ -20,6 +21,7 @@ const viewsRouter = new ViewsRouter();
 
 const app = express();
 app.use(cors());
+app.use(addLogger);
 
 //Parametros de config
 app.use(express.json());
