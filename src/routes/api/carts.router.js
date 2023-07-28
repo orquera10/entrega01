@@ -5,7 +5,7 @@ import { purchaseCart, getCart, saveCart, addProductCart, deleteProductCart, del
 export default class CartsRouter extends Router {
     init() {
         
-        this.get('/:cid', ['ADMIN'], passportStrategiesEnum.JWT, getCart);
+        this.get('/:cid', ['PUBLIC'], passportStrategiesEnum.NOTHING, getCart);
         this.post('/', ['ADMIN'], passportStrategiesEnum.JWT, saveCart);
         this.post('/:cid/product/:pid', ['USER'], passportStrategiesEnum.JWT, addProductCart);
         this.delete('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, deleteProductCart);

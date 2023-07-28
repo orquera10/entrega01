@@ -1,0 +1,21 @@
+{"level":"error","message":"error get cart"}
+{"level":"error","message":"error get cart"}
+{"level":"error","message":"error get cart"}
+{"level":"error","message":"GET en /api/carts/646c03deaa61561076640b - 2023-07-27T22:52:15.157Z"}
+{"level":"error","message":"error get cart"}
+{"level":"error","message":"GET en /login - 2023-07-28T00:30:08.745Z"}
+{"level":"error","message":"GET en /css/index.css - 2023-07-28T00:30:08.778Z"}
+{"level":"error","message":"GET en /js/login.js - 2023-07-28T00:30:08.781Z"}
+{"level":"error","message":"GET en /favicon.ico - 2023-07-28T00:30:09.027Z"}
+{"level":"error","message":"GET en /api/users/github - 2023-07-28T00:30:10.425Z"}
+{"level":"error","message":"GET en /api/users/github-callback?code=e7e1aeda4514059891c8 - 2023-07-28T00:30:10.965Z"}
+{"level":"error","message":"GET en / - 2023-07-28T00:30:12.626Z"}
+{"level":"error","message":"GET en /login - 2023-07-28T00:30:12.630Z"}
+{"level":"error","message":"GET en /products - 2023-07-28T00:30:12.633Z"}
+{"level":"error","message":"GET en /products - 2023-07-28T00:30:12.644Z"}
+{"level":"error","message":"GET en /css/index.css - 2023-07-28T00:30:13.765Z"}
+{"level":"error","message":"GET en /js/btnProd.js - 2023-07-28T00:30:13.767Z"}
+{"level":"error","message":"GET en /api/users/logout - 2023-07-28T00:30:54.514Z"}
+{"level":"error","message":"GET en /login - 2023-07-28T00:30:54.518Z"}
+{"level":"error","message":"GET en /css/index.css - 2023-07-28T00:30:54.534Z"}
+{"level":"error","message":"GET en /js/login.js - 2023-07-28T00:30:54.536Z"}

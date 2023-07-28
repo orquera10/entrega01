@@ -33,7 +33,7 @@ if (ENVIRONMENT === 'production') {
                 level: 'info'
             }),
             new winston.transports.File({
-                filename: 'logs/errors.log',
+                filename: 'src/logs/errors.log',
                 level: 'error'
             })
         ]
@@ -52,6 +52,7 @@ if (ENVIRONMENT === 'production') {
 export const addLogger = (req, res, next) => {
     req.logger = logger;
     //console.log
-    // req.logger.warn(`${req.method} en ${req.url} - ${new Date().toISOString()}`);
+    // req.logger.fatal(`${req.method} en ${req.url} - ${new Date().toISOString()}`);
+    req.logger.error(`${req.method} en ${req.url} - ${new Date().toISOString()}`);
     next();
 }

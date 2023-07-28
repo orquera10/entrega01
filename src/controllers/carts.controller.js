@@ -6,11 +6,11 @@ const getCart = async (req, res) => {
         const cartID = req.params.cid;
         const cart = await getCartByIdService(cartID);
         if (!cart) {
-            const cartError = 'Cart not exist';
+            const cartError = 'cart not exist';
             req.logger.error(cartError);
             return res.sendClientError(cartError);
         }
-        req.logger.info('correct getCart');
+        req.logger.info('successfully get cart');
         res.sendSuccess(cart);
     } catch (error) {
         req.logger.error('error get cart');
@@ -23,7 +23,7 @@ const saveCart = async (req, res) => {
     try {
         const cart = { products: [] };
         const result = await addCartService(cart);
-        req.logger.info('correct save Cart');
+        req.logger.info('successfully save Cart');
         res.sendSuccess(result);
     } catch (error) {
         req.logger.error('error save cart');
@@ -85,11 +85,15 @@ const deleteCart = async (req, res) => {
         const cartID = req.params.cid;
         const cart = await getCartByIdService(cartID)
         if (!cart) {
-            return res.status(400).send({ error: 'Carrito no encontrado' });
+            const cartError = 'Cart not exist';
+            req.logger.error(cartError);
+            return res.sendClientError(cartError);
         }
-        const result = await deleteCartService(cartID)
+        const result = await deleteCartService(cartID);
+        req.logger.info('successfully delete cart');
         res.sendSuccess(result);
     } catch (error) {
+        req.logger.error('error delete cart');
         res.sendServerError(error.message);
     }
 }
@@ -102,11 +106,15 @@ const updateCart = async (req, res) => {
 
         const cart = await getCartByIdService(cartID)
         if (!cart) {
-            return res.status(400).send({ error: 'Carrito no encontrado' });
+            const cartError = 'Cart not exist';
+            req.logger.error(cartError);
+            return res.sendClientError(cartError);
         }
         const result = await updateCartService(cartID, productos);
+        req.logger.info('successfully update cart');
         res.sendSuccess(result);
     } catch (error) {
+        req.logger.error('error update cart');
         res.sendServerError(error.message);
     }
 }
@@ -120,16 +128,22 @@ const updateQuantityCart = async (req, res) => {
 
         const product = await getProductsByIdService(productID);
         if (!product) {
-            return res.status(400).send({ error: 'Producto no encontrado' });
+            const productError = 'Product not exist';
+            req.logger.error(productError);
+            return res.sendClientError(productError);
         }
         const cart = await getCartByIdService(cartID)
         if (!cart) {
-            return res.status(400).send({ error: 'Carrito no encontrado' });
+            const cartError = 'Cart not exist';
+            req.logger.error(cartError);
+            return res.sendClientError(cartError);
         }
 
         const result = await updateQuantityCartService(cartID, productID, quantity);
+        req.logger.info('successfully update quantity');
         res.sendSuccess(result);
     } catch (error) {
+        req.logger.error('error update quantity');
         res.sendServerError(error.message);
     }
 }
@@ -139,15 +153,21 @@ const purchaseCart = async (req,res) => {
         const cartID = req.params.cid;
         const cart = await getCartByIdService(cartID)
         if (!cart) {
-            return res.status(400).send({ error: 'Carrito no encontrado' });
+            const cartError = 'Cart not exist';
+            req.logger.error(cartError);
+            return res.sendClientError(cartError);
         }
-        if (cart.product === []) {
-            return res.status(400).send({ error: 'Carrito vacio' });
+        if (cart.products.length === 0) {
+            const cartError = 'empty cart';
+            req.logger.error(cartError);
+            return res.sendClientError(cartError);
         }
         const result = await purchaseCartService(req.user, cart);
+        req.logger.info('successfully purchase');
         res.sendSuccess(result);   
 
     } catch (error) {
+        req.logger.error('error purchase');
         res.sendServerError(error.message);
     }
 }
