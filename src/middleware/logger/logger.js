@@ -30,11 +30,25 @@ if (ENVIRONMENT === 'production') {
         levels: customLevelOptions.levels,
         transports: [
             new winston.transports.Console({
-                level: 'info'
+                level: 'info',
+                format: winston.format.combine(
+                    winston.format.colorize({
+                        all: true,
+                        colors: customLevelOptions.colors
+                    }),
+                    winston.format.simple()
+                )
             }),
             new winston.transports.File({
                 filename: 'src/logs/errors.log',
-                level: 'error'
+                level: 'error',
+                format: winston.format.combine(
+                    winston.format.colorize({
+                        all: true,
+                        colors: customLevelOptions.colors
+                    }),
+                    winston.format.simple()
+                )
             })
         ]
     });
