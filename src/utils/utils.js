@@ -2,7 +2,7 @@
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { dirname } from "path";
+import { dirname, join } from "path";
 import { PRIVATE_KEY } from "../config/constants.js"
 import { faker } from '@faker-js/faker';
 
@@ -10,6 +10,7 @@ faker.locale = "es";
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+const __directory = join(__dirname, '..')
 
 //cifrado vs hasheo
 //Hasheo es mucho más seguro, porque?, con este mecanismo garantizamos que no vamos a poder revertir los datos a texto plano
@@ -40,7 +41,7 @@ const generateProduct = () => {
 }
 
 export {
-    __dirname,
+    __directory,
     createHash,
     isValidPassword,
     generateToken,

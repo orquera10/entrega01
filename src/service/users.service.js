@@ -10,7 +10,7 @@ const getByEmail = async (email) => {
     if (!user) {
         throw new UserNotFound('User not found');
     }
-    return result;
+    return user;
 }
 
 const login = async (password, user) => {
@@ -39,7 +39,7 @@ const register = async (user) => {
     };
     newUser.password = hashedPassword;
 
-    const result = await usersRepository.save(newUser);
+    const result = await usersRepository.saveUser(newUser);
     return result;
 }
 
@@ -53,12 +53,17 @@ const createToken = async (user) => {
     return accessToken;
 }
 
+const getByEmailPassport = async (email) => {
+    const user = await usersRepository.getByEmail(email);
+    return user;
+}
+
 export {
     getByEmail,
-    saveUser,
     login,
     getByEmailRegister,
     register,
     currentUser,
-    createToken
+    createToken,
+    getByEmailPassport
 }

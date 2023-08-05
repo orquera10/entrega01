@@ -1,6 +1,6 @@
-import CustomError from '../middleware/errors/CustomError.js';
-import EErrors from '../middleware/errors/enums.js';
-import { generateProductErrorInfo } from '../middleware/errors/info.js';
+// import CustomError from '../middleware/errors/CustomError.js';
+// import EErrors from '../middleware/errors/enums.js';
+// import { generateProductErrorInfo } from '../middleware/errors/info.js';
 import { getProductsService, getProductsByIdService, addProductService, updateProductsService, deleteProductService } from '../service/products.service.js';
 
 const getAllProduct = async (req, res) =>{
@@ -43,12 +43,7 @@ const saveProduct = async (req, res) =>{
         if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
             
             req.logger.error('error properties imcomplete');
-            throw CustomError.createError({
-                name: 'ProductError',
-                cause: generateProductErrorInfo(product),
-                message: 'Error trying to create product',
-                code: EErrors.INVALID_TYPE_ERROR
-            });
+            res.sendClientError('error properties imcomplete');
 
         }
         const result = await addProductService(product);

@@ -1,11 +1,11 @@
-import { getByEmail as getByEmailService, register as registerService, login as loginService, getByEmailRegister as getByEmailRegisterService, currentUser as currentUserService, createToken as createTokenSerive  } from '../service/users.service.js';
+import { getByEmail as getByEmailService, register as registerService, login as loginService, getByEmailRegister as getByEmailRegisterService, currentUser as currentUserService, createToken as createTokenService  } from '../service/users.service.js';
 
 
 const userLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await getByEmailService(email);
-        const accessToken = loginService(password, user);
+        const accessToken = await loginService(password, user);
         req.logger.info('access token generated successfully');
         res.cookie(
             'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
@@ -73,7 +73,7 @@ const logGithub = async (req, res) => {
 }
 
 const callbackGithub = async (req, res) => {
-    const accessToken = createTokenSerive(req.user);
+    const accessToken = await createTokenService(req.user);
     req.logger.info('access token generated successfully');
     res.cookie(
         'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
@@ -87,7 +87,7 @@ const logGoogle = async (req, res) => {
 }
 
 const callbackGoogle = async (req, res) => {
-    const accessToken = createTokenSerive(req.user);
+    const accessToken = await createTokenService(req.user);
     req.logger.info('access token generated successfully');
     res.cookie(
         'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
@@ -101,7 +101,7 @@ const logFacebook = async (req, res) => {
 }
 
 const callbackFacebook = async (req, res) => {
-    const accessToken = createTokenSerive(req.user);
+    const accessToken = await createTokenService(req.user);
     req.logger.info('access token generated successfully');
     res.cookie(
         'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }

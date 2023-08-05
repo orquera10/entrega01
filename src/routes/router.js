@@ -1,13 +1,13 @@
 import { Router as expressRouter } from 'express';
 import { passportStrategiesEnum } from '../config/enums.js';
 import passport from 'passport';
-import toAsyncRouter from 'async-express-decorator';
+// import toAsyncRouter from 'async-express-decorator';
 
 //POST, GET, DELETE, PUT
 //router.get('/asdasd', middle1, middle2, (req, res, next))
 export default class Router {
     constructor() {
-        this.router = toAsyncRouter(expressRouter());
+        this.router = expressRouter();
         this.init();
     }
 
@@ -23,7 +23,7 @@ export default class Router {
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            ...await this.applyCallbacks(callbacks)
+            this.applyCallbacks(callbacks)
         );
     }
 
@@ -33,7 +33,7 @@ export default class Router {
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            ...await this.applyCallbacks(callbacks)
+            this.applyCallbacks(callbacks)
         );
     }
 
@@ -43,7 +43,7 @@ export default class Router {
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            ...await this.applyCallbacks(callbacks)
+            this.applyCallbacks(callbacks)
         );
     }
 
@@ -53,7 +53,7 @@ export default class Router {
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            ...await this.applyCallbacks(callbacks)
+            this.applyCallbacks(callbacks)
         );
     }
 
@@ -102,7 +102,8 @@ export default class Router {
             try {
                 await callback.apply(this, params);//req, res, next
             } catch (error) {
-                throw error
+                // throw error
+                params[1].status(500).json({ error: error.message });
             }
         })
     }

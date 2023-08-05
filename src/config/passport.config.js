@@ -6,8 +6,8 @@ import FacebookStrategy from 'passport-facebook';
 import jwt from "passport-jwt";
 import { PRIVATE_KEY } from "./constants.js";
 import config from './config.js';
-import { addCartService } from '../service/carts.service.js';
-import { saveUser, getByEmail } from '../service/users.service.js';
+// import { addCartService } from '../service/carts.service.js';
+import { register, getByEmailPassport } from '../service/users.service.js';
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
@@ -35,19 +35,19 @@ const initializePassport = () => {
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             const email = profile.emails[0].value;
-            const user = await getByEmail(email)
+            const user = await getByEmailPassport(email)
             if (!user) {
-                const cart = await addCartService({ products: [] });
+                // const cart = await addCartService({ products: [] });
                 const newUser = {
                     first_name: profile._json.login,
                     last_name: 'user',
                     age: 18,
                     email,
-                    role: 'USER',
-                    password: createHash(config.passDefault),
-                    cart: cart._id
+                    // role: 'USER',
+                    password: createHash(config.passDefault)
+                    // cart: cart._id
                 }
-                const result = await saveUser(newUser);
+                const result = await register(newUser);
                 done(null, result);
             } else {
                 done(null, user);
@@ -67,20 +67,20 @@ const initializePassport = () => {
         async (request, accessToken, refreshToken, profile, done) => {
             try {
                 const email = profile.emails[0].value;
-                const user = await getByEmail(email)
+                const user = await getByEmailPassport(email)
 
                 if (!user) {
-                    const cart = await addCartService({ products: [] });
+                    // const cart = await addCartService({ products: [] });
                     const newUser = {
                         first_name: profile._json.given_name,
                         last_name: profile._json.family_name,
                         age: 18,
                         email,
-                        role: 'USER',
-                        password: createHash(config.passDefault),
-                        cart: cart._id
+                        // role: 'USER',
+                        password: createHash(config.passDefault)
+                        // cart: cart._id
                     }
-                    const result = await saveUser(newUser);
+                    const result = await register(newUser);
                     done(null, result);
                 } else {
                     done(null, user);
@@ -99,20 +99,20 @@ const initializePassport = () => {
         async function (accessToken, refreshToken, profile, done) {
 
             try {
-                const user = await getByEmail(`${profile._json.id}@mail.com`)
+                const user = await getByEmailPassport(`${profile._json.id}@mail.com`)
                 if (!user) {
-                    const cart = await addCartService({ products: [] });
+                    // const cart = await addCartService({ products: [] });
                     const newUser = {
                         first_name: profile._json.name,
                         last_name: 'user',
                         age: 18,
                         email: `${profile._json.id}@mail.com`,
-                        role: 'USER',
-                        password: createHash(config.passDefault),
-                        cart: cart._id
+                        // role: 'USER',
+                        password: createHash(config.passDefault)
+                        // cart: cart._id
                     }
 
-                    const result = await saveUser(newUser);
+                    const result = await register(newUser);
                     done(null, result);
                 } else {
                     done(null, user);
