@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { createHash, isValidPassword } from '../utils.js';
+import { createHash } from '../utils/utils.js';
 import GitHubStrategy from 'passport-github2';
 import GoogleStrategy from 'passport-google-oauth2';
 import FacebookStrategy from 'passport-facebook';
@@ -9,7 +9,6 @@ import config from './config.js';
 import { addCartService } from '../service/carts.service.js';
 import { saveUser, getByEmail } from '../service/users.service.js';
 
-// const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
 
@@ -44,7 +43,7 @@ const initializePassport = () => {
                     last_name: 'user',
                     age: 18,
                     email,
-                    role:'USER',
+                    role: 'USER',
                     password: createHash(config.passDefault),
                     cart: cart._id
                 }
@@ -62,67 +61,67 @@ const initializePassport = () => {
         clientID: config.idGoogle,
         clientSecret: config.secretGoogle,
         callbackURL: "http://localhost:8081/api/users/google-callback",
-        passReqToCallback   : true,
-        scope: [ 'email', 'profile' ]
-      },
-      async (request, accessToken, refreshToken, profile, done) => {
-        try {
-            const email = profile.emails[0].value;
-            const user = await getByEmail(email)
-            
-            if (!user) {
-                const cart = await addCartService({ products: [] });
-                const newUser = {
-                    first_name: profile._json.given_name,
-                    last_name: profile._json.family_name,
-                    age: 18,
-                    email,
-                    role:'USER',
-                    password: createHash(config.passDefault),
-                    cart: cart._id 
+        passReqToCallback: true,
+        scope: ['email', 'profile']
+    },
+        async (request, accessToken, refreshToken, profile, done) => {
+            try {
+                const email = profile.emails[0].value;
+                const user = await getByEmail(email)
+
+                if (!user) {
+                    const cart = await addCartService({ products: [] });
+                    const newUser = {
+                        first_name: profile._json.given_name,
+                        last_name: profile._json.family_name,
+                        age: 18,
+                        email,
+                        role: 'USER',
+                        password: createHash(config.passDefault),
+                        cart: cart._id
+                    }
+                    const result = await saveUser(newUser);
+                    done(null, result);
+                } else {
+                    done(null, user);
                 }
-                const result = await saveUser(newUser);
-                done(null, result);
-            } else {
-                done(null, user);
+            } catch (error) {
+                return done(error)
             }
-        } catch (error) {
-            return done(error)
         }
-      }
     ));
 
     passport.use('facebook', new FacebookStrategy({
         clientID: config.idFacebook,
         clientSecret: config.secretFacebook,
         callbackURL: "http://localhost:8081/api/users/facebook-callback"
-      },
-      async function(accessToken, refreshToken, profile, done) {
-        
-        try {
-            const user = await getByEmail(`${profile._json.id}@mail.com`)
-            if (!user) {
-                const cart = await addCartService({ products: [] });
-                const newUser = {
-                    first_name: profile._json.name,
-                    last_name: 'user',
-                    age: 18,
-                    email: `${profile._json.id}@mail.com`,
-                    role:'USER',
-                    password: createHash(config.passDefault),
-                    cart: cart._id 
+    },
+        async function (accessToken, refreshToken, profile, done) {
+
+            try {
+                const user = await getByEmail(`${profile._json.id}@mail.com`)
+                if (!user) {
+                    const cart = await addCartService({ products: [] });
+                    const newUser = {
+                        first_name: profile._json.name,
+                        last_name: 'user',
+                        age: 18,
+                        email: `${profile._json.id}@mail.com`,
+                        role: 'USER',
+                        password: createHash(config.passDefault),
+                        cart: cart._id
+                    }
+
+                    const result = await saveUser(newUser);
+                    done(null, result);
+                } else {
+                    done(null, user);
                 }
-                
-                const result = await saveUser(newUser);
-                done(null, result);
-            } else {
-                done(null, user);
+            } catch (error) {
+                return done(error)
             }
-        } catch (error) {
-            return done(error)
+
         }
-        
-      }
     ));
 
 };

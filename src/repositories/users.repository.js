@@ -1,4 +1,5 @@
-import { Users } from '../dao/factory.js'
+import { Users } from '../dao/factory.js';
+import UserDto from '../dao/DTOs/user.dto.js';
 
 export default class UsersRepository {
     constructor() {
@@ -12,6 +13,11 @@ export default class UsersRepository {
 
     saveUser = async (user) => {
         const result = await this.dao.save(user);
+        return result;
+    }
+
+    currentUser = async (user) => {
+        const result = new UserDto(user);
         return result;
     }
 }

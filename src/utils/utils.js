@@ -1,9 +1,9 @@
 // import path from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { dirname } from "path";
-import { PRIVATE_KEY } from "./config/constants.js"
+import { PRIVATE_KEY } from "../config/constants.js"
 import { faker } from '@faker-js/faker';
 
 faker.locale = "es";

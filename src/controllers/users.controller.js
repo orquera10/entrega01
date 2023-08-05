@@ -1,26 +1,53 @@
-import { isValidPassword, generateToken, createHash } from '../utils.js';
-import { getByEmail as getByEmailService, saveUser as saveUserService } from '../service/users.service.js';
-import { addCartService } from '../service/carts.service.js';
-import UserDto from '../dao/DTOs/user.dto.js';
+import { getByEmail as getByEmailService, register as registerService, login as loginService, getByEmailRegister as getByEmailRegisterService, currentUser as currentUserService, createToken as createTokenSerive  } from '../service/users.service.js';
 
 
 const userLogin = async (req, res) => {
-    const { email, password } = req.body;
-    const user = await getByEmailService(email);
-    if (!user) {
-        req.logger.error('incorrect credentials');
-        return res.sendClientError('incorrect credentials');
+    try {
+        const { email, password } = req.body;
+        const user = await getByEmailService(email);
+        const accessToken = loginService(password, user);
+        req.logger.info('access token generated successfully');
+        res.cookie(
+            'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
+        ).sendSuccess({ accessToken });
+    } catch (error) {
+        if (error instanceof UserNotFound) {
+            req.logger.error('user not found');
+            return res.sendClientError(error.message);
+        }
+
+        if (error instanceof IncorrectLoginCredentials) {
+            req.logger.error('incorrect credentials');
+            return res.sendClientError(error.message);
+        }
+        req.logger.error('server error login user');
+        res.sendServerError(error.message);
     }
-    const comparePassword = isValidPassword(user, password);
-    if (!comparePassword) {
-        req.logger.error('incorrect password');
-        return res.sendClientError('incorrect password');
+}
+
+const userRegister = async (req, res) => {
+    try {
+        const { first_name, last_name, email, password, age } = req.body;
+
+        if (!first_name || !last_name || !email || !password || !age) {
+            req.logger.error('error incomplete values');
+            return res.sendClientError('incomplete values');
+        }
+
+        await getByEmailRegisterService(email);
+        
+        const result = await registerService(req.body);
+        req.logger.info('successfully registered user');
+        res.sendSuccess(result);
+
+    } catch (error) {
+        if (error instanceof UserAlreadyExists) {
+            req.logger.error('user already exists');
+            return res.sendClientError('user already exists');
+        }
+        req.logger.error('error register user');
+        res.sendServerError(error.message);
     }
-    const accessToken = generateToken(user);
-    req.logger.info('access token generated successfully');
-    res.cookie(
-        'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
-    ).sendSuccess({ accessToken });
 }
 
 const userLogout = (req, res) => {
@@ -28,38 +55,9 @@ const userLogout = (req, res) => {
     res.clearCookie("coderCookieToken").redirect('/login')
 }
 
-const userRegister = async (req, res) => {
+const userCurrent = async (req, res) => {
     try {
-        const { first_name, last_name, email, password, age } = req.body;
-        if (!first_name || !last_name || !email || !password || !age){
-            req.logger.error('error incomplete values');
-            return res.sendClientError('incomplete values');
-        }
-
-        const exists = await getByEmailService(email);
-        if (exists){
-            req.logger.error('user already exists');
-            return res.sendClientError('user already exists')
-        }
-        
-        const cart = await addCartService({ products: [] });
-        const hashedPassword = createHash(password);
-        const newUser = {
-            ...req.body, role: "USER", cart: cart._id
-        };
-        newUser.password = hashedPassword;
-        const result = await saveUserService(newUser);
-        req.logger.info('successfully registered user');
-        res.sendSuccess(result)
-    } catch (error) {
-        req.logger.error('error register user');
-        res.sendServerError(error.message);
-    }
-}
-
-const userCurrent = async (req,res) => {
-    try {
-        const result = new UserDto(req.user);
+        result = await currentUserService(req.user);
         req.logger.info('successfully user current');
         res.sendSuccess(result);
     } catch (error) {
@@ -68,13 +66,14 @@ const userCurrent = async (req,res) => {
     }
 }
 
+
 const logGithub = async (req, res) => {
     req.logger.info('successfully login github');
     res.sendSuccess("User registered")
 }
 
 const callbackGithub = async (req, res) => {
-    const accessToken = generateToken(req.user);
+    const accessToken = createTokenSerive(req.user);
     req.logger.info('access token generated successfully');
     res.cookie(
         'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
@@ -87,8 +86,8 @@ const logGoogle = async (req, res) => {
     res.sendSuccess("User registered");
 }
 
-const callbackGoogle = async (req, res) => {     
-    const accessToken = generateToken(req.user);
+const callbackGoogle = async (req, res) => {
+    const accessToken = createTokenSerive(req.user);
     req.logger.info('access token generated successfully');
     res.cookie(
         'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
@@ -101,8 +100,8 @@ const logFacebook = async (req, res) => {
     res.sendSuccess("User registered")
 }
 
-const callbackFacebook = async (req, res) => {     
-    const accessToken = generateToken(req.user);
+const callbackFacebook = async (req, res) => {
+    const accessToken = createTokenSerive(req.user);
     req.logger.info('access token generated successfully');
     res.cookie(
         'coderCookieToken', accessToken, { maxAge: 60 * 60 * 1000, httpOnly: true }
