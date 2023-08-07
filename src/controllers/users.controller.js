@@ -1,4 +1,11 @@
-import { getByEmail as getByEmailService, register as registerService, login as loginService, getByEmailRegister as getByEmailRegisterService, currentUser as currentUserService, createToken as createTokenService  } from '../service/users.service.js';
+import {
+    getByEmail as getByEmailService,
+    register as registerService,
+    login as loginService,
+    getByEmailRegister as getByEmailRegisterService,
+    currentUser as currentUserService,
+    createToken as createTokenService
+} from '../service/users.service.js';
 
 
 const userLogin = async (req, res) => {
@@ -35,7 +42,7 @@ const userRegister = async (req, res) => {
         }
 
         await getByEmailRegisterService(email);
-        
+
         const result = await registerService(req.body);
         req.logger.info('successfully registered user');
         res.sendSuccess(result);

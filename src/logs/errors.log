@@ -19,3 +19,4 @@
 {"level":"error","message":"GET en /login - 2023-07-28T00:30:54.518Z"}
 {"level":"error","message":"GET en /css/index.css - 2023-07-28T00:30:54.534Z"}
 {"level":"error","message":"GET en /js/login.js - 2023-07-28T00:30:54.536Z"}
+[31merror[39m: [31merror properties imcomplete[39m

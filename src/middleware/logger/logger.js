@@ -57,7 +57,14 @@ if (ENVIRONMENT === 'production') {
         levels: customLevelOptions.levels,
         transports: [
             new winston.transports.Console({
-                level: 'debug'
+                level: 'debug',
+                format: winston.format.combine(
+                    winston.format.colorize({
+                        all: true,
+                        colors: customLevelOptions.colors
+                    }),
+                    winston.format.simple()
+                )
             })
         ]
     });

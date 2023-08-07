@@ -1,9 +1,9 @@
-// import CustomError from '../middleware/errors/CustomError.js';
-// import EErrors from '../middleware/errors/enums.js';
-// import { generateProductErrorInfo } from '../middleware/errors/info.js';
+import CustomError from '../middleware/errors/CustomError.js';
+import EErrors from '../middleware/errors/enums.js';
+import { generateProductErrorInfo } from '../middleware/errors/info.js';
 import { getProductsService, getProductsByIdService, addProductService, updateProductsService, deleteProductService } from '../service/products.service.js';
 
-const getAllProduct = async (req, res) =>{
+const getAllProduct = async (req, res) => {
     try {
         const products = await getProductsService();
         const limite = Number(req.query.limit) || products.length;
@@ -16,7 +16,7 @@ const getAllProduct = async (req, res) =>{
     }
 }
 
-const getByIdProduct = async (req, res) =>{
+const getByIdProduct = async (req, res) => {
     try {
         const productID = req.params.pid;
         const product = await getProductsByIdService(productID);
@@ -33,25 +33,29 @@ const getByIdProduct = async (req, res) =>{
     }
 }
 
-const saveProduct = async (req, res) =>{
-    
-        const product = req.body;
-        
-        if (product.status === null || product.status === undefined) {
-            product.status = true;
-        }
-        if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
-            
-            req.logger.error('error properties imcomplete');
-            res.sendClientError('error properties imcomplete');
+const saveProduct = async (req, res) => {
 
-        }
-        const result = await addProductService(product);
-        req.logger.info('successfully save product');
-        res.sendSuccess(result);
+    const product = req.body;
+
+    if (product.status === null || product.status === undefined) {
+        product.status = true;
+    }
+    if (!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category) {
+
+        req.logger.error('error properties imcomplete');
+        throw CustomError.createError({
+            name: 'ProductError',
+            cause: generateProductErrorInfo(product),
+            message: 'Error trying to create product',
+            code: EErrors.INVALID_TYPE_ERROR
+        });
+    }
+    const result = await addProductService(product);
+    req.logger.info('successfully save product');
+    res.sendSuccess(result);
 }
 
-const updateProduct = async (req, res) =>{
+const updateProduct = async (req, res) => {
     try {
         const productID = req.params.pid;
         const product = req.body;
@@ -70,7 +74,7 @@ const updateProduct = async (req, res) =>{
     }
 }
 
-const deleteProduct = async (req, res) =>{
+const deleteProduct = async (req, res) => {
     try {
         const productID = req.params.pid;
         const encontrado = await getProductByIdService(productID)
