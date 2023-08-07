@@ -6,6 +6,7 @@ import { dirname, join } from "path";
 import { PRIVATE_KEY } from "../config/constants.js";
 import { faker } from '@faker-js/faker';
 import nodemailer from 'nodemailer';
+import config from '../config/config.js';
 
 faker.locale = "es";
 
