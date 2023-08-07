@@ -24,5 +24,7 @@ export default {
     secretGoogle: process.env.SECRET_GOOGLE,
     idFacebook: process.env.ID_FACEBOOK,
     secretFacebook: process.env.SECRET_FACEBOOK,
-    passDefault: process.env.PASS_DEFAULT
+    passDefault: process.env.PASS_DEFAULT,
+    userNodemailer: process.env.USER_NODEMAILER,
+    passNodemailer: process.env.PASS_NODEMAILER
 }

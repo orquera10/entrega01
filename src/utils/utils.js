@@ -3,8 +3,9 @@ import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { dirname, join } from "path";
-import { PRIVATE_KEY } from "../config/constants.js"
+import { PRIVATE_KEY } from "../config/constants.js";
 import { faker } from '@faker-js/faker';
+import nodemailer from 'nodemailer';
 
 faker.locale = "es";
 
@@ -40,11 +41,21 @@ const generateProduct = () => {
     }
 }
 
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    port: 587,
+    auth: {
+        user: config.userNodemailer,
+        pass: config.passNodemailer
+    }
+})
+
 export {
     __directory,
     createHash,
     isValidPassword,
     generateToken,
-    generateProduct
+    generateProduct,
+    transporter
 }
 
