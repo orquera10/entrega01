@@ -54,14 +54,10 @@ export default class ViewsRouter extends Router {
                 console.log('conectado a chat');
 
                 socket.on('message', async data => {
-
                     const result = { user: userChat, ...data };
-                    // console.log(result.userId.first_name);
                     await messagesRepository.addMessages(result);
                     messages.push(result);
                     io.emit('messageLogs', messages);
-                    await messagesRepository.addMessages(result);
-
                 });
             })
             res.render('chat');
