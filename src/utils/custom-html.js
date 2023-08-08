@@ -1,58 +1,27 @@
-export const loginNotification = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notificación de Inicio de Sesión</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .notification {
-      background-color: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      padding: 20px;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    .notification h2 {
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    .notification p {
-      color: #777;
-    }
-
-    .btn {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .btn:hover {
-      background-color: #0056b3;
-    }
-  </style>
-</head>
-<body>
-  <div class="notification">
-    <h2>Inicio de Sesión Exitoso</h2>
-    <p>Bienvenido/a nuestro sitio web. Tu sesión ha sido iniciada correctamente.</p>
-  </div>
-</body>
-</html>`
+export function loginNotification (token) { return `<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="UTF-8">
+      <title>Restablecimiento de Contraseña</title>
+  </head>
+  <body style="font-family: Arial, sans-serif;">
+  
+      <h2>Restablecimiento de Contraseña</h2>
+      
+      <p>Hola,</p>
+      <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta. Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
+      
+      <p>Si deseas restablecer tu contraseña, haz clic en el siguiente enlace:</p>
+      <p><a href="http://localhost:8081/reset-password?token=${token}" style="background-color: #007BFF; color: #FFFFFF; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Restablecer Contraseña</a></p>
+      
+      <p>Si el enlace no funciona, copia y pega la siguiente URL en tu navegador:</p>
+      <p>http://localhost:8081/reset-password?token=${token}</p>
+      
+      <p>Si no solicitaste este cambio, no es necesario que realices ninguna acción.</p>
+      
+      <p>Gracias,</p>
+      <p>El equipo de coderDarioOrquera.com</p>
+  
+  </body>
+  </html>`
+}

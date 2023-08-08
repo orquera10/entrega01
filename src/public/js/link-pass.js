@@ -1,17 +1,13 @@
-const form = document.getElementById('resetForm');
-const dataToken = document.getElementById(`token`);
-const token = dataToken.dataset.token;
+const form = document.getElementById('linkForm');
 
 form.addEventListener('submit', e => {
     e.preventDefault();
     const data = new FormData(form);
     const obj = {};
     data.forEach((value, key) => obj[key] = value);
-    const newPassword = {password: obj.password , token};
-
-    fetch('/api/users/reset-password', {
+    fetch('/api/users/password-link', {
         method: 'POST',
-        body: JSON.stringify(newPassword),
+        body: JSON.stringify(obj),
         headers: {
             'Content-Type': 'application/json'
         }
@@ -23,9 +19,8 @@ form.addEventListener('submit', e => {
                 icon: 'error',
                 timer: 3000,
                 title: "¡Error!",
-                text: "Token expiro",
+                text: "Email no encontrado",
             });
-            setTimeout(()=>{window.location.replace('/login');},2000)
         }
     });
 })

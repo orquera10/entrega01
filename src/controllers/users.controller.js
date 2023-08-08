@@ -1,17 +1,18 @@
 import {
-    getByEmail as getByEmailService,
+    getByEmailLogin as getByEmailLoginService,
     register as registerService,
     login as loginService,
     getByEmailRegister as getByEmailRegisterService,
     currentUser as currentUserService,
-    createToken as createTokenService
+    createToken as createTokenService,
+    passwordLinkService, verificarTokenService
 } from '../service/users.service.js';
 
 
 const userLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await getByEmailService(email);
+        const user = await getByEmailLoginService(email);
         const accessToken = await loginService(password, user);
         req.logger.info('access token generated successfully');
         res.cookie(
@@ -116,6 +117,37 @@ const callbackFacebook = async (req, res) => {
     res.redirect('/');
 }
 
+const passwordLink = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await getByEmailLoginService(email);
+        await passwordLinkService(user);
+        req.logger.info('password token send successfully');
+        res.sendSuccess("password token")
+    } catch (error) {
+        if (error instanceof UserNotFound) {
+            req.logger.error('user not found');
+            return res.sendClientError(error.message);
+        }
+        req.logger.error('server error password link');
+        res.sendServerError(error.message);
+    }
+
+}
+
+const passwordReset = async (req, res) => {
+    try {
+        const { password, token } = req.body;
+        await verificarTokenService(token);
+        
+        req.logger.info('password reset successfully');
+    } catch (error) {
+        req.logger.error('invalid token');
+        res.sendServerError(error.message);
+    }
+
+}
+
 export {
     userLogin,
     userLogout,
@@ -126,5 +158,7 @@ export {
     logGoogle,
     callbackGoogle,
     logFacebook,
-    callbackFacebook
+    callbackFacebook,
+    passwordLink,
+    passwordReset
 }

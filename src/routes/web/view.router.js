@@ -114,9 +114,15 @@ export default class ViewsRouter extends Router {
         });
 
         //ruta para recuperar password
-        this.get('/reset-password', ['PUBLIC'], passportStrategiesEnum.NOTHING, (req, res) => {
+        this.get('/link-password', ['PUBLIC'], passportStrategiesEnum.NOTHING, (req, res) => {
             if (req.cookies["coderCookieToken"]) res.redirect('/products');
             res.render('recuperar-pass');
+        });
+
+        this.get('/reset-password', ['PUBLIC'], passportStrategiesEnum.NOTHING, (req, res) => {
+            if (req.cookies["coderCookieToken"]) res.redirect('/products');
+            const { token = "" } = req.query;
+            res.render('reset-pass', {token});
         });
     }
 

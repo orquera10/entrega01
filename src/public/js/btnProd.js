@@ -4,8 +4,6 @@
     const btnCarrito = document.getElementById('btnCarrito');
     //Obtener id carrito
     const cid = cartUser.dataset.cid;
-    console.log(cid);
-    
     btnCarrito.addEventListener(`click`, function() {
         window.location.replace('/cart');
     })

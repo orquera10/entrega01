@@ -7,7 +7,7 @@ import jwt from "passport-jwt";
 import { PRIVATE_KEY } from "./constants.js";
 import config from './config.js';
 // import { addCartService } from '../service/carts.service.js';
-import { register, getByEmailPassport } from '../service/users.service.js';
+import { register, getByEmail } from '../service/users.service.js';
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
@@ -35,7 +35,7 @@ const initializePassport = () => {
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             const email = profile.emails[0].value;
-            const user = await getByEmailPassport(email)
+            const user = await getByEmail(email)
             if (!user) {
                 // const cart = await addCartService({ products: [] });
                 const newUser = {
@@ -67,7 +67,7 @@ const initializePassport = () => {
         async (request, accessToken, refreshToken, profile, done) => {
             try {
                 const email = profile.emails[0].value;
-                const user = await getByEmailPassport(email)
+                const user = await getByEmail(email)
 
                 if (!user) {
                     // const cart = await addCartService({ products: [] });
@@ -99,7 +99,7 @@ const initializePassport = () => {
         async function (accessToken, refreshToken, profile, done) {
 
             try {
-                const user = await getByEmailPassport(`${profile._json.id}@mail.com`)
+                const user = await getByEmail(`${profile._json.id}@mail.com`)
                 if (!user) {
                     // const cart = await addCartService({ products: [] });
                     const newUser = {

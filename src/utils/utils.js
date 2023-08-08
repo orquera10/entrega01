@@ -28,6 +28,20 @@ const generateToken = (user) => {
     return token;
 };
 
+const validateToken = (token) => {
+    try {
+        const decoded = jwt.verify(token, PRIVATE_KEY);
+        // Verificar la fecha de expiración
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        if (decoded.exp && currentTimestamp > decoded.exp) {
+            return { valid: false, message: 'El JWT ha expirado.' };
+        }
+        return { valid: true, decoded };
+    } catch (error) {
+        return { valid: false, message: 'El JWT no es válido.' };
+    }
+};
+
 const generateProduct = () => {
     return {
         id: faker.database.mongodbObjectId(),
@@ -57,6 +71,7 @@ export {
     isValidPassword,
     generateToken,
     generateProduct,
-    transporter
+    transporter,
+    validateToken
 }
 
