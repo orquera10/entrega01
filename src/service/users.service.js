@@ -75,9 +75,17 @@ const verificarTokenService = async (token) => {
     if (validationResult.valid) {
         console.log('El JWT es válido.');
         console.log('Contenido del JWT:', validationResult.decoded);
+        const user = validationResult.decoded;
+        return user;
     } else {
         console.error('Error:', validationResult.message);
     }
+}
+
+const resetPassService = async (user, password) => {
+    const hashedPassword = createHash(password);
+    user.password = hashedPassword;
+    await usersRepository.updateUser(user._id, user);
 }
 
 export {
@@ -89,5 +97,6 @@ export {
     createToken,
     getByEmailLogin,
     passwordLinkService,
-    verificarTokenService
+    verificarTokenService,
+    resetPassService
 }

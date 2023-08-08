@@ -5,7 +5,8 @@ import {
     getByEmailRegister as getByEmailRegisterService,
     currentUser as currentUserService,
     createToken as createTokenService,
-    passwordLinkService, verificarTokenService
+    passwordLinkService, verificarTokenService,
+    resetPassService
 } from '../service/users.service.js';
 
 
@@ -138,9 +139,13 @@ const passwordLink = async (req, res) => {
 const passwordReset = async (req, res) => {
     try {
         const { password, token } = req.body;
-        await verificarTokenService(token);
-        
-        req.logger.info('password reset successfully');
+        const user = await verificarTokenService(token);
+        if (user) {
+            req.logger.info('password reset successfully');
+            await resetPassService(user, password);
+            res.sendSuccess('password reset successfully');
+        }
+
     } catch (error) {
         req.logger.error('invalid token');
         res.sendServerError(error.message);
