@@ -6,8 +6,10 @@ import {
     currentUser as currentUserService,
     createToken as createTokenService,
     passwordLinkService, verificarTokenService,
-    resetPassService
+    resetPassService, validarPasswordService,
+    getByIDService, updateRoleService
 } from '../service/users.service.js';
+import { IncorrectPassword } from '../utils/custom-exceptions.js';
 
 
 const userLogin = async (req, res) => {
@@ -124,7 +126,7 @@ const passwordLink = async (req, res) => {
         const user = await getByEmailLoginService(email);
         await passwordLinkService(user);
         req.logger.info('password token send successfully');
-        res.sendSuccess("password token")
+        res.sendSuccess("password token generated")
     } catch (error) {
         if (error instanceof UserNotFound) {
             req.logger.error('user not found');
@@ -140,14 +142,36 @@ const passwordReset = async (req, res) => {
     try {
         const { password, token } = req.body;
         const user = await verificarTokenService(token);
+        await validarPasswordService(user, password);
         if (user) {
             req.logger.info('password reset successfully');
             await resetPassService(user, password);
             res.sendSuccess('password reset successfully');
         }
-
     } catch (error) {
+        if (error instanceof IncorrectPassword) {
+            req.logger.error('invalid Password');
+            return res.sendClientError(error.message);
+        }
         req.logger.error('invalid token');
+        res.sendServerError(error.message);
+    }
+
+}
+
+const premium = async (req, res) => {
+    try {
+        const userID = req.params.uid;
+        const user = await getByIDService(userID);
+        if (user.role === "ADMIN") {
+            req.logger.error('not change role, admin user');
+            res.sendClientError('not change role, admin user');
+        }
+        const result = await updateRoleService(user);
+        req.logger.info('Role change successfully');
+        res.sendSuccess(result);
+    } catch (error) {
+        req.logger.error('error service premium');
         res.sendServerError(error.message);
     }
 
@@ -165,5 +189,6 @@ export {
     logFacebook,
     callbackFacebook,
     passwordLink,
-    passwordReset
+    passwordReset,
+    premium
 }

@@ -48,6 +48,11 @@ const addProductCart = async (req, res) => {
             req.logger.error(cartError);
             return res.sendClientError(cartError);
         }
+        if (product.owner === req.user._id && req.user.role === "PREMIUM") {
+            const cartError = 'Error adding product';
+            req.logger.error(cartError);
+            return res.sendClientError(cartError);
+        }
         const result = await addProductToCartService(cartID, productID)
         req.logger.info('product successfully saved in cart');
         res.sendSuccess(result);
@@ -147,9 +152,9 @@ const updateQuantityCart = async (req, res) => {
         res.sendServerError(error.message);
     }
 }
-const purchaseCart = async (req,res) => {
+const purchaseCart = async (req, res) => {
     try {
-        
+
         const cartID = req.params.cid;
         const cart = await getCartByIdService(cartID)
         if (!cart) {
@@ -164,7 +169,7 @@ const purchaseCart = async (req,res) => {
         }
         const result = await purchaseCartService(req.user, cart);
         req.logger.info('successfully purchase');
-        res.sendSuccess(result);   
+        res.sendSuccess(result);
 
     } catch (error) {
         req.logger.error('error purchase');
@@ -172,7 +177,7 @@ const purchaseCart = async (req,res) => {
     }
 }
 
-export{
+export {
     purchaseCart,
     getCart,
     saveCart,

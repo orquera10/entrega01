@@ -24,4 +24,9 @@ export default class Users {
         const result = await userModel.updateOne({ _id: uid }, user);
         return result;
     }
+
+    getById = async (uid) => {
+        const user = await userModel.findOne({ uid }).lean();
+        return user;
+    }
 }

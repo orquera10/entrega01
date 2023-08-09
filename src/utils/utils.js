@@ -24,22 +24,13 @@ const isValidPassword = (user, password) =>
     bcrypt.compareSync(password, user.password);
 
 const generateToken = (user) => {
-    const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: '24h' });
+    const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: '1h' });
     return token;
 };
 
 const validateToken = (token) => {
-    try {
-        const decoded = jwt.verify(token, PRIVATE_KEY);
-        // Verificar la fecha de expiración
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        if (decoded.exp && currentTimestamp > decoded.exp) {
-            return { valid: false, message: 'El JWT ha expirado.' };
-        }
-        return { valid: true, decoded };
-    } catch (error) {
-        return { valid: false, message: 'El JWT no es válido.' };
-    }
+    const decoded = jwt.verify(token, PRIVATE_KEY);
+    return decoded;
 };
 
 const generateProduct = () => {

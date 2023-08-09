@@ -1,6 +1,6 @@
 import UsersRepository from '../repositories/users.repository.js';
 import { isValidPassword, generateToken, createHash, validateToken } from '../utils/utils.js';
-import { IncorrectLoginCredentials, UserAlreadyExists, UserNotFound } from "../utils/custom-exceptions.js";
+import { IncorrectLoginCredentials, UserAlreadyExists, UserNotFound, IncorrectPassword } from "../utils/custom-exceptions.js";
 import { addCartService } from './carts.service.js';
 import { loginNotification } from "../utils/custom-html.js";
 import { sendEmail } from './mail.js';
@@ -72,20 +72,33 @@ const passwordLinkService = async (user) => {
 
 const verificarTokenService = async (token) => {
     const validationResult = validateToken(token);
-    if (validationResult.valid) {
-        console.log('El JWT es válido.');
-        console.log('Contenido del JWT:', validationResult.decoded);
-        const user = validationResult.decoded;
-        return user;
-    } else {
-        console.error('Error:', validationResult.message);
-    }
+    const { user } = validationResult;
+    return user;
 }
 
 const resetPassService = async (user, password) => {
     const hashedPassword = createHash(password);
     user.password = hashedPassword;
     await usersRepository.updateUser(user._id, user);
+}
+
+const validarPasswordService = async (user, password) => {
+    const comparePassword = isValidPassword(user, password);
+    if (comparePassword) {
+        throw new IncorrectPassword('invalid password');
+    }
+}
+
+const getByIDService = async (uid) => {
+    const user = await usersRepository.getById(uid);
+    return user;
+}
+
+const updateRoleService = async (user) => {
+    const newUser = user;
+    newUser.role = user.role==="USER" ? "PREMIUM" : "USER";
+    const result = await usersRepository.updateUser(user._id, newUser);
+    return result;
 }
 
 export {
@@ -98,5 +111,8 @@ export {
     getByEmailLogin,
     passwordLinkService,
     verificarTokenService,
-    resetPassService
+    resetPassService,
+    validarPasswordService,
+    getByIDService,
+    updateRoleService
 }

@@ -25,4 +25,9 @@ export default class UsersRepository {
         const result = await this.dao.update(uid, user);
         return result;
     }
+    
+    getById = async (uid) => {
+        const result = await this.dao.getById(uid);
+        return result;
+    }
 }

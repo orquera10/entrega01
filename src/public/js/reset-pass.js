@@ -7,7 +7,7 @@ form.addEventListener('submit', e => {
     const data = new FormData(form);
     const obj = {};
     data.forEach((value, key) => obj[key] = value);
-    const newPassword = {password: obj.password , token};
+    const newPassword = { password: obj.password, token };
 
     fetch('/api/users/reset-password', {
         method: 'POST',
@@ -17,15 +17,27 @@ form.addEventListener('submit', e => {
         }
     }).then(result => {
         if (result.status === 200) {
-            window.location.replace('/login');
-        } else{
+            Swal.fire({
+                icon: 'success',
+                title: "¡Éxito!",
+                text: "Tu contraseña se actualizo",
+            })
+            setTimeout(() => { window.location.replace('/login'); }, 2000)
+        } else if (result.status === 400) {
             Swal.fire({
                 icon: 'error',
                 timer: 3000,
                 title: "¡Error!",
-                text: "Token expiro",
+                text: "Ingresa una contraseña diferente a la anterior",
             });
-            setTimeout(()=>{window.location.replace('/login');},2000)
+        } else {
+            Swal.fire({
+                icon: 'error',
+                timer: 3000,
+                title: "¡Error!",
+                text: "Token no valido",
+            });
+            setTimeout(() => { window.location.replace('/link-password'); }, 2000)
         }
     });
 })

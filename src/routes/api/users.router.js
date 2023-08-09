@@ -12,7 +12,8 @@ import {
     callbackGoogle,
     callbackFacebook,
     passwordLink,
-    passwordReset
+    passwordReset,
+    premium
 } from '../../controllers/users.controller.js';
 
 
@@ -33,5 +34,6 @@ export default class UsersRouter extends Router {
 
         this.post('/password-link', ['PUBLIC'], passportStrategiesEnum.NOTHING, passwordLink);
         this.post('/reset-password', ['PUBLIC'], passportStrategiesEnum.NOTHING, passwordReset);
+        this.post('/premium/:uid', ['ADMIN'], passportStrategiesEnum.JWT, premium);
     }
 }
