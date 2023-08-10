@@ -5,6 +5,7 @@ import {
     getByEmailRegister as getByEmailRegisterService,
     currentUser as currentUserService,
     createToken as createTokenService,
+    getByEmail as getByEmailService,
     passwordLinkService, verificarTokenService,
     resetPassService, validarPasswordService,
     getByIDService, updateRoleService
@@ -141,7 +142,10 @@ const passwordLink = async (req, res) => {
 const passwordReset = async (req, res) => {
     try {
         const { password, token } = req.body;
-        const user = await verificarTokenService(token);
+        
+        const userToken = await verificarTokenService(token);
+        const user = await getByEmailService(userToken.email);
+        console.log(user);
         await validarPasswordService(user, password);
         if (user) {
             req.logger.info('password reset successfully');
