@@ -13,6 +13,8 @@ import cors from 'cors';
 import {Server} from 'socket.io';
 import errorHandler from './middleware/errors/index.js'
 import { addLogger } from './middleware/logger/logger.js';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
@@ -37,6 +39,21 @@ app.set('view engine', 'handlebars');
 //PASSPORT
 initializePassport();
 app.use(passport.initialize());
+
+//documentacion
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentación del proyeecto de aopción de mascotas',
+            description: 'API pensada para resolver el proceso de adopción de mascotas'
+        }
+    },
+    apis: [`${__directory}/docs/**/*.yaml`]
+};
+
+const specs = swaggerJsdoc(swaggerOptions);
+app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 app.use(`/`,viewsRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
