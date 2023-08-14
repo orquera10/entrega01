@@ -1,50 +1,71 @@
 paths:
-  /api/users:
+  /api/products:
     get:
-      summary: Obtiene todos los usuarios
+      summary: Obtiene todos los productos
       tags:
-        - Users
+        - Products
       responses:
         "200":
-          description: Los usuarios fueron obtenidos satisfactoriamente de la BDD
+          description: Los productos fueron obtenidos satisfactoriamente de la BDD
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#components/schemas/User'
+                  $ref: '#components/schemas/Products'
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
-  /api/users/{uid}:
-    get:
-      summary: Obtiene un solo usuario a partir de su uid
+    post:
+      summary: Agregar producto enviado en el body
       tags:
-        - Users
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/addProduct'
+      responses:
+        "200":
+          description: El producto se agrego correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Products'
+        "400":
+          description: Una o mas propiedades del producto estan incompletas o son invalidas
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un solo producto a partir de su pid
+      tags:
+        - Products
       parameters:
-        - name: uid
+        - name: pid
           in: path
           required: true
-          description: El id del usuario
+          description: El id del producto
           schema:
             $type: String
       responses:
         "200":
-          description: El usuario fue obttenido satisfcatoriamente de la BDD
+          description: El producto fue obtenido satisfactoriamente de la BDD
           content:
             application/json:
               schema:
-                $ref: '#components/schemas/User'
+                $ref: '#components/schemas/Products'
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
     put:
-      summary: Actualiza el usuario a partir de su uid
+      summary: Actualiza el producto a partir de su pid
       tags:
-        - Users
+        - Products
       parameters:
-        - name: uid
+        - name: pid
           in: path
           required: true
-          description: El id del usuario
+          description: El id del producto
           schema:
             $type: String
       requestBody:
@@ -52,66 +73,160 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/requestBodies/updateUser'
+              $ref: '#components/requestBodies/updateProduct'
       responses:
         "200":
-          description: El usuario fue actualizado correctamente
-        "404":
-          description: El usuario no fue encontrado en la BDD
+          description: El producto fue actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Products'
+        "400":
+          description: El producto no fue encontrado en la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+    delete:
+      summary: Elimina un producto a partir de su pid
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: El id del producto
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El producto fue eliminado satisfactoriamente de la BDD
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Products'
+        "400":
+          description: El producto no fue encontrado en la BDD
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
 components:
   schemas:
-    User:
+    Products:
       type: object
       properties:
         _id:
           type: ObjectId
           description: Id autogenerado de mongodb
-        first_name:
+        title:
           type: String
-          description: Nombre del usuario
-        last_name:
+          description: Titulo del producto
+        description:
           type: String
-          description: Apellido del usuario
-        email:
+          description: Apellido del producto
+        code:
           type: String
-          description: Correo del usuario
-        password:
+          description: Codigo del producto, tiene q ser unico
+        price:
+          type: Number
+          description: precio del producto
+        status:
+          type: Boolean
+          description: Disponibilidad del producto
+        category:
           type: String
-          description: Password del usuario
-        role:
+          description: categoria del producto
+        stock:
+          type: Number
+          description: cantidad de existenbcias del producto
+        thumbnail:
           type: String
-          description: Rol del usuario
+          description: path de imagen representativa del producto
+        owner:
+          type: String
+          description: id del usuario que creo el producto, por defecto es "ADMIN"
       example:
         _id: ObjectId("asdad324524")
-        first_name: Jose
-        last_name: Guerra
-        email: hg@gmail.com
-        password: $asd645
-        role: admin
+        title: producto prueba
+        description: Este es un producto de prueba
+        code: abc133
+        price: 200
+        status: true
+        category: food
+        stock: 10
+        thumbnail: http://imagendeprueba.com
+        owner: asdad5589633244
   requestBodies:
-    updateUser:
+    addProduct:
       type: object
       properties:
-        first_name:
+        title:
           type: String
-          description: Nombre del usuario
-        last_name:
+          description: Titulo del producto
+        description:
           type: String
-          description: Apellido del usuario
-        email:
+          description: Apellido del producto
+        code:
           type: String
-          description: Correo del usuario
-        password:
+          description: Codigo del producto, tiene q ser unico
+        price:
+          type: Number
+          description: precio del producto
+        status:
+          type: Boolean
+          description: Disponibilidad del producto
+        category:
           type: String
-          description: Password del usuario
-        role:
+          description: categoria del producto
+        stock:
+          type: Number
+          description: cantidad de existenbcias del producto
+        thumbnail:
           type: String
-          description: Rol del usuario
+          description: path de imagen representativa del producto
+        owner:
+          type: String
+          description: id del usuario que creo el producto, por defecto es "ADMIN"
       example:
-        first_name: Jose
-        last_name: Guerra
-        email: hg@gmail.com
-        password: $asd645
-        role: admin
+        title: producto prueba
+        description: Este es un producto de prueba
+        code: abc133
+        price: 200
+        status: true
+        category: food
+        stock: 10
+        thumbnail: http://imagendeprueba.com
+        owner: asdad5589633244
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Titulo del producto
+        description:
+          type: String
+          description: Apellido del producto
+        code:
+          type: String
+          description: Codigo del producto, tiene q ser unico
+        price:
+          type: Number
+          description: precio del producto
+        status:
+          type: Boolean
+          description: Disponibilidad del producto
+        category:
+          type: String
+          description: categoria del producto
+        stock:
+          type: Number
+          description: cantidad de existenbcias del producto
+        thumbnail:
+          type: String
+          description: path de imagen representativa del producto
+      example:
+        title: producto prueba
+        description: Este es un producto de prueba
+        code: abc133
+        price: 200
+        status: true
+        category: food
+        stock: 10
+        thumbnail: http://imagendeprueba.com

@@ -5,13 +5,16 @@ import { purchaseCart, getCart, saveCart, addProductCart, deleteProductCart, del
 export default class CartsRouter extends Router {
     init() {
 
-        this.get('/:cid', ['PUBLIC'], passportStrategiesEnum.NOTHING, getCart);
         this.post('/', ['ADMIN'], passportStrategiesEnum.JWT, saveCart);
-        this.post('/:cid/product/:pid', ['ADMIN', 'USER', 'PREMIUM'], passportStrategiesEnum.JWT, addProductCart);
-        this.delete('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, deleteProductCart);
-        this.delete('/:cid', ['ADMIN', 'USER'], passportStrategiesEnum.JWT, deleteCart);
+
+        this.get('/:cid', ['PUBLIC'], passportStrategiesEnum.NOTHING, getCart);
         this.put('/:cid', ['ADMIN', 'USER'], passportStrategiesEnum.JWT, updateCart);
+        this.delete('/:cid', ['ADMIN', 'USER'], passportStrategiesEnum.JWT, deleteCart);
+        
+        this.post('/:cid/product/:pid', ['ADMIN', 'USER', 'PREMIUM'], passportStrategiesEnum.JWT, addProductCart);
         this.put('/:cid/product/:pid', ['ADMIN', 'USER'], passportStrategiesEnum.JWT, updateQuantityCart);
+        this.delete('/:cid/product/:pid', ['ADMIN'], passportStrategiesEnum.JWT, deleteProductCart);
+        
         this.post('/:cid/purchase', ['USER'], passportStrategiesEnum.JWT, purchaseCart);
 
     }

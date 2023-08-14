@@ -45,8 +45,8 @@ const swaggerOptions = {
     definition: {
         openapi: '3.0.1',
         info: {
-            title: 'Documentación del proyeecto de aopción de mascotas',
-            description: 'API pensada para resolver el proceso de adopción de mascotas'
+            title: 'Documentación de proyecto para E-commerce',
+            description: 'API pensada para resolver el proceso de compra de productos'
         }
     },
     apis: [`${__directory}/docs/**/*.yaml`]

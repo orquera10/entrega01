@@ -1,0 +1,255 @@
+paths:
+  /api/carts:
+    post:
+      summary: Agregar carrito vacio
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: El carrito se agrego correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Carts'
+              example:
+                _id: ObjectId("5f8a1c86f9fcf216883ad06f")
+                products: []
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un solo producto a partir de su cid
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El carrito fue obtenido satisfactoriamente de la BDD
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Carts'
+        "400":
+          description: El carrito no fue encontrado en la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+    put:
+      summary: Actualiza el carrito a partir de su cid
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateCart'
+      responses:
+        "200":
+          description: El carrito fue actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Carts'
+        "400":
+          description: El carrito no fue encontrado en la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+    delete:
+      summary: Elimina un carrito a partir de su cid
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El carrito fue eliminado satisfactoriamente de la BDD
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Carts'
+        "400":
+          description: El carrito no fue encontrado en la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agregar un producto al carrito a partir del cid y pid
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: El id del producto
+          schema:
+            $type: String 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/addProduct'
+      responses:
+        "200":
+          description: El producto se agrego al carrito correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Carts'
+        "400":
+          description: El carrito o el producto no fueron encontrados en la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+    put:
+      summary: Actualiza la cantidad de un producto perteneciente a un carrito, a partir del cid y pid
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: El id del producto
+          schema:
+            $type: String 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/addQuantity'
+      responses:
+        "200":
+          description: La cantidad de un porducto del carrito se actualizo correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Carts'
+        "400":
+          description: El carrito o el producto no fueron encontrados en la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        product:
+          type: ObjectId
+          description: Id del pructo añadido al carrito
+        quantity:
+          type: Number
+          description: Cantidad de productos añadidos al carrito
+      example:
+        product: ObjectId("asdad324524ssbfa")
+        quantity: 5
+    Carts:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de mongodb
+        products:
+          type: Array
+          description: Array de productos que contiene el carrito
+          items:
+            $ref: "#/components/schemas/Product"
+      example:
+          _id: ObjectId("5f8a1c86f9fcf216883ad06f")
+          products:
+            - _id: "abc123"
+              quantity: 2
+            - _id: "def456"
+              quantity: 1
+  requestBodies:
+    updateCart:
+      type: object
+      properties:
+        products:
+          type: Array
+          description: Array de productos que contiene el carrito
+          items:
+            $ref: "#/components/schemas/Product"
+      example:
+        products:
+          - _id: "abc123"
+            quantity: 5
+          - _id: "def456"
+            quantity: 9
+    addProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Titulo del producto
+        description:
+          type: String
+          description: Apellido del producto
+        code:
+          type: String
+          description: Codigo del producto, tiene q ser unico
+        price:
+          type: Number
+          description: precio del producto
+        status:
+          type: Boolean
+          description: Disponibilidad del producto
+        category:
+          type: String
+          description: categoria del producto
+        stock:
+          type: Number
+          description: cantidad de existenbcias del producto
+        thumbnail:
+          type: String
+          description: path de imagen representativa del producto
+        owner:
+          type: String
+          description: id del usuario que creo el producto, por defecto es "ADMIN"
+      example:
+        title: producto prueba
+        description: Este es un producto de prueba
+        code: abc133
+        price: 200
+        status: true
+        category: food
+        stock: 10
+        thumbnail: http://imagendeprueba.com
+        owner: asdad5589633244
+    addQuantity:
+      type: object
+      properties:
+        quantity:
+          type: Number
+          description: Cantidad de un producto
+      example:
+        quantity: 6
