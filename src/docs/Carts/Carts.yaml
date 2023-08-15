@@ -107,12 +107,6 @@ paths:
           description: El id del producto
           schema:
             $type: String 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#components/requestBodies/addProduct'
       responses:
         "200":
           description: El producto se agrego al carrito correctamente
@@ -158,6 +152,57 @@ paths:
           description: El carrito o el producto no fueron encontrados en la BDD
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+    delete:
+      summary: Elimina un producto perteneciente a un carrito, a partir del cid y pid
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: El id del producto
+          schema:
+            $type: String 
+      responses:
+        "200":
+          description: Se elimino el producto del carrito correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Carts'
+        "400":
+          description: El carrito o el producto no fueron encontrados en la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Realiza la compra generando un ticket de los porductos agregados al carrito
+      tags:
+          - Carts
+      parameters:
+          - name: cid
+            in: path
+            required: true
+            description: El id del carrito
+            schema:
+              $type: String
+      responses:
+          "200":
+            description: Se realizo correctamente la compra
+            content:
+              application/json:
+                schema:
+                  $ref: '#components/schemas/Purchase'
+          "400":
+            description: El carrito no fue encontrado en la BDD
+          "500":
+            description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
 components:
   schemas:
     Product:
@@ -190,6 +235,49 @@ components:
               quantity: 2
             - _id: "def456"
               quantity: 1
+    Tickets:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de mongodb
+        code:
+          type: String
+          description: Codigo del ticket, tiene q ser unico 
+        amount:
+          type: Number
+          description: Monto total del ticket 
+        purcharser:
+          type: String
+          description: Email del usuario
+      example:
+        _id: ObjectId("5f8a541696f9fcf216883ad06f")
+        code: tk58963
+        amount: 520
+        purcharser: do@mail.com
+    Purchase:
+      type: object
+      properties:
+        ticket:
+          type: object
+          description: Id del pructo añadido al carrito
+          $ref: "#/components/schemas/Ticket"
+        productOut:
+          type: array
+          description: Array de productos sin stock
+          items:
+            $ref: "#/components/schemas/Product"
+      example:
+        ticket:
+          _id: ObjectId("5f8a541696f9fcf216883ad06f")
+          code: tk58963
+          amount: 520
+          purcharser: do@mail.com
+        productOut:
+          - _id: "abc123"
+            quantity: 2
+          - _id: "def456"
+            quantity: 1
   requestBodies:
     updateCart:
       type: object
@@ -205,46 +293,6 @@ components:
             quantity: 5
           - _id: "def456"
             quantity: 9
-    addProduct:
-      type: object
-      properties:
-        title:
-          type: String
-          description: Titulo del producto
-        description:
-          type: String
-          description: Apellido del producto
-        code:
-          type: String
-          description: Codigo del producto, tiene q ser unico
-        price:
-          type: Number
-          description: precio del producto
-        status:
-          type: Boolean
-          description: Disponibilidad del producto
-        category:
-          type: String
-          description: categoria del producto
-        stock:
-          type: Number
-          description: cantidad de existenbcias del producto
-        thumbnail:
-          type: String
-          description: path de imagen representativa del producto
-        owner:
-          type: String
-          description: id del usuario que creo el producto, por defecto es "ADMIN"
-      example:
-        title: producto prueba
-        description: Este es un producto de prueba
-        code: abc133
-        price: 200
-        status: true
-        category: food
-        stock: 10
-        thumbnail: http://imagendeprueba.com
-        owner: asdad5589633244
     addQuantity:
       type: object
       properties:
