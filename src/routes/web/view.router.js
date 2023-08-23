@@ -17,7 +17,7 @@ export default class ViewsRouter extends Router {
             res.render('register');
         });
 
-        this.get('/products', ['USER', 'ADMIN'], passportStrategiesEnum.JWT, async (req, res) => {
+        this.get('/products', ['USER', 'ADMIN', 'PREMIUM'], passportStrategiesEnum.JWT, async (req, res) => {
 
             const { page = 1, limit = 10, category = "", status = "", sort = "" } = req.query;
             const filter = {};

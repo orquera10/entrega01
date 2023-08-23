@@ -69,7 +69,7 @@ const userLogout = (req, res) => {
 
 const userCurrent = async (req, res) => {
     try {
-        result = await currentUserService(req.user);
+        const result = await currentUserService(req.user);
         req.logger.info('successfully user current');
         res.sendSuccess(result);
     } catch (error) {

@@ -29,7 +29,7 @@ const getByEmailRegister = async (email) => {
     if (user) {
         throw new UserAlreadyExists('user already exists');
     }
-    return result;
+    
 }
 
 const register = async (user) => {
