@@ -33,11 +33,25 @@ const userSchema = new mongoose.Schema({
     },
     cart: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'carts'
+        ref: 'carts'
+    },
+    documents: [
+        {
+            name: {
+                type: String
+            },
+            reference: {
+                type: String
+            }
+        }
+    ],
+    last_connection: {
+        type: Date,
+        default: Date.now
     }
 });
 
-userSchema.pre("findOne", function(){
+userSchema.pre("findOne", function () {
     this.populate('cart')
 })
 
