@@ -181,6 +181,20 @@ const premium = async (req, res) => {
 
 }
 
+const upload = async (req, res) => {
+    try {
+        const filename = req.file.filename;
+        console.log(filename);
+        
+        req.logger.info('upload successfully');
+        res.sendSuccess('upload successfully');
+    } catch (error) {
+        req.logger.error('error service upload');
+        res.sendServerError(error.message);
+    }
+
+}
+
 export {
     userLogin,
     userLogout,
@@ -194,5 +208,6 @@ export {
     callbackFacebook,
     passwordLink,
     passwordReset,
-    premium
+    premium,
+    upload
 }

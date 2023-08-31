@@ -7,6 +7,7 @@ import { PRIVATE_KEY } from "../config/constants.js";
 import { faker } from '@faker-js/faker';
 import nodemailer from 'nodemailer';
 import config from '../config/config.js';
+import multer from 'multer';
 
 faker.locale = "es";
 
@@ -56,6 +57,22 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, `${__directory}/public/img`);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const uploader = multer({
+    storage, onError: (err, next) => {
+        console.log(err);
+        next();
+    }
+});
+
 export {
     __directory,
     createHash,
@@ -63,6 +80,7 @@ export {
     generateToken,
     generateProduct,
     transporter,
-    validateToken
+    validateToken,
+    uploader
 }
 

@@ -13,9 +13,10 @@ import {
     callbackFacebook,
     passwordLink,
     passwordReset,
-    premium
+    premium,
+    upload
 } from '../../controllers/users.controller.js';
-
+import { uploader } from '../../utils/utils.js';
 
 export default class UsersRouter extends Router {
     init() {
@@ -35,5 +36,8 @@ export default class UsersRouter extends Router {
         this.post('/password-link', ['PUBLIC'], passportStrategiesEnum.NOTHING, passwordLink);
         this.post('/reset-password', ['PUBLIC'], passportStrategiesEnum.NOTHING, passwordReset);
         this.post('/premium/:uid', ['ADMIN'], passportStrategiesEnum.JWT, premium);
+
+        this.post('/documents', ['PUBLIC'], passportStrategiesEnum.NOTHING, uploader.single('file'), upload);
+        
     }
 }
