@@ -8,7 +8,8 @@ import {
     getByEmail as getByEmailService,
     passwordLinkService, verificarTokenService,
     resetPassService, validarPasswordService,
-    getByIDService, updateRoleService
+    getByIDService, updateRoleService,
+    updateUserService
 } from '../service/users.service.js';
 import { IncorrectPassword } from '../utils/custom-exceptions.js';
 
@@ -142,10 +143,9 @@ const passwordLink = async (req, res) => {
 const passwordReset = async (req, res) => {
     try {
         const { password, token } = req.body;
-        
+
         const userToken = await verificarTokenService(token);
         const user = await getByEmailService(userToken.email);
-        console.log(user);
         await validarPasswordService(user, password);
         if (user) {
             req.logger.info('password reset successfully');
@@ -183,16 +183,44 @@ const premium = async (req, res) => {
 
 const upload = async (req, res) => {
     try {
-        const filename = req.file.filename;
-        console.log(filename);
-        
+        // const filename = req.file.filename;
+        // console.log(filename);
+
         req.logger.info('upload successfully');
         res.sendSuccess('upload successfully');
     } catch (error) {
         req.logger.error('error service upload');
         res.sendServerError(error.message);
     }
+}
 
+const uploadDocuments = async (req, res) => {
+    const userID = req.params.uid;
+    try {
+        const filename = req.files;
+        const user = await getByIDService(userID);
+        const newDocument = [];
+        if (!user) {
+            req.logger.error('user not exist');
+            res.sendClientError('user not exist');
+        }
+        // if (!user.documents) {
+        //     user.documents = [];
+        // }
+        if (filename.identificacion) newDocument.push({name: 'Identificacion',reference: `http://localhost:8081/img/${filename.identificacion[0].filename}`});
+        if (filename.domicilio) newDocument.push({name: 'Comprobante de domicilio',reference: `http://localhost:8081/img/${filename.domicilio[0].filename}`});
+        if (filename.estadoCuenta) newDocument.push({name: 'Comprobante de estado de cuenta',reference: `http://localhost:8081/img/${filename.estadoCuenta[0].filename}`});
+        
+        console.log(newDocument);
+        const result = await updateUserService(user._id, {
+            $addToSet: { documents: { $each: newDocument } }
+        });
+        req.logger.info('upload successfully');
+        res.sendSuccess(result);
+    } catch (error) {
+        req.logger.error('error service upload');
+        res.sendServerError(error.message);
+    }
 }
 
 export {
@@ -209,5 +237,6 @@ export {
     passwordLink,
     passwordReset,
     premium,
-    upload
+    upload,
+    uploadDocuments
 }

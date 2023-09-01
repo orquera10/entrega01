@@ -26,7 +26,7 @@ export default class Users {
     }
 
     getById = async (uid) => {
-        const user = await userModel.findOne({ uid }).lean();
+        const user = await userModel.findOne({ _id: uid }).lean();
         return user;
     }
 }

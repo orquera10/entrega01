@@ -59,7 +59,26 @@ const transporter = nodemailer.createTransport({
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, `${__directory}/public/img`);
+        // cb(null, `${__directory}/public/img`);
+        switch (file.fieldname) {
+            case 'profileImage':
+                cb(null, `${__directory}/public/img/profiles`);
+                break;
+            case 'productImage':
+                cb(null, `${__directory}/public/img/products`);
+                break;
+            case 'identificacion':
+                cb(null, `${__directory}/public/img/documents`);
+                break;
+            case 'domicilio':
+                cb(null, `${__directory}/public/img/documents`);
+                break;
+            case 'estadoCuenta':
+                cb(null, `${__directory}/public/img/documents`);
+                break;
+            default:
+                break;
+        }
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`);

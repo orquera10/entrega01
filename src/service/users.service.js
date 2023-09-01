@@ -101,6 +101,11 @@ const updateRoleService = async (user) => {
     return result;
 }
 
+const updateUserService = async (uid, user) => {
+    const result = await usersRepository.updateUser(uid, user);
+    return result;
+}
+
 export {
     getByEmail,
     login,
@@ -114,5 +119,6 @@ export {
     resetPassService,
     validarPasswordService,
     getByIDService,
-    updateRoleService
+    updateRoleService,
+    updateUserService
 }
