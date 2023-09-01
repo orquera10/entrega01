@@ -204,17 +204,34 @@ const uploadDocuments = async (req, res) => {
             req.logger.error('user not exist');
             res.sendClientError('user not exist');
         }
-        // if (!user.documents) {
-        //     user.documents = [];
-        // }
-        if (filename.identificacion) newDocument.push({name: 'Identificacion',reference: `http://localhost:8081/img/${filename.identificacion[0].filename}`});
-        if (filename.domicilio) newDocument.push({name: 'Comprobante de domicilio',reference: `http://localhost:8081/img/${filename.domicilio[0].filename}`});
-        if (filename.estadoCuenta) newDocument.push({name: 'Comprobante de estado de cuenta',reference: `http://localhost:8081/img/${filename.estadoCuenta[0].filename}`});
-        
-        console.log(newDocument);
-        const result = await updateUserService(user._id, {
-            $addToSet: { documents: { $each: newDocument } }
-        });
+
+        if (filename.identificacion) newDocument.push({ name: 'Identificacion', reference: `http://localhost:8081/img/${filename.identificacion[0].filename}` });
+        if (filename.domicilio) newDocument.push({ name: 'Comprobante de domicilio', reference: `http://localhost:8081/img/${filename.domicilio[0].filename}` });
+        if (filename.estadoCuenta) newDocument.push({ name: 'Comprobante de estado de cuenta', reference: `http://localhost:8081/img/${filename.estadoCuenta[0].filename}` });
+
+        if (!user.documents) {
+            user.documents = newDocument;
+        } else {
+            newDocument.forEach(ndoc => {
+                let band = true;
+                user.documents.forEach(doc => {
+                    if (doc.name === ndoc.name) {
+
+                        band = false;
+                        doc.reference = ndoc.reference;
+
+                    }
+                })
+                if (band) {
+                    user.documents.push(ndoc)
+                }
+            });
+
+        }
+
+        console.log(user);
+
+        const result = await updateUserService(user._id, user);
         req.logger.info('upload successfully');
         res.sendSuccess(result);
     } catch (error) {
