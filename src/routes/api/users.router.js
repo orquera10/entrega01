@@ -24,7 +24,7 @@ export default class UsersRouter extends Router {
         this.post('/login', ['PUBLIC'], passportStrategiesEnum.NOTHING, userLogin);
         this.post('/register', ['PUBLIC'], passportStrategiesEnum.NOTHING, userRegister);
 
-        this.get('/logout', ['PUBLIC'], passportStrategiesEnum.NOTHING, userLogout);
+        this.get('/logout', ['ADMIN', 'USER', 'PREMIUM'], passportStrategiesEnum.JWT, userLogout);
         this.get('/current', ['ADMIN', 'USER'], passportStrategiesEnum.JWT, userCurrent);
 
         this.get('/github', ['PUBLIC'], passportStrategiesEnum.github, logGithub);

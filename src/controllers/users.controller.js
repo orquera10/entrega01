@@ -63,9 +63,18 @@ const userRegister = async (req, res) => {
     }
 }
 
-const userLogout = (req, res) => {
-    req.logger.info('access token deleted successfully');
-    res.clearCookie("coderCookieToken").redirect('/login')
+const userLogout = async (req, res) => {
+    try {
+        const user = req.user
+        user.last_connection = Date.now();
+        await updateUserService(user._id, user);
+        req.logger.info('access token deleted successfully');
+        res.clearCookie("coderCookieToken").redirect('/login')
+    } catch (error) {
+        req.logger.error('error logout');
+        res.sendServerError(error.message);
+    }
+
 }
 
 const userCurrent = async (req, res) => {
@@ -183,9 +192,6 @@ const premium = async (req, res) => {
 
 const upload = async (req, res) => {
     try {
-        // const filename = req.file.filename;
-        // console.log(filename);
-
         req.logger.info('upload successfully');
         res.sendSuccess('upload successfully');
     } catch (error) {
@@ -230,8 +236,6 @@ const uploadDocuments = async (req, res) => {
                 }
             });
         }
-
-        console.log(user);
 
         const result = await updateUserService(user._id, user);
         req.logger.info('Upload successful');

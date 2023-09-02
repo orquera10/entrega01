@@ -20,6 +20,10 @@ const login = async (password, user) => {
     if (!comparePassword) {
         throw new IncorrectLoginCredentials('incorrect credentials');
     }
+
+    user.last_connection = Date.now();
+    await usersRepository.updateUser(user._id, user);
+    
     const accessToken = generateToken(user);
     return accessToken;
 }
@@ -51,6 +55,8 @@ const currentUser = async (user) => {
 }
 
 const createToken = async (user) => {
+    user.last_connection = Date.now();
+    await usersRepository.updateUser(user._id, user);
     const accessToken = generateToken(user);
     return accessToken;
 }
