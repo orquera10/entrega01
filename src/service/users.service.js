@@ -1,6 +1,6 @@
 import UsersRepository from '../repositories/users.repository.js';
 import { isValidPassword, generateToken, createHash, validateToken } from '../utils/utils.js';
-import { IncorrectLoginCredentials, UserAlreadyExists, UserNotFound, IncorrectPassword } from "../utils/custom-exceptions.js";
+import { IncorrectLoginCredentials, UserAlreadyExists, UserNotFound, IncorrectPassword, RoleNotUser } from "../utils/custom-exceptions.js";
 import { addCartService } from './carts.service.js';
 import { loginNotification } from "../utils/custom-html.js";
 import { sendEmail } from './mail.js';
@@ -23,7 +23,7 @@ const login = async (password, user) => {
 
     user.last_connection = Date.now();
     await usersRepository.updateUser(user._id, user);
-    
+
     const accessToken = generateToken(user);
     return accessToken;
 }
@@ -33,7 +33,7 @@ const getByEmailRegister = async (email) => {
     if (user) {
         throw new UserAlreadyExists('user already exists');
     }
-    
+
 }
 
 const register = async (user) => {
@@ -101,10 +101,26 @@ const getByIDService = async (uid) => {
 }
 
 const updateRoleService = async (user) => {
-    const newUser = user;
-    newUser.role = user.role==="USER" ? "PREMIUM" : "USER";
-    const result = await usersRepository.updateUser(user._id, newUser);
-    return result;
+    
+    
+    if (user.role === 'USER') {
+        
+        const docsBuscados = ['Identificacion', 'Comprobante de domicilio', 'Comprobante de estado de cuenta'];
+
+        const docsEncontrados = user.documents.filter(doc => docsBuscados.includes(doc.name));
+        console.log(user);
+        console.log(docsEncontrados.length);
+        if (docsEncontrados.length === 3) {
+            
+            user.role = 'PREMIUM';
+        } else {
+            throw new RoleNotUser('user role is not USER'); 
+        }
+    } else if (user.role === 'PREMIUM'){
+        user.role = 'USER';
+    }
+
+    await usersRepository.updateUser(user._id, user);
 }
 
 const updateUserService = async (uid, user) => {

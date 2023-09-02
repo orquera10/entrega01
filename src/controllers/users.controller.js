@@ -11,7 +11,7 @@ import {
     getByIDService, updateRoleService,
     updateUserService
 } from '../service/users.service.js';
-import { IncorrectPassword } from '../utils/custom-exceptions.js';
+import { IncorrectPassword, UserNotFound, IncorrectLoginCredentials, UserAlreadyExists, RoleNotUser } from '../utils/custom-exceptions.js';
 
 
 const userLogin = async (req, res) => {
@@ -180,10 +180,14 @@ const premium = async (req, res) => {
             req.logger.error('not change role, admin user');
             res.sendClientError('not change role, admin user');
         }
-        const result = await updateRoleService(user);
+        await updateRoleService(user);
         req.logger.info('Role change successfully');
-        res.sendSuccess(result);
+        res.sendSuccess('Role change successfully');
     } catch (error) {
+        if (error instanceof RoleNotUser) {
+            req.logger.error('user role is not USER');
+            return res.sendClientError(error.message);
+        }
         req.logger.error('error service premium');
         res.sendServerError(error.message);
     }

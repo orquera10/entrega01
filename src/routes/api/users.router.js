@@ -44,6 +44,6 @@ export default class UsersRouter extends Router {
             { name: 'identificacion', maxCount: 1 },
             { name: 'domicilio', maxCount: 1 },
             { name: 'estadoCuenta', maxCount: 1 }
-          ]), uploadDocuments);
+        ]), uploadDocuments);
     }
 }
