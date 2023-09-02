@@ -195,50 +195,53 @@ const upload = async (req, res) => {
 }
 
 const uploadDocuments = async (req, res) => {
-    const userID = req.params.uid;
     try {
-        const filename = req.files;
-        const user = await getByIDService(userID);
-        const newDocument = [];
+        const { params: { uid }, files: filename } = req;
+        const baseURL = 'http://localhost:8081/img/';
+
+        const user = await getByIDService(uid);
+
         if (!user) {
-            req.logger.error('user not exist');
-            res.sendClientError('user not exist');
+            req.logger.error('User does not exist');
+            return res.sendClientError('User does not exist');
         }
 
-        if (filename.identificacion) newDocument.push({ name: 'Identificacion', reference: `http://localhost:8081/img/${filename.identificacion[0].filename}` });
-        if (filename.domicilio) newDocument.push({ name: 'Comprobante de domicilio', reference: `http://localhost:8081/img/${filename.domicilio[0].filename}` });
-        if (filename.estadoCuenta) newDocument.push({ name: 'Comprobante de estado de cuenta', reference: `http://localhost:8081/img/${filename.estadoCuenta[0].filename}` });
+        const newDocument = [];
+
+        if (filename.identificacion) {
+            newDocument.push({ name: 'Identificacion', reference: `${baseURL}${filename.identificacion[0].filename}` });
+        }
+        if (filename.domicilio) {
+            newDocument.push({ name: 'Comprobante de domicilio', reference: `${baseURL}${filename.domicilio[0].filename}` });
+        }
+        if (filename.estadoCuenta) {
+            newDocument.push({ name: 'Comprobante de estado de cuenta', reference: `${baseURL}${filename.estadoCuenta[0].filename}` });
+        }
 
         if (!user.documents) {
             user.documents = newDocument;
         } else {
             newDocument.forEach(ndoc => {
-                let band = true;
-                user.documents.forEach(doc => {
-                    if (doc.name === ndoc.name) {
-
-                        band = false;
-                        doc.reference = ndoc.reference;
-
-                    }
-                })
-                if (band) {
-                    user.documents.push(ndoc)
+                const existingDoc = user.documents.find(doc => doc.name === ndoc.name);
+                if (existingDoc) {
+                    existingDoc.reference = ndoc.reference;
+                } else {
+                    user.documents.push(ndoc);
                 }
             });
-
         }
 
         console.log(user);
 
         const result = await updateUserService(user._id, user);
-        req.logger.info('upload successfully');
+        req.logger.info('Upload successful');
         res.sendSuccess(result);
     } catch (error) {
-        req.logger.error('error service upload');
+        req.logger.error('Error in document upload service');
         res.sendServerError(error.message);
     }
 }
+
 
 export {
     userLogin,
