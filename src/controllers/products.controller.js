@@ -1,7 +1,7 @@
 import CustomError from '../middleware/errors/CustomError.js';
 import EErrors from '../middleware/errors/enums.js';
 import { generateProductErrorInfo } from '../middleware/errors/info.js';
-import { getProductsService, getProductsByIdService, addProductService, updateProductsService, deleteProductService } from '../service/products.service.js';
+import { getProductsService, getProductsByIdService, addProductService, updateProductsService, deleteProductService, getProductsPaginateService } from '../service/products.service.js';
 
 const getAllProduct = async (req, res) => {
     try {
@@ -105,10 +105,37 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+const getProductsPaginate = async (res, req) => {
+    try {
+        const { page = 1, limit = 10, category = "", status = "", sort = "" } = req.query;
+        const filter = {};
+
+        if (category) {
+            filter.category = category; // Agregar filtro por categoría si se especifica
+        }
+        if (status) {
+            filter.status = status; // Agregar filtro por categoría si se especifica
+        }
+
+        const sortBy = {};
+        if (sort) {
+            sortBy.price = sort
+        }
+
+        const result = await getProductsPaginateService(filter, limit, page, sortBy, category, status, sort);
+        req.logger.info('successfully get products paginate');
+        res.sendSuccess(result);
+    } catch (error) {
+        req.logger.error('error get paginate products');
+        res.sendServerError(error.message);
+    }
+}
+
 export {
     getAllProduct,
     getByIdProduct,
     saveProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getProductsPaginate
 }

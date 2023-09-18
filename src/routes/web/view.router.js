@@ -1,7 +1,6 @@
 import Router from '../router.js';
 import { passportStrategiesEnum } from '../../config/enums.js';
 import { getProductsPaginateService } from "../../service/products.service.js";
-import MessagesRepository from '../../repositories/messages.repository.js';
 import CartsRepository from '../../repositories/carts.repository.js';
 import { generateProduct } from '../../utils/utils.js';
 
@@ -33,36 +32,14 @@ export default class ViewsRouter extends Router {
             if (sort) {
                 sortBy.price = sort
             }
-
-            const result = await getProductsPaginateService(filter, limit, page, sortBy, category, status, sort)
+    
+            const result = await getProductsPaginateService(filter, limit, page, sortBy, category, status, sort);
 
             res.render('home', { products: result, user: req.user });
         });
         this.get('/', ['PUBLIC'], passportStrategiesEnum.NOTHING, (req, res) => {
             res.redirect('/login');
         });
-
-        //Vista chat
-        this.get('/chat', ['USER'], passportStrategiesEnum.JWT, async (req, res) => {
-            const messagesRepository = new MessagesRepository();
-            let userChat = `${req.user.first_name} ${req.user.last_name}`
-            const io = req.app.get('socketio');
-            //Implementacion para guardar mensages del chat en base de datos
-            const messages = await messagesRepository.getMessages();
-
-            io.on('connection', socket => {
-                console.log('conectado a chat');
-
-                socket.on('message', async data => {
-                    const result = { user: userChat, ...data };
-                    await messagesRepository.addMessages(result);
-                    messages.push(result);
-                    io.emit('messageLogs', messages);
-                });
-            })
-            res.render('chat');
-        });
-
 
         // //Vista para mostrar los productos de un carrito especificado
         this.get('/cart', ['USER'], passportStrategiesEnum.JWT, async (req, res) => {
@@ -122,7 +99,7 @@ export default class ViewsRouter extends Router {
         this.get('/reset-password', ['PUBLIC'], passportStrategiesEnum.NOTHING, (req, res) => {
             if (req.cookies["coderCookieToken"]) res.redirect('/products');
             const { token = "" } = req.query;
-            res.render('reset-pass', {token});
+            res.render('reset-pass', { token });
         });
     }
 

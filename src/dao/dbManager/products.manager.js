@@ -9,21 +9,8 @@ export default class Products {
         return products;
     }
 
-    getProductsPaginate = async (filter, limit, page, sortBy, category, status, sort) => {
-        const products = await productModel.paginate(filter, { limit, page, lean: true, sort: sortBy });
-        
-        const result = {
-            status: "success",
-            payload: products.docs,
-            totalPages: products.totalPages,
-            prevPage: products.prevPage,
-            nextPage: products.nextPage,
-            page: products.page,
-            hasPrevPage: products.hasPrevPage,
-            hasNextPage: products.hasNextPage,
-            prevLink: products.hasPrevPage ? `/products?page=${products.prevPage}&limit=${limit}&category=${category}&status=${status}&sort=${sort}` : null,
-            nextLink: products.hasNextPage ? `/products?page=${products.nextPage}&limit=${limit}&category=${category}&status=${status}&sort=${sort}` : null
-        }
+    getProductsPaginate = async (filter, limit, page, sortBy) => {
+        const result = await productModel.paginate(filter, { limit, page, lean: true, sort: sortBy });
         return result;
     }
 

@@ -12,20 +12,8 @@ export default class CartsRepository {
         const result = await this.dao.addCarts(cart);
         return result;
     }
-    addProductToCart = async (cid,pid) => {
-        const result = await this.dao.addProductToCart(cid,pid);
-        return result;
-    }
-    deleteProductToCart = async (cid,pid) => {
-        const result = await this.dao.deleteProductToCart(cid,pid);
-        return result;
-    }
     deleteCart = async (cid) => {
         const result = await this.dao.deleteCart(cid);
-        return result;
-    }
-    updateQuantityCart = async (cid,pid,quantity) => {
-        const result = await this.dao.updateQuantityCart(cid,pid,quantity);
         return result;
     }
     updateCart = async (cid,product) => {

@@ -1,6 +1,6 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
-import {__directory} from './utils/utils.js';
+import { __directory } from './utils/utils.js';
 import ProductsRouter from './routes/api/products.router.js';
 import CartsRouter from './routes/api/carts.router.js';
 import UsersRouter from './routes/api/users.router.js';
@@ -10,7 +10,6 @@ import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import config from './config/config.js';
 import cors from 'cors';
-import {Server} from 'socket.io';
 import errorHandler from './middleware/errors/index.js'
 import { addLogger } from './middleware/logger/logger.js';
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -55,14 +54,11 @@ const swaggerOptions = {
 const specs = swaggerJsdoc(swaggerOptions);
 app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
-app.use(`/`,viewsRouter.getRouter());
+app.use(`/`, viewsRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
 app.use('/api/users', usersRouter.getRouter());
 app.use(errorHandler);
 
 const port = Number(config.port);
-const server = app.listen(port, () => console.log('Server running on port 8081'));
-
-const io = new Server(server);
-app.set('socketio', io);
+app.listen(port, () => console.log(`Server running on port ${port}`));

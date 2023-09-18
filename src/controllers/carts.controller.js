@@ -48,6 +48,7 @@ const addProductCart = async (req, res) => {
             req.logger.error(cartError);
             return res.sendClientError(cartError);
         }
+        //El usuario premium no puede agregar a su carrito un producto que le pertenece
         if (product.owner === req.user._id && req.user.role === "PREMIUM") {
             const cartError = 'Error adding product';
             req.logger.error(cartError);
@@ -67,9 +68,7 @@ const deleteProductCart = async (req, res) => {
     try {
         const cartID = req.params.cid;
         const productID = req.params.pid;
-
         const cart = await getCartByIdService(cartID);
-
         if (!cart) {
             const cartError = 'Cart not exist';
             req.logger.error(cartError);

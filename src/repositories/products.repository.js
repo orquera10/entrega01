@@ -24,8 +24,8 @@ export default class ProductsRepository {
         const result = await this.dao.deleteProduct(pid);
         return result;
     }
-    getProductsPaginate = async (filter,limit,page,sortBy,category,status,sort) => {
-        const result = await this.dao.getProductsPaginate(filter,limit,page,sortBy,category,status,sort);
+    getProductsPaginate = async (filter,limit,page,sortBy) => {
+        const result = await this.dao.getProductsPaginate(filter,limit,page,sortBy);
         return result;
     }
 }

@@ -16,13 +16,30 @@ const addCartService = async (cart) => {
     return result;
 }
 
-const addProductToCartService = async (cid,pid) => {
-    const result = await cartsRepository.addProductToCart(cid,pid);
+const addProductToCartService = async (cid, pid) => {
+    const cart = await cartsRepository.getCartById(cid);
+    const existingProductIndex = cart.products.findIndex((item) => item.product._id.toString() === pid);
+
+    if (existingProductIndex !== -1) {
+        cart.products[existingProductIndex].quantity += 1;
+    } else {
+        cart.products.push({ product: pid });
+    }
+    const result = await cartsRepository.updateCart(cid, cart);
     return result;
 }
 
-const deleteProductToCartService = async (cid,pid) => {
-    const result = await cartsRepository.deleteProductToCart(cid,pid);
+const deleteProductToCartService = async (cid, pid) => {
+    const cart = await cartsRepository.getCartById(cid);
+
+    const existingProductIndex = cart.products.findIndex((item) => item.product._id.toString() === pid);
+    if (existingProductIndex !== -1) {
+        cart.products.splice(existingProductIndex, 1);
+    } else {
+        console.log('The product is not in the cart');
+        //tirar error a capa superior
+    }
+    const result = await cartsRepository.updateCart(cid, cart);
     return result;
 }
 
@@ -31,13 +48,21 @@ const deleteCartService = async (cid) => {
     return result;
 }
 
-const updateCartService = async (cid,products) => {
-    const result = await cartsRepository.updateCart(cid,products);
+const updateCartService = async (cid, products) => {
+    const result = await cartsRepository.updateCart(cid, products);
     return result;
 }
 
-const updateQuantityCartService = async (cid,pid,quantity) => {
-    const result = await cartsRepository.updateQuantityCart(cid,pid,quantity);
+const updateQuantityCartService = async (cid, pid, quantity) => {
+    const cart = await cartsRepository.getCartById(cid);
+    const existingProductIndex = cart.products.findIndex((item) => item.product._id.toString() === pid);
+    if (existingProductIndex !== -1) {
+        cart.products[existingProductIndex].quantity = quantity.quantity;
+    } else {
+        //tirar error a capa superior
+        console.log('The product is not in the cart');
+    }
+    const result = await cartsRepository.updateCart(cid, cart);
     return result;
 }
 
@@ -75,15 +100,15 @@ const purchaseCartService = async (user, cart) => {
     };
 
     //actualizo el cart
-    const produ = {products: productsSinStock};
+    const produ = { products: productsSinStock };
     await cartsRepository.updateCart(cart._id, produ);
 
     const result = await ticketsRepository.createTicket(ticket);
-    return ({ticket: result , productOut: productsSinStock});
+    return ({ ticket: result, productOut: productsSinStock });
 }
 
 
-export{
+export {
     addCartService,
     getCartByIdService,
     addProductToCartService,
@@ -95,4 +120,3 @@ export{
 }
 
 
-        
