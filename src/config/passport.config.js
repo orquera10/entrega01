@@ -6,8 +6,8 @@ import FacebookStrategy from 'passport-facebook';
 import jwt from "passport-jwt";
 import { PRIVATE_KEY } from "./constants.js";
 import config from './config.js';
-// import { addCartService } from '../service/carts.service.js';
-import { register, getByEmail } from '../service/users.service.js';
+import { getByEmail } from '../service/users.service.js';
+import { register } from '../service/sessions.service.js';
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;

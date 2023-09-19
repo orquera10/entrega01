@@ -5,7 +5,7 @@
     //Obtener id carrito
     const cid = cartUser.dataset.cid;
     btnCarrito.addEventListener(`click`, function() {
-        window.location.replace('/cart');
+        window.location.replace('http://localhost:8081/cart');
     })
 
     

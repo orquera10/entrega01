@@ -4,6 +4,7 @@ import { __directory } from './utils/utils.js';
 import ProductsRouter from './routes/api/products.router.js';
 import CartsRouter from './routes/api/carts.router.js';
 import UsersRouter from './routes/api/users.router.js';
+import SessionsRouter from './routes/api/sessions.router.js';
 import ViewsRouter from './routes/web/view.router.js';
 import initializePassport from './config/passport.config.js';
 import passport from 'passport';
@@ -18,6 +19,7 @@ import swaggerUiExpress from 'swagger-ui-express';
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
 const productsRouter = new ProductsRouter();
+const sessionsRouter = new SessionsRouter();
 const viewsRouter = new ViewsRouter();
 
 const app = express();
@@ -64,6 +66,7 @@ app.use(`/`, viewsRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
 app.use('/api/users', usersRouter.getRouter());
+app.use('/api/sessions', sessionsRouter.getRouter());
 app.use(errorHandler);
 
 const port = Number(config.port);

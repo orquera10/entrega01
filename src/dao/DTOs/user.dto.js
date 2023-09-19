@@ -1,4 +1,4 @@
-export default class UserDto {
+export class UserDto {
     // {
     //     "data": {
     //     "_id": "64a490b8d4564a1df4c27e36",
@@ -30,4 +30,17 @@ export default class UserDto {
         delete updateUser.password;
         Object.assign(this, updateUser);
     }
+}
+
+export class GetUserDto {
+    constructor(user) {
+        this.name = `${user.first_name} ${user.last_name}`;
+        this.email = user.email;
+        this.role = user.role;
+    }
+}
+
+export const DTOs = {
+    UserDto,
+    GetUserDto
 }

@@ -42,7 +42,7 @@ export default class ViewsRouter extends Router {
         });
 
         // //Vista para mostrar los productos de un carrito especificado
-        this.get('/cart', ['USER'], passportStrategiesEnum.JWT, async (req, res) => {
+        this.get('/cart', ['USER','ADMIN','PREMIUM'], passportStrategiesEnum.JWT, async (req, res) => {
             try {
                 const cartRepository = new CartsRepository();
 
