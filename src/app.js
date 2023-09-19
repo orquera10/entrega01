@@ -21,7 +21,13 @@ const productsRouter = new ProductsRouter();
 const viewsRouter = new ViewsRouter();
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:3000', // Sustituye con el dominio de tu frontend
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Habilita el envío de cookies a través de la solicitud
+    optionsSuccessStatus: 204, // Cambia el código de estado para las solicitudes OPTIONS
+};
+app.use(cors(corsOptions));
 app.use(addLogger);
 
 //Parametros de config
