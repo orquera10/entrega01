@@ -1,4 +1,5 @@
-export function loginNotification (token) { return `<!DOCTYPE html>
+export function loginNotification(token) {
+  return `<!DOCTYPE html>
   <html>
   <head>
       <meta charset="UTF-8">
@@ -24,4 +25,58 @@ export function loginNotification (token) { return `<!DOCTYPE html>
   
   </body>
   </html>`
+}
+
+export function userDeleteNotificacion() {
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificación de baja de cuenta</title>
+</head>
+<body>
+    <h1>Notificación de baja de cuenta</h1>
+    <p>Estimado/a Usuario</p>
+    
+    <p>Esperamos que este mensaje te encuentre bien. Queremos informarte que tu cuenta ha sido dada de baja debido a una inactividad mayor a dos días.</p>
+
+    <p>Si deseas volver a utilizar nuestros servicios, por favor, no dudes en ponerte en contacto con nosotros y estaremos encantados de ayudarte a reactivar tu cuenta.</p>
+
+    <p>¡Esperamos verte pronto de vuelta!</p>
+
+    <p>Atentamente</p>
+</body>
+</html>
+`
+}
+
+export function productDeleteNotificacion() {
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificación de baja de cuenta</title>
+</head>
+<body>
+    <h1>Notificación de baja de cuenta</h1>
+    <p>Estimado/a Usuario</p>
+    
+    <p>Esperamos que este mensaje te encuentre bien. Queremos informarte que tu cuenta ha sido dada de baja debido a una inactividad mayor a dos días.</p>
+
+    <p>Si deseas volver a utilizar nuestros servicios, por favor, no dudes en ponerte en contacto con nosotros y estaremos encantados de ayudarte a reactivar tu cuenta.</p>
+
+    <p>¡Esperamos verte pronto de vuelta!</p>
+
+    <p>Atentamente</p>
+</body>
+</html>
+`
+}
+
+export const noficationsMail = {
+  loginNotification,
+  userDeleteNotificacion,
+  productDeleteNotificacion
 }

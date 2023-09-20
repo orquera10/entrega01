@@ -1,0 +1,21 @@
+<div class="row container-fluid m-0 p-0">
+    <h1 class="col-12 text-center mt-5">Usuarios</h1>
+    <div class="col-12 d-flex justify-content-center flex-wrap m-0 p-0" id="container">
+        {{#each users}}
+        <div class="card col-4 m-4" style="width: 18rem;">
+            <div class="card-body text-center">
+                <h6 class="card-title mb-2 text-body-secondary">ID: {{this._id}}</h6>
+                <h5 class="card-title">Name: {{this.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Email: {{this.email}}</h6>
+                <p class="card-text m-1">Role: {{this.role}}</p>
+                <div class="d-flex justify-content-center">
+                    <button data-uid="{{this._id}}" class="btn btn-primary roleButton m-2">Cambiar Role</button>
+                    <button class="btn btn-danger deleteButton m-2">Eliminar</button>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>    
+</div>
+
+<script src="./js/adminUser.js"></script>

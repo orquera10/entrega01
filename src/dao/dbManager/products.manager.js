@@ -30,6 +30,7 @@ export default class Products {
     }
 
     deleteProduct = async (id) =>{
-        const result = await productModel.deleteOne({_id:id})
+        const result = await productModel.deleteOne({_id:id});
+        return result;
     }
 }

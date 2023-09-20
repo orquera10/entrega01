@@ -85,14 +85,15 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const productID = req.params.pid;
+        const user = req.user;
         const producto = await getProductByIdService(productID)
         if (!producto) {
             const productError = 'Product not exist';
             req.logger.error(productError);
             return res.sendClientError(productError);
         }
-        if ((producto.owner === req.user._id && req.user.role === "PREMIUM") || req.user.role === "ADMIN") {
-            const result = await deleteProductService(productID);
+        if ((producto.owner === user._id && user.role === "PREMIUM") || user.role === "ADMIN") {
+            const result = await deleteProductService(productID, user);
             req.logger.info('successfully delete product');
             res.sendSuccess(result);
         } else {

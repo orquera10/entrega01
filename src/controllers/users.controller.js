@@ -4,7 +4,8 @@ import {
     passwordLinkService, verificarTokenService,
     resetPassService, validarPasswordService,
     getByIDService, updateRoleService,
-    updateUserService, getAllUsersService
+    updateUserService, getAllUsersService,
+    deleteUsersService, deleteUserService
 } from '../service/users.service.js';
 import { IncorrectPassword, UserNotFound, RoleNotUser } from '../utils/custom-exceptions.js';
 
@@ -138,11 +139,41 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+const deleteUsers = async (req, res) => {
+    try {
+        await deleteUsersService();
+        req.logger.info('delete users 2 days successfully');
+        res.sendSuccess('delete users 2 days successfully');
+    } catch (error) {
+        req.logger.error('error delete users');
+        res.sendServerError(error.message);
+    }
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        const userID = req.params.uid;
+        const user = await getByIDService(userID);
+        if (!user) {
+            req.logger.error('user not exist');
+            res.sendClientError('user not exist');
+        }
+        await deleteUserService(userID);
+        req.logger.info('delete user');
+        res.sendSuccess('delete user');
+    } catch (error) {
+        req.logger.error('error delete user');
+        res.sendServerError(error.message);
+    }
+}
+
 export {
     passwordLink,
     passwordReset,
     premium,
     upload,
     uploadDocuments,
-    getAllUsers
+    getAllUsers,
+    deleteUsers,
+    deleteUser
 }

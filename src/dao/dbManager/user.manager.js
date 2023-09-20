@@ -29,4 +29,9 @@ export default class Users {
         const user = await userModel.findOne({ _id: uid }).lean();
         return user;
     }
+
+    delete = async (uid) => {
+        const user = await userModel.deleteOne({ _id: uid });
+        return user;
+    }
 }

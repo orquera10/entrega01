@@ -1,4 +1,6 @@
 import ProductsRepository from '../repositories/products.repository.js';
+import { productDeleteNotificacion } from '../utils/custom-html.js';
+import { sendEmail } from './mail.js';
 
 const productsRepository = new ProductsRepository();
 
@@ -17,18 +19,26 @@ const addProductService = async (product) => {
     return result;
 }
 
-const updateProductsService = async (pid,product) => {
-    const result = await productsRepository.updateProducts(pid,product);
+const updateProductsService = async (pid, product) => {
+    const result = await productsRepository.updateProducts(pid, product);
     return result;
 }
 
-const deleteProductService = async (pid) => {
+const deleteProductService = async (pid, user) => {
+    if (user.role === 'PREMIUM') {
+        const email = {
+            to: user.email,
+            subject: 'Cuenta eliminada',
+            html: productDeleteNotificacion()
+        }
+        await sendEmail(email);
+    }
     const result = await productsRepository.deleteProduct(pid);
     return result;
 }
 
-const getProductsPaginateService = async (filter,limit,page,sortBy,category,status,sort) => {
-    const products = await productsRepository.getProductsPaginate(filter,limit,page,sortBy);
+const getProductsPaginateService = async (filter, limit, page, sortBy, category, status, sort) => {
+    const products = await productsRepository.getProductsPaginate(filter, limit, page, sortBy);
     const result = {
         status: "success",
         payload: products.docs,
@@ -44,7 +54,7 @@ const getProductsPaginateService = async (filter,limit,page,sortBy,category,stat
     return result;
 }
 
-export{
+export {
     getProductsService,
     getProductsByIdService,
     addProductService,

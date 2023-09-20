@@ -1,8 +1,9 @@
 import UsersRepository from '../repositories/users.repository.js';
 import { isValidPassword, generateToken, createHash, validateToken } from '../utils/utils.js';
 import { UserNotFound, IncorrectPassword, RoleNotUser } from "../utils/custom-exceptions.js";
-import { loginNotification } from "../utils/custom-html.js";
+import { loginNotification, userDeleteNotificacion } from "../utils/custom-html.js";
 import { sendEmail } from './mail.js';
+import { esMayorDeDosDias } from '../utils/utils.js';
 
 const usersRepository = new UsersRepository();
 
@@ -54,17 +55,10 @@ const getByIDService = async (uid) => {
 }
 
 const updateRoleService = async (user) => {
-
-
     if (user.role === 'USER') {
-
         const docsBuscados = ['Identificacion', 'Comprobante de domicilio', 'Comprobante de estado de cuenta'];
-
         const docsEncontrados = user.documents.filter(doc => docsBuscados.includes(doc.name));
-        console.log(user);
-        console.log(docsEncontrados.length);
         if (docsEncontrados.length === 3) {
-
             user.role = 'PREMIUM';
         } else {
             throw new RoleNotUser('user role is not USER');
@@ -72,7 +66,6 @@ const updateRoleService = async (user) => {
     } else if (user.role === 'PREMIUM') {
         user.role = 'USER';
     }
-
     await usersRepository.updateUser(user._id, user);
 }
 
@@ -86,6 +79,25 @@ const getAllUsersService = async () => {
     return result;
 }
 
+const deleteUsersService = async () => {
+    const users = await usersRepository.getAllDelete();
+    users.forEach(async user => {
+        if (esMayorDeDosDias(user.last_connection)) {
+            await usersRepository.deleteUser(user._id);
+            const email = {
+                to: user.email,
+                subject: 'Cuenta eliminada',
+                html: userDeleteNotificacion()
+            }
+            await sendEmail(email);
+        }
+    });
+}
+
+const deleteUserService = async (uid) => {
+    await usersRepository.deleteUser(uid);
+}
+
 export {
     getByEmail,
     getByEmailLogin,
@@ -96,5 +108,7 @@ export {
     getByIDService,
     updateRoleService,
     updateUserService,
-    getAllUsersService
+    getAllUsersService,
+    deleteUsersService,
+    deleteUserService
 }

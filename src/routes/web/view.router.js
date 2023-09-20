@@ -3,6 +3,7 @@ import { passportStrategiesEnum } from '../../config/enums.js';
 import { getProductsPaginateService } from "../../service/products.service.js";
 import CartsRepository from '../../repositories/carts.repository.js';
 import { generateProduct } from '../../utils/utils.js';
+import { getAllUsersService } from '../../service/users.service.js';
 
 export default class ViewsRouter extends Router {
     init() {
@@ -100,6 +101,11 @@ export default class ViewsRouter extends Router {
             if (req.cookies["coderCookieToken"]) res.redirect('/products');
             const { token = "" } = req.query;
             res.render('reset-pass', { token });
+        });
+
+        this.get('/admin-users', ['ADMIN'], passportStrategiesEnum.JWT, async (req, res) => {
+            const users = await getAllUsersService();
+            res.render('adminUsers', { users });
         });
     }
 

@@ -6,7 +6,9 @@ import {
     premium,
     upload,
     uploadDocuments,
-    getAllUsers
+    getAllUsers,
+    deleteUsers,
+    deleteUser
 } from '../../controllers/users.controller.js';
 import { uploader } from '../../utils/utils.js';
 
@@ -24,6 +26,8 @@ export default class UsersRouter extends Router {
             { name: 'estadoCuenta', maxCount: 1 }
         ]), uploadDocuments);
 
-        this.get('/getUsers', ['ADMIN'], passportStrategiesEnum.JWT, getAllUsers);
+        this.get('/get-users', ['ADMIN'], passportStrategiesEnum.JWT, getAllUsers);
+        this.delete('/delete-users', ['ADMIN'], passportStrategiesEnum.JWT, deleteUsers);
+        this.delete('/delete-user/:uid', ['ADMIN'], passportStrategiesEnum.JWT, deleteUser);
     }
 }

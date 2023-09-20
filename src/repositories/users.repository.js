@@ -35,4 +35,14 @@ export default class UsersRepository {
         const result = await this.dao.getAll();
         return result.map(user => new GetUserDto(user));
     }
+
+    getAllDelete = async () => {
+        const result = await this.dao.getAll();
+        return result.map(user => new UserDto(user));
+    }
+
+    deleteUser = async (uid) => {
+        const result = await this.dao.delete(uid);
+        return result;
+    }
 }

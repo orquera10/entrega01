@@ -92,6 +92,12 @@ const uploader = multer({
     }
 });
 
+const esMayorDeDosDias = (fecha) => {
+    const hoy = new Date();
+    const dosDiasEnMS = 2 * 24 * 60 * 60 * 1000; // Dos días en milisegundos
+    return hoy - fecha > dosDiasEnMS;
+}
+
 export {
     __directory,
     createHash,
@@ -100,6 +106,7 @@ export {
     generateProduct,
     transporter,
     validateToken,
-    uploader
+    uploader,
+    esMayorDeDosDias
 }
 
