@@ -107,6 +107,11 @@ export default class ViewsRouter extends Router {
             const users = await getAllUsersService();
             res.render('adminUsers', { users });
         });
+
+        this.get('/finalizar-compra', ['ADMIN', 'USER', 'PREMIUM'], passportStrategiesEnum.JWT, async (req, res) => {
+            const result = req.body;
+            res.render('finalizarCompra', { result });
+        });
     }
 
 
