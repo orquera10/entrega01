@@ -30,7 +30,7 @@ const initializePassport = () => {
     passport.use('github', new GitHubStrategy({
         clientID: config.idGitHub,
         clientSecret: config.secretGitHub,
-        callbackURL: "http://localhost:8081/api/sessions/github-callback",
+        callbackURL: "/api/sessions/github-callback",
         scope: ['user:email']
     }, async (accessToken, refreshToken, profile, done) => {
         try {
@@ -60,7 +60,7 @@ const initializePassport = () => {
     passport.use('google', new GoogleStrategy({
         clientID: config.idGoogle,
         clientSecret: config.secretGoogle,
-        callbackURL: "http://localhost:8081/api/sessions/google-callback",
+        callbackURL: "/api/sessions/google-callback",
         passReqToCallback: true,
         scope: ['email', 'profile']
     },
@@ -94,7 +94,7 @@ const initializePassport = () => {
     passport.use('facebook', new FacebookStrategy({
         clientID: config.idFacebook,
         clientSecret: config.secretFacebook,
-        callbackURL: "http://localhost:8081/api/sessions/facebook-callback"
+        callbackURL: "/api/sessions/facebook-callback"
     },
         async function (accessToken, refreshToken, profile, done) {
 
