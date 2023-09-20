@@ -51,7 +51,7 @@ btnFin.addEventListener(`click`, function () {
                             <style>
                                 table {
                                     border-collapse: collapse;
-                                    width: 70%;
+                                    width: 90%;
                                     margin: 0 auto;
                                 }
 
