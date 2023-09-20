@@ -1,5 +1,6 @@
 import { getCartByIdService, addCartService, addProductToCartService, deleteProductToCartService, deleteCartService, updateCartService, updateQuantityCartService, purchaseCartService } from '../service/carts.service.js';
 import { getProductsByIdService } from '../service/products.service.js'
+import { ProductNotFound } from '../utils/custom-exceptions.js';
 
 const getCart = async (req, res) => {
     try {
@@ -78,6 +79,10 @@ const deleteProductCart = async (req, res) => {
         req.logger.info('product successfully deleted from cart');
         res.sendSuccess(result);
     } catch (error) {
+        if (error instanceof ProductNotFound) {
+            req.logger.error('product not found');
+            return res.sendClientError(error.message);
+        }
         req.logger.error('error product deleted from cart');
         res.sendServerError(error.message);
     }
@@ -124,7 +129,6 @@ const updateCart = async (req, res) => {
 }
 
 const updateQuantityCart = async (req, res) => {
-
     try {
         const cartID = req.params.cid;
         const productID = req.params.pid;
@@ -147,6 +151,10 @@ const updateQuantityCart = async (req, res) => {
         req.logger.info('successfully update quantity');
         res.sendSuccess(result);
     } catch (error) {
+        if (error instanceof ProductNotFound) {
+            req.logger.error('product not found');
+            return res.sendClientError(error.message);
+        }
         req.logger.error('error update quantity');
         res.sendServerError(error.message);
     }

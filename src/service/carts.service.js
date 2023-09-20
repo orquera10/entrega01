@@ -1,6 +1,7 @@
 import CartsRepository from '../repositories/carts.repository.js';
 import ProductsRepository from '../repositories/products.repository.js';
 import TicketsRepository from '../repositories/tickets.repository.js';
+import { ProductNotFound } from "../utils/custom-exceptions.js";
 
 const cartsRepository = new CartsRepository();
 const productsRepository = new ProductsRepository();
@@ -36,8 +37,7 @@ const deleteProductToCartService = async (cid, pid) => {
     if (existingProductIndex !== -1) {
         cart.products.splice(existingProductIndex, 1);
     } else {
-        console.log('The product is not in the cart');
-        //tirar error a capa superior
+        throw new ProductNotFound('Product not found');
     }
     const result = await cartsRepository.updateCart(cid, cart);
     return result;
@@ -59,8 +59,7 @@ const updateQuantityCartService = async (cid, pid, quantity) => {
     if (existingProductIndex !== -1) {
         cart.products[existingProductIndex].quantity = quantity.quantity;
     } else {
-        //tirar error a capa superior
-        console.log('The product is not in the cart');
+        throw new ProductNotFound('Product not found');
     }
     const result = await cartsRepository.updateCart(cid, cart);
     return result;
