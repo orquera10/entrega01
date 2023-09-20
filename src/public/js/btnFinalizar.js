@@ -40,13 +40,18 @@ btnFin.addEventListener(`click`, function () {
             }
         })
         .then(data => {
+            const datos = data.data;
             Swal.fire({
                 icon: 'success',
-                title: "¡Éxito!",
-                text: `Ticket ${data.data.ticket._id} generado exitosamente`,
-            })
-            console.log(data.data);
-            setTimeout(() => { window.location.replace(`/cart`); }, 2500)
+                title: "¡Ticket generado con éxito!",
+                text: `Ticket id: ${datos.ticket._id} generado exitosamente`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/cart';
+                }
+            });
+            console.log(datos);
+            // setTimeout(() => { window.location.replace(`/cart`); }, 2500)
         })
         .catch(error => {
             console.error('Error al realizar la solicitud POST:', error);
