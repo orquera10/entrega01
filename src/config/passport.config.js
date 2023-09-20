@@ -30,7 +30,7 @@ const initializePassport = () => {
     passport.use('github', new GitHubStrategy({
         clientID: config.idGitHub,
         clientSecret: config.secretGitHub,
-        callbackURL: "/api/sessions/github-callback",
+        callbackURL: "https://entrega01-production.up.railway.app/api/sessions/github-callback",
         scope: ['user:email']
     }, async (accessToken, refreshToken, profile, done) => {
         try {
