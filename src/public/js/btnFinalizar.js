@@ -51,7 +51,8 @@ btnFin.addEventListener(`click`, function () {
                             <style>
                                 table {
                                     border-collapse: collapse;
-                                    width: 50%;
+                                    width: 70%;
+                                    margin: 0 auto;
                                 }
 
                                 th, td {
@@ -80,7 +81,7 @@ btnFin.addEventListener(`click`, function () {
                             </tr>
                             <tr>
                                 <th>Comprador</th>
-                                <td id="ticketPurchaser">${datos.purchaser}</td>
+                                <td id="ticketPurchaser">${datos.ticket.purchaser}</td>
                             </tr>
                             <tr>
                                 <th>Fecha de Compra</th>
