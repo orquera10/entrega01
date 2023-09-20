@@ -82,7 +82,7 @@ const purchaseCartService = async (user, cart) => {
     }
 
     const sum = productsConStock.reduce((acc, producto) => {
-        acc += producto.product.price;
+        acc += producto.product.price * producto.quantity;
         return acc;
     }, 0);
 
