@@ -11,7 +11,7 @@ for (let i = 0; i < roleButtons.length; i++) {
     roleButton.addEventListener(`click`, function () {
 
         // Realizar la solicitud POST aquí
-        const url = `http://localhost:8081/api/users/premium/${uid}`;
+        const url = `/api/users/premium/${uid}`;
         fetch(url, {
             method: 'POST',
             headers: {
@@ -26,7 +26,7 @@ for (let i = 0; i < roleButtons.length; i++) {
                         title: "¡Éxito!",
                         text: "Se cambio el role del usuario",
                     })
-                    setTimeout(() => { window.location.replace('http://localhost:8081/admin-users'); }, 2000)
+                    setTimeout(() => { window.location.replace('/admin-users'); }, 2000)
                 } else {
                     console.error('Error al realizar la solicitud POST');
                     Swal.fire({
@@ -47,7 +47,7 @@ for (let i = 0; i < roleButtons.length; i++) {
         const uid = roleButton.dataset.uid; // Reemplaza 'pid' por la forma en que obtienes el valor de pid dinámicamente
 
         // Realizar la solicitud POST aquí
-        const url = `http://localhost:8081/api/users/delete-user/${uid}`;
+        const url = `/api/users/delete-user/${uid}`;
         fetch(url, {
             method: 'DELETE',
             headers: {
@@ -62,7 +62,7 @@ for (let i = 0; i < roleButtons.length; i++) {
                         title: "¡Éxito!",
                         text: "El usuario fue eliminado",
                     })
-                    setTimeout(() => { window.location.replace('http://localhost:8081/admin-users'); }, 2000)
+                    setTimeout(() => { window.location.replace('/admin-users'); }, 2000)
                 } else {
                     console.error('Error al realizar la solicitud POST');
                     Swal.fire({

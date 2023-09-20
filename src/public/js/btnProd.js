@@ -5,7 +5,7 @@
     //Obtener id carrito
     const cid = cartUser.dataset.cid;
     btnCarrito.addEventListener(`click`, function() {
-        window.location.replace('http://localhost:8081/cart');
+        window.location.replace('/cart');
     })
 
     
@@ -17,7 +17,7 @@
             const pid = postButton.dataset.pid; // Reemplaza 'pid' por la forma en que obtienes el valor de pid dinámicamente
             
             // Realizar la solicitud POST aquí
-            const url = `http://localhost:8081/api/carts/${cid}/product/${pid}`;
+            const url = `/api/carts/${cid}/product/${pid}`;
             fetch(url, {
             method: 'POST',
             headers: {

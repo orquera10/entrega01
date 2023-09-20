@@ -13,10 +13,10 @@ export function loginNotification(token) {
       <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta. Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
       
       <p>Si deseas restablecer tu contraseña, haz clic en el siguiente enlace:</p>
-      <p><a href="http://localhost:8081/reset-password?token=${token}" style="background-color: #007BFF; color: #FFFFFF; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Restablecer Contraseña</a></p>
+      <p><a href="https://entrega01-production.up.railway.app/reset-password?token=${token}" style="background-color: #007BFF; color: #FFFFFF; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Restablecer Contraseña</a></p>
       
       <p>Si el enlace no funciona, copia y pega la siguiente URL en tu navegador:</p>
-      <p>http://localhost:8081/reset-password?token=${token}</p>
+      <p>https://entrega01-production.up.railway.app/reset-password?token=${token}</p>
       
       <p>Si no solicitaste este cambio, no es necesario que realices ninguna acción.</p>
       
